@@ -142,12 +142,18 @@ def main():
                             for ticket in connect_user.asign_tickets:
                                 ticket_string += f"\n {i} - {ticket.title}"
 
+                            while not nbr_valide:
+                                try:
+                                    i : int = int(input(ticket_string))
+                                    nbr_valide = True
+                                    ticket = connect_user.asign_tickets[i]
+
+                                except:
+                                    print("Erreur : Veillez choisir un ticket existant")
+                                    nbr_valide = False
+
+                            connect_user.view_ticket(ticket)
                             
-
-
-
-
-                            input("Quelle action voulez-vous faire:\n 1 - Créer un ticket\n 2 - Afficher un ticket\n 3 - Mettre a jour un ticket 4 - Deconnexion\n Choix (numéro) : ")
                         case 3:
                             pass
                         case 4:
