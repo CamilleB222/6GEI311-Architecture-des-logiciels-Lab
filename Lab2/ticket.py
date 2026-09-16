@@ -1,4 +1,3 @@
-from user import User
 from datetime import datetime
 
 class Ticket:
@@ -49,11 +48,11 @@ class Ticket:
     def update_date(self):
         return self._update_date
 
-    def assign_to(self, user : User):
+    def assign_to(self, user):
         user.asign_tickets.append(self)
 
     def update_status(self, status : str):
-        if self.status == "FERMER":
+        if self.status == "FERMER" or status == "FERMER":
             self._status = status
 
         if self.status == "OUVERT" and status == "ASSIGNÉ":

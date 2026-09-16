@@ -44,13 +44,13 @@ class User:
         if not self._asign_tickets.__contains__(ticket):
             return
 
-        print('---- Ticket ' + ticket.ticket_id + '----')
-        print('Titre : ' + ticket.ticket_id)
-        print('Description :' + ticket.description)
-        print('Status :' + ticket.status)
-        print('Priorité :' + ticket.priority)
-        print('Date de création :' + ticket.creation_date.strftime("YYYY-MM-DD HH:mm:ss"))
-        print('Date de modification :' + ticket.update_date.strftime("YYYY-MM-DD HH:mm:ss"))
+        print('---- Ticket ' + str(ticket.ticket_id) + ' ----')
+        print('Titre : ' + ticket.title)
+        print('Description : ' + ticket.description)
+        print('Status : ' + ticket.status)
+        print('Priorité : ' + ticket.priority)
+        print('Date de création : ' + ticket.creation_date.strftime("%Y-%m-%d %H:%M:%S"))
+        print('Date de modification : ' + ticket.update_date.strftime("%Y-%m-%d %H:%M:%S"))
     
     def update_ticket(self, ticket : Ticket):
         if not self._asign_tickets.__contains__(ticket):
@@ -59,5 +59,5 @@ class User:
         if ticket.status == "ASSIGNÉ":
             ticket.update_status("VALIDATION")
 
-        if ticket.status == "VALIDATION":
+        elif ticket.status == "VALIDATION":
             ticket.update_status("TERMINÉ")

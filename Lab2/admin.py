@@ -29,6 +29,7 @@ class Admin:
 
     def assign_ticket(self, ticket : Ticket, user : User):
         ticket.assign_to(user)
+        ticket.update_status("ASSIGNÉ")
 
     def close_ticket(self, ticket : Ticket):
         ticket.update_status("FERMER")
