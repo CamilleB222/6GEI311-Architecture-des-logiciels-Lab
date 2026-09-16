@@ -15,8 +15,8 @@ def main():
     list_user.append(user2)
 
     connexion : int
-    connexion_reussi : bool = false
-    deconnexion : bool = false
+    connexion_reussi : bool = False
+    deconnexion : bool = False
     action : int
 
     connexion = input("Connexion en tant que : \n 1 - Camille Barrette (admin)\n 2 - Xavier Tremblay (user) \n 3 - Zachary Harvey (user) \n Choix (numéro) : ")
@@ -28,16 +28,24 @@ def main():
                     action = input("Quelle action voulez-vous faire:\n 1 - Assigner un ticket\n 2 - Fermer un ticket\n 3 - Voir tous les tickets 4 - Deconnexion\n Choix (numéro) : ")
                     match ation:
                         case 1:
-                            nbr_valide : bool = false
+                            nbr_valide : bool = False
                             while not nbr_valide:
                                 try:
                                     ticket_id : int = int(input("Veuillez entrer l'ID du ticket à assigner : "))
-                                    nbr_valide = true
+                                    nbr_valide = True
                                 except ValueError:
                                     print("Erreur : Veillez entrer un nombre entier")
-                                    nbr_valide = false
+                                    nbr_valide = False
 
-                            for user in 
+                            ticket_existe : bool = False
+                            ticket : Ticket
+                            for ticket in list_ticket:
+                                if (ticket_id == ticket.ticket_id):
+                                    ticket_existe = True
+
+                            if (not ticket_existe):
+                                print("Erreur : ID ")
+
                         case 2:
                             pass
                         case 3:
@@ -45,7 +53,7 @@ def main():
                         case 4:
                             pass
                         case _:
-                            action = input("Erreur : Action non valide:\nQuelle action voulez-vous faire:\n 1 - Assigner un ticket\n 2 - Fermer un ticket\n 3 - Voir tous les tickets 4 - Deconnexion\n Choix (numéro) : ")
+                            print("Erreur : Action non valide")
             case 2 | 3 :
                 pass
 
