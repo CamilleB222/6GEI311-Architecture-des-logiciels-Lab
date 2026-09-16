@@ -1,3 +1,4 @@
+from user import User
 from datetime import datetime
 
 class Ticket:
@@ -10,11 +11,11 @@ class Ticket:
     _update_date : datetime
     _list_commentaires : list[str]
 
-    def __init__(self, ticket_id : int, title : str, description : str, status : str, priority : str, creation_date : datetime, update_date : datetime):
+    def __init__(self, ticket_id : int, title : str, description : str, priority : str, creation_date : datetime, update_date : datetime):
        self._ticket_id = ticket_id
        self._title = title
        self._description = description
-       self._status = status
+       self._status = "OUVERT"
        self._priority = priority
        self._creation_date = creation_date
        self._update_date = update_date
@@ -47,3 +48,19 @@ class Ticket:
     @property
     def update_date(self):
         return self._update_date
+
+    def assign_to(self, user : User):
+        user.asign_tickets.append(self)
+
+    def update_status(self, status : str):
+        if self.status == "FERMER":
+            self._status = status
+
+        if self.status == "OUVERT" and status == "ASSIGNÉ":
+            self._status = status
+
+        if self.status == "ASSIGNÉ" and status == "VALIDATION":
+            self._status = status
+
+        if self.status == "VALIDATION" and status == "TERMINÉ":
+            self._status = status

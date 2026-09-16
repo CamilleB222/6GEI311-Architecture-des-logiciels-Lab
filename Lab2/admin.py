@@ -1,4 +1,5 @@
 from ticket import Ticket
+from user import User
 
 class Admin:
     _admin_id : int
@@ -25,4 +26,13 @@ class Admin:
     @property
     def email(self):
         return self._email
+
+    def assign_ticket(self, ticket : Ticket, user : User):
+        ticket.assign_to(user)
+
+    def close_ticket(self, ticket : Ticket):
+        ticket.update_status("FERMER")
+
+    def view_all_tickets(self) -> list[Ticket]:
+        return self._list_tickets
     

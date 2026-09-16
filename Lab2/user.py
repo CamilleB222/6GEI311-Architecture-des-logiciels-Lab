@@ -6,6 +6,7 @@ class User:
     _email : str
     _role : str
     _asign_tickets : list[Ticket]
+    _created_tickets : list[Ticket]
 
     @property
     def user_id(self):
@@ -34,12 +35,29 @@ class User:
         self._email = email
         self._role = role
         self._asign_tickets = list[Ticket]()
+        self._created_tickets = list[Ticket]()
 
-    def create_ticket (ticket : Ticket):
-        pass
+    def create_ticket (self, ticket : Ticket):
+        self._created_tickets.append(ticket)
     
-    def view_ticket (ticket : Ticket):
-        pass
+    def view_ticket (self, ticket : Ticket):
+        if not self._asign_tickets.__contains__(ticket):
+            return
+
+        print('---- Ticket ' + ticket.ticket_id + '----')
+        print('Titre : ' + ticket.ticket_id)
+        print('Description :' + ticket.description)
+        print('Status :' + ticket.status)
+        print('Priorité :' + ticket.priority)
+        print('Date de création :' + ticket.creation_date.strftime("YYYY-MM-DD HH:mm:ss"))
+        print('Date de modification :' + ticket.update_date.strftime("YYYY-MM-DD HH:mm:ss"))
     
-    def update_ticket(ticket : Ticket):
-        pass
+    def update_ticket(self, ticket : Ticket):
+        if not self._asign_tickets.__contains__(ticket):
+            return
+
+        if ticket.status == "ASSIGNÉ":
+            ticket.update_status("VALIDATION")
+
+        if ticket.status == "VALIDATION":
+            ticket.update_status("TERMINÉ")
