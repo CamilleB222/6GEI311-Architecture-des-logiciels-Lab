@@ -149,12 +149,38 @@ def main():
 
                             input("Quelle action voulez-vous faire:\n 1 - Créer un ticket\n 2 - Afficher un ticket\n 3 - Mettre a jour un ticket 4 - Deconnexion\n Choix (numéro) : ")
                         case 3:
-                            pass
+                            ticket_existe : bool = False
+                            nbr_valide : bool = False
+                            while not ticket_existe:
+                                while not nbr_valide:
+                                    try:
+                                        ticket_id : int = int(input("Veuillez entrer l'ID du ticket à mettre à jour : "))
+                                        nbr_valide = True
+                                    except ValueError:
+                                        print("Erreur : Veillez entrer un nombre entier")
+                                        nbr_valide = False
+
+                            ticket : Ticket
+                            for ticket in list_tickets:
+                                if ticket_id == ticket.ticket_id:
+                                    ticket_choisi = ticket
+                                    ticket_existe = True
+
+                            if not ticket_existe:
+                                print("Erreur : ID n'existe pas")
+
+                            status_ticket = ticket_choisi.status
+                            connect_user.update_ticket(ticket_choisi)
+                            if status_ticket != ticket_choisi.status:
+                                print(f"Mise à jout du ticket {ticket_choisi.ticket_id} réussi")
+                            else:
+                                print("Erreur : Ticket non mis à jour")
+
                         case 4:
                             deconnexion = True
                         case _:
                             action = print("Erreur : Action non valide")
-                pass
+        
             case _:
                 connexion = input("Erreur : Identifiant non valise \nConnexion en tant que : \n 1 - Camille Barrette (admin)\n 2 - Xavier Tremblay (user) \n 3 - Zachary Harvey (user) \n")
 
