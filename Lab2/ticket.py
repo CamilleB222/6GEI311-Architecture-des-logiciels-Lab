@@ -8,6 +8,7 @@ class Ticket:
     _priority : str
     _creation_date : datetime
     _update_date : datetime
+    _list_commentaires : list[str]
 
     def __init__(self, ticket_id : int, title : str, description : str, status : str, priority : str, creation_date : datetime, update_date : datetime):
        self._ticket_id = ticket_id
@@ -17,6 +18,7 @@ class Ticket:
        self._priority = priority
        self._creation_date = creation_date
        self._update_date = update_date
+       self._list_commentaires = list[str]()
 
     @property
     def ticket_id(self):
