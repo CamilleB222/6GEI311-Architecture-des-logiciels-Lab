@@ -23,11 +23,11 @@ def main():
 
     while not connexion_reussi:
         deconnexion = False
-        connexion = input("Connexion en tant que : \n 1 - Camille Barrette (admin)\n 2 - Xavier Tremblay (user) \n 3 - Zachary Harvey (user) \n Choix (numéro) : ")
+        connexion = input("\nConnexion en tant que : \n 1 - Camille Barrette (admin)\n 2 - Xavier Tremblay (user) \n 3 - Zachary Harvey (user) \n Choix (numéro) : ")
         match connexion:
             case '1':
                 while not deconnexion :
-                    action = input("Quelle action voulez-vous faire:\n 1 - Assigner un ticket\n 2 - Fermer un ticket\n 3 - Voir tous les tickets\n 4 - Deconnexion\n Choix (numéro) : ")
+                    action = input("\nQuelle action voulez-vous faire:\n 1 - Assigner un ticket\n 2 - Fermer un ticket\n 3 - Voir tous les tickets\n 4 - Deconnexion\n Choix (numéro) : ")
                     match action:
                         case '1':
                             if len(admin1.view_all_tickets()) !=0:
@@ -40,10 +40,10 @@ def main():
                                         nbr_valide = False
                                         while not nbr_valide:
                                             try:
-                                                ticket_id : int = int(input("Veuillez entrer l'ID du ticket à assigner : "))
+                                                ticket_id : int = int(input("\nVeuillez entrer l'ID du ticket à assigner : "))
                                                 nbr_valide = True
                                             except ValueError:
-                                                print("Erreur : Veillez entrer un nombre entier")
+                                                print("\nErreur : Veillez entrer un nombre entier")
                                                 nbr_valide = False
 
                                         
@@ -54,12 +54,12 @@ def main():
                                                 ticket_existe = True
 
                                         if not ticket_existe:
-                                            print("Erreur : ID n'existe pas")
+                                            print("\nErreur : ID n'existe pas")
 
 
                                     user_existe : bool = False
                                     while not user_existe:
-                                        user_name = input("Entrer le nom de l'utilisateur à qui assigner le ticket : ")
+                                        user_name = input("\nEntrer le nom de l'utilisateur à qui assigner le ticket : ")
 
                                         user : User
                                         user_choisi : User
@@ -69,18 +69,18 @@ def main():
                                                 user_choisi = user
 
                                         if not user_existe:
-                                            print("Erreur : L'utilisateur n'existe pas")
+                                            print("\nErreur : L'utilisateur n'existe pas")
 
                                     admin1.assign_ticket(ticket_choisi,user_choisi)
 
                                     if ticket_choisi.status == "ASSIGNÉ":
-                                        print(f"Le ticket {ticket_id} à été assigné à {user_name}")
+                                        print(f"\nLe ticket {ticket_id} à été assigné à {user_name}")
                                         ticket_asign = True
                                     else:
-                                        print("Erreur lors de l'assignement du ticket, veillez réessayer\n")
+                                        print("\nErreur lors de l'assignement du ticket, veillez réessayer")
 
                             else:
-                                print("Aucun ticket n'existe\n")
+                                print("\nAucun ticket n'existe")
 
                         case '2':
                             if len(admin1.view_all_tickets()) !=0:
@@ -93,10 +93,10 @@ def main():
                                         nbr_valide = False
                                         while not nbr_valide:
                                             try:
-                                                ticket_id : int = int(input("Veuillez entrer l'ID du ticket à fermer : "))
+                                                ticket_id : int = int(input("\nVeuillez entrer l'ID du ticket à fermer : "))
                                                 nbr_valide = True
                                             except ValueError:
-                                                print("Erreur : Veillez entrer un nombre entier")
+                                                print("\nErreur : Veillez entrer un nombre entier")
                                                 nbr_valide = False
 
                                         ticket : Ticket
@@ -106,35 +106,35 @@ def main():
                                                 ticket_existe = True
 
                                         if not ticket_existe:
-                                            print("Erreur : ID n'existe pas")
+                                            print("\nErreur : ID n'existe pas")
                                         else:
                                             admin1.close_ticket(ticket_choisi)
 
                                             if ticket_choisi.status == "FERMER":
-                                                print("Fermeture du ticket réussi")
+                                                print("\nFermeture du ticket réussi")
                                                 ticket_fermer = True
                                             else:
-                                                print("Erreur lors de la fermeture du ticket, veillez réessayer")
+                                                print("\nErreur lors de la fermeture du ticket, veillez réessayer")
                             else:
-                                print("Aucun ticket n'existe\n")
+                                print("\nAucun ticket n'existe")
 
                         case '3':
                             list_tickets_admin : list[Ticket]
                             list_tickets_admin = admin1.view_all_tickets()
                             ticket : Ticket
-                            print("Les tickets sont :")
+                            print("\nLes tickets sont :")
                             for ticket in list_tickets_admin:
                                 print (f"{ticket.ticket_id}   {ticket.title}")
 
                         case '4':
                             deconnexion = True
                         case _:
-                            print("Erreur : Action non valide")
+                            print("\nErreur : Action non valide")
             case '2' | '3' :
                 connect_user : User
                 connect_user = list_user[int(connexion) - 2]
                 while not deconnexion :
-                    action = input("Quelle action voulez-vous faire:\n 1 - Créer un ticket\n 2 - Afficher un ticket\n 3 - Mettre a jour un ticket\n 4 - Deconnexion\n Choix (numéro) : ")
+                    action = input("\nQuelle action voulez-vous faire:\n 1 - Créer un ticket\n 2 - Afficher un ticket\n 3 - Mettre a jour un ticket\n 4 - Deconnexion\n Choix (numéro) : ")
                     match action:
                         case '1':
                             ticket : Ticket
@@ -144,7 +144,7 @@ def main():
                             else:
                                 ticket_id = 1
 
-                            title : str = input("Titre :")
+                            title : str = input("\nTitre :")
                             description : str = input("Description :")
                             priority : str = input("Prioriter :")
 
@@ -152,7 +152,7 @@ def main():
                             list_tickets.append(ticket)
                             connect_user.create_ticket(ticket)
 
-                            print("Ticket créer avec succes")
+                            print("\nTicket créer avec succes")
                              
                         case '2':
 
@@ -174,12 +174,12 @@ def main():
                                         ticket = connect_user.asign_tickets[i]
 
                                     except:
-                                        print("Erreur : Veillez choisir un ticket existant")
+                                        print("\nErreur : Veillez choisir un ticket existant")
                                         nbr_valide = False
 
                                 connect_user.view_ticket(ticket)
                             else:
-                                print("Aucun ticket présent dans votre liste de ticket\n")
+                                print("\nAucun ticket présent dans votre liste de ticket")
                             
                         case '3':
                             if len(connect_user.asign_tickets) != 0:
@@ -189,10 +189,10 @@ def main():
                                     nbr_valide = False
                                     while not nbr_valide:
                                         try:
-                                            ticket_id : int = int(input("Veuillez entrer l'ID du ticket à mettre à jour : "))
+                                            ticket_id : int = int(input("\nVeuillez entrer l'ID du ticket à mettre à jour : "))
                                             nbr_valide = True
                                         except ValueError:
-                                            print("Erreur : Veillez entrer un nombre entier")
+                                            print("\nErreur : Veillez entrer un nombre entier")
                                             nbr_valide = False
 
                                     ticket : Ticket
@@ -202,25 +202,25 @@ def main():
                                             ticket_existe = True
 
                                     if not ticket_existe:
-                                        print("Erreur : ID n'existe pas")
+                                        print("\nErreur : ID n'existe pas")
                                     else:
                                         status_ticket = ticket_choisi.status
                                         connect_user.update_ticket(ticket_choisi)
                                         if status_ticket != ticket_choisi.status:
-                                            print(f"Mise à jout du ticket {ticket_choisi.ticket_id} réussi")
+                                            print(f"\nMise à jout du ticket {ticket_choisi.ticket_id} réussi")
                                         else:
-                                            print("Erreur : Ticket non mis à jour")
+                                            print("\nErreur : Ticket non mis à jour")
 
                             else:
-                                print("Aucun ticket présent dans votre liste de ticket\n")
+                                print("\nAucun ticket présent dans votre liste de ticket")
 
                         case '4':
                             deconnexion = True
                         case _:
-                            action = print("Erreur : Action non valide")
+                            action = print("\nErreur : Action non valide")
         
             case _:
-                print("Erreur : Identifiant non valise\n")
+                print("\nErreur : Identifiant non valise")
 
 if __name__ == "__main__":
     main()
