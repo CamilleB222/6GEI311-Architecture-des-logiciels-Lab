@@ -2,10 +2,21 @@ from user import User
 from admin import Admin
 from ticket import Ticket
 from datetime import datetime
+from ticketManager import TicketManager
+from statutTicket import StatutTicket
+from descriptionTicketTexte import DescriptionTicketTexte
+from descriptionTicketImage import DescriptionTicketImage
+import tkinter as tk
+from tkinter import filedialog
+from pathlib import Path
+
+root = tk.Tk()
+root.withdraw()
 
 list_user : list[User] = list[User]()
 list_admin : list[Admin] = list[Admin]()
 list_tickets : list[Ticket] = list[Ticket]()
+ticket_manager : TicketManager
 
 def main():
     admin1 = Admin(1, 'Camille Barrette', 'cbarrette@etu.uqac.ca',list_tickets)
@@ -25,12 +36,14 @@ def main():
         deconnexion = False
         connexion = input("\nConnexion en tant que : \n 1 - Camille Barrette (admin)\n 2 - Xavier Tremblay (user) \n 3 - Zachary Harvey (user) \n Choix (numéro) : ")
         match connexion:
-            case '1':
+            case '1': #Admin
+                connect_admin = Admin
+                connect_admin = list_admin[int(connexion) - 1]
                 while not deconnexion :
                     action = input("\nQuelle action voulez-vous faire:\n 1 - Assigner un ticket\n 2 - Fermer un ticket\n 3 - Voir tous les tickets\n 4 - Deconnexion\n Choix (numéro) : ")
                     match action:
-                        case '1':
-                            if len(admin1.view_all_tickets()) !=0:
+                        case '1': #Assigner ticket
+                            if len(ticket_manager.view_all_ticket()) !=0:
                                 ticket_choisi : Ticket
                                 nbr_valide : bool = False
                                 ticket_existe : bool = False
@@ -71,7 +84,7 @@ def main():
                                         if not user_existe:
                                             print("\nErreur : L'utilisateur n'existe pas")
 
-                                    admin1.assign_ticket(ticket_choisi,user_choisi)
+                                    ticket_manager.assign_Ticket(connect_admin, user_choisi, ticket_choisi)
 
                                     if ticket_choisi.status == "ASSIGNÉ":
                                         print(f"\nLe ticket {ticket_id} à été assigné à {user_name}")
@@ -82,8 +95,8 @@ def main():
                             else:
                                 print("\nAucun ticket n'existe")
 
-                        case '2':
-                            if len(admin1.view_all_tickets()) !=0:
+                        case '2': #Fermer ticket
+                            if len(ticket_manager.view_all_tickets()) !=0:
                                 ticket_choisi : Ticket
                                 nbr_valide : bool = False
                                 ticket_existe : bool = False
@@ -108,9 +121,9 @@ def main():
                                         if not ticket_existe:
                                             print("\nErreur : ID n'existe pas")
                                         else:
-                                            admin1.close_ticket(ticket_choisi)
+                                            ticket_manager.close_ticket(ticket_choisi)
 
-                                            if ticket_choisi.status == "FERMER":
+                                            if ticket_choisi.status == StatutTicket.FERMER:
                                                 print("\nFermeture du ticket réussi")
                                                 ticket_fermer = True
                                             else:
@@ -118,25 +131,25 @@ def main():
                             else:
                                 print("\nAucun ticket n'existe")
 
-                        case '3':
-                            list_tickets_admin : list[Ticket]
-                            list_tickets_admin = admin1.view_all_tickets()
+                        case '3': #Voir tous les tickets
+                            list_tickets_manager : list[Ticket]
+                            list_tickets_manager = ticket_manager.view_all_ticket()
                             ticket : Ticket
                             print("\nLes tickets sont :")
-                            for ticket in list_tickets_admin:
+                            for ticket in list_tickets_manager:
                                 print (f"{ticket.ticket_id}   {ticket.title}")
 
-                        case '4':
+                        case '4': #Deconnexion
                             deconnexion = True
                         case _:
                             print("\nErreur : Action non valide")
-            case '2' | '3' :
+            case '2' | '3' : #User
                 connect_user : User
                 connect_user = list_user[int(connexion) - 2]
                 while not deconnexion :
                     action = input("\nQuelle action voulez-vous faire:\n 1 - Créer un ticket\n 2 - Afficher un ticket\n 3 - Mettre a jour un ticket\n 4 - Deconnexion\n Choix (numéro) : ")
                     match action:
-                        case '1':
+                        case '1': #Créer un ticket
                             ticket : Ticket
                             ticket_id : int
                             if not len(list_tickets) == 0:
@@ -150,11 +163,35 @@ def main():
 
                             ticket = Ticket(ticket_id, title, description, priority, datetime.now(), datetime.now())
                             list_tickets.append(ticket)
-                            connect_user.create_ticket(ticket)
+                            ticket_manager.creat_ticket(connect_user, ticket)
 
+                            choix_valide : bool = False
+                            type_description : int
+                            while not choix_valide:
+                                type_description = input("Voulez-vous ajouter des descriptions sous forme de : \n 1 - texte \n 2 - image \n 3 - Ne pas ajouter de description \n Choix (numéro) : ")
+                                if (type_description == 1): #texte
+                                    description_texte : str
+                                    description_texte = input("Veillez écrire la description : ")
+                                    ticket.add_description(DescriptionTicketTexte, description_texte)
+                                    choix_valide = True
+                                elif (type_description == 2): #image
+                                    description_image : str
+
+                                    description_image = filedialog.askopenfilename(
+                                        title = "Choisir une image",
+                                        initialdir=Path.home
+                                    )
+                                    
+                                    ticket.add_description(DescriptionTicketImage, description_image)
+                                    choix_valide = True
+                                elif (type_description == 3):
+                                    choix_valide = True
+                                else:
+                                    print("Erreur : Veuillez entrer un nombre valide")
+                                    
                             print("\nTicket créer avec succes")
                              
-                        case '2':
+                        case '2': #Afficher un ticket
 
                             if len(connect_user.asign_tickets) != 0:
 
@@ -177,11 +214,11 @@ def main():
                                         print("\nErreur : Veillez choisir un ticket existant")
                                         nbr_valide = False
 
-                                connect_user.view_ticket(ticket)
+                                ticket_manager.view_ticket(connect_user, ticket)
                             else:
                                 print("\nAucun ticket présent dans votre liste de ticket")
                             
-                        case '3':
+                        case '3': #Mettre à jout un ticket
                             if len(connect_user.asign_tickets) != 0:
                                 ticket_existe : bool = False
                                 nbr_valide : bool = False
@@ -205,7 +242,7 @@ def main():
                                         print("\nErreur : ID n'existe pas")
                                     else:
                                         status_ticket = ticket_choisi.status
-                                        connect_user.update_ticket(ticket_choisi)
+                                        ticket_manager.update_ticket(connect_user, ticket_choisi)
                                         if status_ticket != ticket_choisi.status:
                                             print(f"\nMise à jout du ticket {ticket_choisi.ticket_id} réussi")
                                         else:
@@ -214,7 +251,7 @@ def main():
                             else:
                                 print("\nAucun ticket présent dans votre liste de ticket")
 
-                        case '4':
+                        case '4': #Deconnexion
                             deconnexion = True
                         case _:
                             action = print("\nErreur : Action non valide")

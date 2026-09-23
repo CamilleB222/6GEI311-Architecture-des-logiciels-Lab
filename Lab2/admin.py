@@ -1,18 +1,11 @@
 from ticket import Ticket
 from user import User
+from statutTicket import StatutTicket
 
-class Admin:
-    _admin_id : int
-    _name : str
-    _email : str
-    _list_tickets : list[Ticket]
+class Admin(User):
 
-
-    def __init__(self, admin_id : int, name : str, email : str, list_tickets : list[Ticket]):
-        self._admin_id = admin_id
-        self._name = name
-        self._email = email
-        self._list_tickets = list_tickets
+    def __init__(self, admin_id : int, name : str, email : str):
+        super().__init__(admin_id, name, email, "admin")
 
 
     @property
@@ -29,11 +22,8 @@ class Admin:
 
     def assign_ticket(self, ticket : Ticket, user : User):
         ticket.assign_to(user)
-        ticket.update_status("ASSIGNÉ")
+        ticket.update_status(StatutTicket.ASSIGNÉ)
 
     def close_ticket(self, ticket : Ticket):
-        ticket.update_status("FERMER")
-
-    def view_all_tickets(self) -> list[Ticket]:
-        return self._list_tickets
+        ticket.update_status(StatutTicket.FERMER)
     

@@ -1,24 +1,29 @@
 from datetime import datetime
+from descriptionTicket import DescriptionTicket
+from descriptionTicketImage import DescriptionTicketImage
+from descriptionTicketTexte import DescriptionTicketTexte
+from statutTicket import StatutTicket
 
 class Ticket:
     _ticket_id : int
     _title : str
-    _description : str
-    _status : str
+    _list_description : list[DescriptionTicket]
+    _status : StatutTicket
     _priority : str
     _creation_date : datetime
     _update_date : datetime
     _list_commentaires : list[str]
 
-    def __init__(self, ticket_id : int, title : str, description : str, priority : str, creation_date : datetime, update_date : datetime):
-       self._ticket_id = ticket_id
-       self._title = title
-       self._description = description
-       self._status = "OUVERT"
-       self._priority = priority
-       self._creation_date = creation_date
-       self._update_date = update_date
-       self._list_commentaires = list[str]()
+    def __init__(self, ticket_id : int, title : str, description_initiale : str, priority : str, creation_date : datetime, update_date : datetime):
+        self._ticket_id = ticket_id
+        self._title = title
+        self._description = list[DescriptionTicket]()
+        self._description.append(self.add_description(description_initiale))   
+        self._status = StatutTicket.OUVERT
+        self._priority = priority
+        self._creation_date = creation_date
+        self._update_date = update_date
+        self._list_commentaires = list[str]()
 
     @property
     def ticket_id(self):
@@ -51,15 +56,19 @@ class Ticket:
     def assign_to(self, user):
         user.asign_tickets.append(self)
 
-    def update_status(self, status : str):
-        if self.status == "FERMER" or status == "FERMER":
+    def update_status(self, status : StatutTicket):
+        if self.status == StatutTicket.FERMER or status == StatutTicket.FERMER:
             self._status = status
+            return
 
-        if self.status == "OUVERT" and status == "ASSIGNÉ":
-            self._status = status
+        if (self.status == status-1):# Si le Statut actuelle est avant le statut qu'on veut aller
+            self.status = status
 
-        if self.status == "ASSIGNÉ" and status == "VALIDATION":
-            self._status = status
+    def add_description(self, type_description : type, description : str):
+        if (type_description == DescriptionTicketTexte):
+            description_texte = DescriptionTicketTexte(description)
+            self._list_description.append(description_texte)
 
-        if self.status == "VALIDATION" and status == "TERMINÉ":
-            self._status = status
+        elif (type_description == DescriptionTicketImage):
+            description_image = DescriptionTicketImage(description)
+            self._list_description.append(description_image)
