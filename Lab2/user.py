@@ -1,4 +1,5 @@
 from ticket import Ticket
+from statutTicket import StatutTicket
 
 class User:
     _id : int
@@ -48,8 +49,13 @@ class User:
 
         ticket_string += ('---- Ticket ' + str(ticket.ticket_id) + ' ----') + "\n"
         ticket_string +=('Titre : ' + ticket.title) + "\n"
-        ticket_string +=('Description : ' + ticket.description) + "\n"
-        ticket_string +=('Status : ' + ticket.status) + "\n"
+        num_description : int = 1
+        for description in ticket.list_description:
+            
+            ticket_string +=('Description ' + str(num_description) + ' : ' + description.get_description()) + "\n"
+            num_description += 1
+
+        ticket_string +=('Status : ' + ticket.status.name) + "\n"
         ticket_string +=('Priorité : ' + ticket.priority) + "\n"
         ticket_string +=('Date de création : ' + ticket.creation_date.strftime("%Y-%m-%d %H:%M:%S")) + "\n"
         ticket_string +=('Date de modification : ' + ticket.update_date.strftime("%Y-%m-%d %H:%M:%S")) + "\n"
@@ -60,8 +66,8 @@ class User:
         if not self._asign_tickets.__contains__(ticket):
             return
 
-        if ticket.status == "ASSIGNÉ":
-            ticket.update_status("VALIDATION")
+        if ticket.status == StatutTicket.ASSIGNÉ:
+            ticket.update_status(StatutTicket.VALIDATION)
 
-        elif ticket.status == "VALIDATION":
-            ticket.update_status("TERMINÉ")
+        elif ticket.status == StatutTicket.VALIDATION:
+            ticket.update_status(StatutTicket.TERMINE)

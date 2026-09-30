@@ -24,6 +24,8 @@ class Admin(User):
         ticket.assign_to(user)
         ticket.update_status(StatutTicket.ASSIGNÉ)
 
-    def close_ticket(self, ticket : Ticket):
+    def close_ticket(self, ticket : Ticket, users : list[User]):
         ticket.update_status(StatutTicket.FERMER)
-    
+        for user in users:
+            if ticket in user.asign_tickets:
+                user.asign_tickets.remove(ticket)

@@ -16,16 +16,27 @@ root.withdraw()
 list_user : list[User] = list[User]()
 list_admin : list[Admin] = list[Admin]()
 list_tickets : list[Ticket] = list[Ticket]()
-ticket_manager : TicketManager
+ticket_manager : TicketManager = TicketManager()
+
+def register_user(user : User):
+    if isinstance(user, Admin):
+        if user not in list_admin:
+            list_admin.append(user)
+    else:
+        if user not in list_user:
+            list_user.append(user)
+
+    ticket_manager.register_user(user)
 
 def get_ticket_by_id() -> Ticket | None:
     ticket_choisi : Ticket | None
-    
+    ticket_existe : bool = False
+
     while not ticket_existe:
         nbr_valide : bool = False
         while not nbr_valide:
             try:
-                ticket_id : int = int(input("\nVeuillez entrer l'ID du ticket (0 pour quitter) : "))
+                ticket_id : int = int(input("\nVeuillez entrer l'ID du ticket (Entrez 0 pour quitter) : "))
                 nbr_valide = True
             except ValueError:
                 print("\nErreur : Veillez entrer un nombre entier")
@@ -46,8 +57,6 @@ def get_ticket_by_id() -> Ticket | None:
 
     return ticket_choisi
     
-
-
 def assigner_ticket(connect_admin : Admin):
     if len(ticket_manager.view_all_ticket()) == 0:
         print("\nAucun ticket n'existe")
@@ -63,7 +72,7 @@ def assigner_ticket(connect_admin : Admin):
             user_choisi : User | None
 
             while not user_existe:
-                user_name = input("\nEntrer le nom de l'utilisateur à qui assigner le ticket (0 pour quitter) : ")
+                user_name = input("\nEntrer le nom de l'utilisateur à qui assigner le ticket (Entrez 0 pour quitter) : ")
 
                 if user_name != "0":
                     user : User
@@ -81,7 +90,7 @@ def assigner_ticket(connect_admin : Admin):
             if user_choisi is not None :
                 ticket_manager.assign_Ticket(connect_admin, user_choisi, ticket_choisi)
 
-                if ticket_choisi.status == "ASSIGNÉ":
+                if ticket_choisi.status == StatutTicket.ASSIGNÉ:
                     print(f"\nLe ticket {ticket_choisi.ticket_id} à été assigné à {user_name}")
                     ticket_asign = True
                 else:
@@ -92,7 +101,7 @@ def assigner_ticket(connect_admin : Admin):
             ticket_asign = True
 
 def fermer_ticket(connect_admin : Admin):
-    if len(ticket_manager.view_all_tickets()) == 0:
+    if len(ticket_manager.view_all_ticket()) == 0:
         print("\nAucun ticket n'existe")
         return
     
@@ -128,24 +137,24 @@ def creer_ticket(connect_user : User):
     else:
         ticket_id = 1
 
-    title : str = input("\nTitre :")
-    description : str = input("Description :")
-    priority : str = input("Prioriter :")
+    title : str = input("\nTitre : ")
+    description : str = input("Description : ")
+    priority : str = input("Prioriter : ")
 
     ticket = Ticket(ticket_id, title, description, priority, datetime.now(), datetime.now())
     list_tickets.append(ticket)
     ticket_manager.creat_ticket(connect_user, ticket)
 
-    choix_valide : bool = False
-    type_description : int
-    while not choix_valide:
-        type_description = input("Voulez-vous ajouter des descriptions sous forme de : \n 1 - texte \n 2 - image \n 3 - Ne pas ajouter de description \n Choix (numéro) : ")
-        if (type_description == 1): #texte
+    ajouter_description : bool = True
+    type_description : str
+    while ajouter_description:
+        type_description = input("\nVoulez-vous ajouter des descriptions sous forme de : \n 1 - texte \n 2 - image \n 3 - Ne pas ajouter d'autre description \n Choix (numéro) : ")
+        if (type_description == "1"): #texte
             description_texte : str
             description_texte = input("Veillez écrire la description : ")
             ticket.add_description(DescriptionTicketTexte, description_texte)
-            choix_valide = True
-        elif (type_description == 2): #image
+            print("\nDescription (texte) ajouté avec succes")
+        elif (type_description == "2"): #image
             description_image : str
 
             description_image = filedialog.askopenfilename(
@@ -154,24 +163,25 @@ def creer_ticket(connect_user : User):
             )
             
             ticket.add_description(DescriptionTicketImage, description_image)
-            choix_valide = True
-        elif (type_description == 3):
-            choix_valide = True
+            print("\nDescription (image) ajouté avec succes")
+        elif (type_description == "3"):
+            ajouter_description = False
         else:
             print("Erreur : Veuillez entrer un nombre valide")
             
-    print("\nTicket créer avec succes")
+    print("\nTicket créer avec succès")
 
 def afficher_ticket(connect_user : User):
     if len(connect_user.asign_tickets) == 0:
         print("\nAucun ticket présent dans votre liste de ticket")
         return
 
-    ticket_string : str = "Choisisser un ticket (0 pour quitter) :"
-    i : int = 1
+    ticket_string : str = "Choisisser un ticket (Entrez 0 pour quitter) :"
+    nbr_tickets : int = 1
     ticket : Ticket | None
     for ticket in connect_user.asign_tickets:
-        ticket_string += f"\n {i} - {ticket.title}"
+        ticket_string += f"\n {nbr_tickets} - {ticket.title}"
+        nbr_tickets += 1
 
     ticket_string += "\n Choix (numéro) : "
         
@@ -190,7 +200,7 @@ def afficher_ticket(connect_user : User):
             nbr_valide = False
 
     if ticket != 0:
-        ticket_manager.view_ticket(connect_user, ticket)
+        print(ticket_manager.view_ticket(connect_user, ticket))
 
 def mise_a_jour_ticket(connect_user : User):
     if len(connect_user.asign_tickets) == 0:
@@ -203,7 +213,7 @@ def mise_a_jour_ticket(connect_user : User):
         nbr_valide = False
         while not nbr_valide:
             try:
-                ticket_id : int = int(input("\nVeuillez entrer l'ID du ticket (0 pour quitter) : "))
+                ticket_id : int = int(input("\nVeuillez entrer l'ID du ticket (Entrez 0 pour quitter) : "))
                 nbr_valide = True
             except ValueError:
                 print("\nErreur : Veillez entrer un nombre entier")
@@ -231,12 +241,13 @@ def mise_a_jour_ticket(connect_user : User):
 
 
 def main():
+    
     admin1 = Admin(1, 'Camille Barrette', 'cbarrette@etu.uqac.ca')
-    list_admin.append(admin1)
+    register_user(admin1)
     user1 = User(1,'Xavier Tremblay','xtremblay@etu.uqac.ca', 'développeur')
     user2 = User(2, 'Zachary Harvey', 'zharvey@etu.uqac.ca', 'apprenti')
-    list_user.append(user1)
-    list_user.append(user2)
+    register_user(user1)
+    register_user(user2)
 
     connexion : str
     connexion_reussi : bool = False

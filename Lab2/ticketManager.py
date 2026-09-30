@@ -27,8 +27,12 @@ class TicketManager:
     def update_ticket(self, user : User, ticket:Ticket):
         user.update_ticket(ticket)
 
+    def register_user(self, user : User):
+        if user not in self._list_user_assignable:
+            self._list_user_assignable.append(user)
+
     def assign_Ticket(self, admin : Admin, user : User, ticket : Ticket):
         admin.assign_ticket(ticket, user)
 
     def close_ticket(self, admin : Admin, ticket : Ticket):
-        admin.close_ticket(ticket)
+        admin.close_ticket(ticket, self._list_user_assignable)

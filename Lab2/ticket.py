@@ -17,8 +17,8 @@ class Ticket:
     def __init__(self, ticket_id : int, title : str, description_initiale : str, priority : str, creation_date : datetime, update_date : datetime):
         self._ticket_id = ticket_id
         self._title = title
-        self._description = list[DescriptionTicket]()
-        self._description.append(self.add_description(description_initiale))   
+        self._list_description = list[DescriptionTicket]()
+        self.add_description(DescriptionTicketTexte, description_initiale)   
         self._status = StatutTicket.OUVERT
         self._priority = priority
         self._creation_date = creation_date
@@ -34,8 +34,8 @@ class Ticket:
         return self._title
 
     @property
-    def description(self):
-        return self._description
+    def list_description(self):
+        return self._list_description
 
     @property
     def status(self):
@@ -62,7 +62,7 @@ class Ticket:
             return
 
         if (self.status == status-1):# Si le Statut actuelle est avant le statut qu'on veut aller
-            self.status = status
+            self._status = status
 
     def add_description(self, type_description : type, description : str):
         if (type_description == DescriptionTicketTexte):

@@ -1,6 +1,6 @@
-from enum import Enum
+from enum import IntEnum
 
-class StatutTicket(Enum):
+class StatutTicket(IntEnum):
     OUVERT = 0
     ASSIGNÉ = 1
     VALIDATION = 2
