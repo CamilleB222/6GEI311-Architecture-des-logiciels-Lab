@@ -40,17 +40,21 @@ class User:
     def create_ticket (self, ticket : Ticket):
         self._created_tickets.append(ticket)
     
-    def view_ticket (self, ticket : Ticket):
+    def view_ticket (self, ticket : Ticket) -> str:
         if not self._asign_tickets.__contains__(ticket):
-            return
+            return ""
+        
+        ticket_string : str = ""
 
-        print('---- Ticket ' + str(ticket.ticket_id) + ' ----')
-        print('Titre : ' + ticket.title)
-        print('Description : ' + ticket.description)
-        print('Status : ' + ticket.status)
-        print('Priorité : ' + ticket.priority)
-        print('Date de création : ' + ticket.creation_date.strftime("%Y-%m-%d %H:%M:%S"))
-        print('Date de modification : ' + ticket.update_date.strftime("%Y-%m-%d %H:%M:%S"))
+        ticket_string += ('---- Ticket ' + str(ticket.ticket_id) + ' ----') + "\n"
+        ticket_string +=('Titre : ' + ticket.title) + "\n"
+        ticket_string +=('Description : ' + ticket.description) + "\n"
+        ticket_string +=('Status : ' + ticket.status) + "\n"
+        ticket_string +=('Priorité : ' + ticket.priority) + "\n"
+        ticket_string +=('Date de création : ' + ticket.creation_date.strftime("%Y-%m-%d %H:%M:%S")) + "\n"
+        ticket_string +=('Date de modification : ' + ticket.update_date.strftime("%Y-%m-%d %H:%M:%S")) + "\n"
+
+        return ticket_string
     
     def update_ticket(self, ticket : Ticket):
         if not self._asign_tickets.__contains__(ticket):

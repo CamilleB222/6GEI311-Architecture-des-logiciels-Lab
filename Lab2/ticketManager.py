@@ -21,8 +21,8 @@ class TicketManager:
         user.create_ticket(ticket)
         self._list_ticket.append(ticket)
 
-    def view_ticket(self, user : User, ticket:Ticket):
-        user.view_ticket(ticket)
+    def view_ticket(self, user : User, ticket:Ticket) -> str:
+        return user.view_ticket(ticket)
 
     def update_ticket(self, user : User, ticket:Ticket):
         user.update_ticket(ticket)
