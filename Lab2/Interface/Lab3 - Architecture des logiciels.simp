@@ -1,0 +1,666 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<sim-project version="15.1" multi-file="no" uid="simp93b78bb284034d1cae9dedabee9c2f31" creation-date="10/07/2026 07:59:56">
+  <meta>
+    <name>Lab3 - Architecture des logiciels</name>
+    <authors>Camille Barrette</authors>
+    <description />
+  </meta>
+  <counters models="1">
+    <entity-names>
+      <counter>
+        <item-type type-id="ui-window" type="Window" />
+        <value>7</value>
+      </counter>
+      <counter>
+        <item-type type-id="ui-label" type="Label" />
+        <value>19</value>
+      </counter>
+      <counter>
+        <item-type type-id="ui-panel" type="Panel" />
+        <value>8</value>
+      </counter>
+      <counter>
+        <item-type type-id="ui-button" type="Button" />
+        <value>17</value>
+      </counter>
+      <counter>
+        <item-type type-id="ui-paragraph" type="Paragraph" />
+        <value>1</value>
+      </counter>
+      <counter>
+        <item-type type-id="ui-text-box" type="Text Box" />
+        <value>4</value>
+      </counter>
+      <counter>
+        <item-type type-id="ui-multi-line" type="Multi-Line Text Box" />
+        <value>2</value>
+      </counter>
+      <counter>
+        <item-type type-id="ui-list-box" type="List Box" />
+        <value>1</value>
+      </counter>
+      <counter>
+        <item-type type-id="ui-grid" type="Grid" />
+        <value>2</value>
+      </counter>
+      <counter>
+        <item-type type-id="ui-combo-box" type="Combo Box" />
+        <value>1</value>
+      </counter>
+      <counter>
+        <item-type type-id="ui-check-box" type="Check Box" />
+        <value>1</value>
+      </counter>
+    </entity-names>
+    <entity-ids>
+      <counter>
+        <item-type type-id="ui-window" type="Window" />
+        <value>8</value>
+      </counter>
+      <counter>
+        <item-type type-id="ui-label" type="Label" />
+        <value>20</value>
+      </counter>
+      <counter>
+        <item-type type-id="ui-panel" type="Panel" />
+        <value>11</value>
+      </counter>
+      <counter>
+        <item-type type-id="ui-button" type="Button" />
+        <value>18</value>
+      </counter>
+      <counter>
+        <item-type type-id="ui-paragraph" type="Paragraph" />
+        <value>4</value>
+      </counter>
+      <counter>
+        <item-type type-id="ui-text-box" type="Text Box" />
+        <value>5</value>
+      </counter>
+      <counter>
+        <item-type type-id="ui-multi-line" type="Multi-Line Text Box" />
+        <value>8</value>
+      </counter>
+      <counter>
+        <item-type type-id="ui-list-box" type="List Box" />
+        <value>2</value>
+      </counter>
+      <counter>
+        <item-type type-id="ui-grid" type="Grid" />
+        <value>3</value>
+      </counter>
+      <counter>
+        <item-type type-id="ui-combo-box" type="Combo Box" />
+        <value>2</value>
+      </counter>
+      <counter>
+        <item-type type-id="ui-check-box" type="Check Box" />
+        <value>2</value>
+      </counter>
+    </entity-ids>
+    <diagrams>
+      <counter>
+        <type>SoftwareIdeasModeler.Core.Diagrams.Wireframing.UserInterfaceDiagram</type>
+        <value>4</value>
+      </counter>
+    </diagrams>
+    <fields />
+  </counters>
+  <alias-groups />
+  <management uid="md-1180f9a7905a4338a034dc2ccd9569e0" name="" task-id-sequence="0">
+    <working-schedule uid="ws-232d80e445ae42f0ae2a92a842dda590" hours="8" monday="8" tuesday="8" wednesday="8" thursday="8" friday="8" saturday="0" sunday="0" />
+    <persons>
+      <person id="">
+        <first-name>Camille</first-name>
+        <last-name>Barrette</last-name>
+        <role />
+        <e-mail />
+        <phone-number />
+        <description />
+        <color>#00000000</color>
+        <working-schedule uid="ws-c34941cc02f9439b9048c06bd4b364d3" hours="8" monday="8" tuesday="8" wednesday="8" thursday="8" friday="8" saturday="0" sunday="0" />
+      </person>
+      <person id="">
+        <first-name>Camille</first-name>
+        <last-name>Barrette</last-name>
+        <role />
+        <e-mail />
+        <phone-number />
+        <description />
+        <color>#00000000</color>
+      </person>
+    </persons>
+    <teams />
+    <sprints />
+    <projects />
+    <modules />
+    <tasks />
+    <to-dos />
+  </management>
+  <glossary id="glsr-05326a191bf8441ea573be024793e886" name="" order-index="-1" />
+  <types default="UML">
+    <type-sets>
+      <type-set file="UmlTypes.xml" />
+    </type-sets>
+    <custom-types>
+      <parameters />
+      <types />
+    </custom-types>
+  </types>
+  <items>
+    <item id="5b446a5439a34b819355afa749c0b990" cid="LBL009" type="ui-label" name="&lt;Role&gt;" owner="21a12f279eff45a895df9190da7239ba" creation-date="10/07/2026 08:13:50" />
+    <item id="ac3858a21e314b2da4b238df11f1ae6f" cid="BTN009" type="ui-button" name="Annuler" owner="459305bad8374e7084688fc832e1c624" creation-date="10/07/2026 08:27:29">
+      <button />
+    </item>
+    <item id="6837ec4b0b5e4e41a7663a83ebb454f7" cid="LBL008" type="ui-label" name="&lt;nom d'utilisateur&gt;" owner="21a12f279eff45a895df9190da7239ba" creation-date="10/07/2026 08:13:23" />
+    <item id="e9c9de6f75ed49059fcb55b409457a65" cid="LBL010" type="ui-label" name="Acceuil/Liste ticket" owner="21a12f279eff45a895df9190da7239ba" creation-date="10/07/2026 08:17:35">
+      <style style-name="Custom Style" shadow-type="smooth" shadow-offset="1,1" shadow-visible="true" shadow-color="#32000000" gloss-effect="rounded" wrap-name-text="true" wrap-other-text="true" padding="1" field-padding="1" glow-color="#FFFFFF" accuracy="0.9">
+        <text-style type="name" color="#000000" font="Verdana;10;" horizontal-alignment="left" vertical-alignment="top" />
+        <text-style type="part-header" color="#1E1E1E" font="Verdana;9;I" />
+        <text-style type="text" color="#000000" font="Verdana;10;" horizontal-alignment="left" vertical-alignment="top" />
+        <text-style type="tagged-value" color="#1E1E1E" font="Verdana;10;" horizontal-alignment="left" vertical-alignment="top" />
+        <text-style type="stereotype" color="#1E1E1E" font="Verdana;10;" horizontal-alignment="left" vertical-alignment="top" />
+        <background type="forward-diagonal" colors="#FFFFFF,#EBEBEB" />
+        <border color="#000000" />
+        <label-connector color="#80000000" dash-style="Dash" />
+        <alternate-styles>
+          <alternate-style style-name="Alternate" shadow-type="smooth" shadow-offset="1,1" shadow-color="#32000000" gloss-effect="rounded" wrap-name-text="true" wrap-other-text="true" padding="1" field-padding="1" margin="3" glow-color="#FFFFFF" accuracy="0.9">
+            <text-style type="name" color="#000000" font="Verdana;10;B" />
+            <text-style type="part-header" color="#1E1E1E" font="Verdana;9;I" />
+            <text-style type="text" color="#000000" font="Verdana;9;" horizontal-alignment="left" />
+            <text-style type="tagged-value" color="#1E1E1E" font="Verdana;9;I" />
+            <text-style type="stereotype" color="#1E1E1E" font="Verdana;9;I" />
+            <background type="vertical-linear" colors="#1E90FF,#87CEFA" />
+            <border color="#00008B" />
+            <label-connector color="#000000" />
+          </alternate-style>
+        </alternate-styles>
+      </style>
+    </item>
+    <item id="c10e6128cae642559be39b2c1fbb0dfb" cid="LBL010" type="ui-label" name="Acceuil" owner="831483b1b2c040598b76b8051d55b3f6" creation-date="10/07/2026 08:17:35">
+      <style style-name="Custom Style" shadow-type="smooth" shadow-offset="1,1" shadow-visible="true" shadow-color="#32000000" gloss-effect="rounded" wrap-name-text="true" wrap-other-text="true" padding="1" field-padding="1" glow-color="#FFFFFF" accuracy="0.9">
+        <text-style type="name" color="#000000" font="Verdana;10;" horizontal-alignment="left" vertical-alignment="top" />
+        <text-style type="part-header" color="#1E1E1E" font="Verdana;9;I" />
+        <text-style type="text" color="#000000" font="Verdana;10;" horizontal-alignment="left" vertical-alignment="top" />
+        <text-style type="tagged-value" color="#1E1E1E" font="Verdana;10;" horizontal-alignment="left" vertical-alignment="top" />
+        <text-style type="stereotype" color="#1E1E1E" font="Verdana;10;" horizontal-alignment="left" vertical-alignment="top" />
+        <background type="forward-diagonal" colors="#FFFFFF,#EBEBEB" />
+        <border color="#000000" />
+        <label-connector color="#80000000" dash-style="Dash" />
+        <alternate-styles>
+          <alternate-style style-name="Alternate" shadow-type="smooth" shadow-offset="1,1" shadow-color="#32000000" gloss-effect="rounded" wrap-name-text="true" wrap-other-text="true" padding="1" field-padding="1" margin="3" glow-color="#FFFFFF" accuracy="0.9">
+            <text-style type="name" color="#000000" font="Verdana;10;B" />
+            <text-style type="part-header" color="#1E1E1E" font="Verdana;9;I" />
+            <text-style type="text" color="#000000" font="Verdana;9;" horizontal-alignment="left" />
+            <text-style type="tagged-value" color="#1E1E1E" font="Verdana;9;I" />
+            <text-style type="stereotype" color="#1E1E1E" font="Verdana;9;I" />
+            <background type="vertical-linear" colors="#1E90FF,#87CEFA" />
+            <border color="#00008B" />
+            <label-connector color="#000000" />
+          </alternate-style>
+        </alternate-styles>
+      </style>
+    </item>
+    <item id="4619e6691cb345d4bceab2cd8ff8bc4f" cid="LBL019" type="ui-label" name="Ajouter une image" owner="459305bad8374e7084688fc832e1c624" creation-date="10/07/2026 08:45:21" />
+    <item id="2d7c3f59b5b1416f9bac711412576b4f" cid="BTN009" type="ui-button" name="Ajouter" owner="459305bad8374e7084688fc832e1c624" creation-date="10/07/2026 08:27:29">
+      <button />
+    </item>
+    <item id="2d4c5f50f8354cf990cc51f69dc62c3d" cid="BTN009" type="ui-button" name="Ajouter" owner="eacd83ffea8146a7b1390668b42c5bb5" creation-date="10/07/2026 08:27:29">
+      <button />
+    </item>
+    <item id="81979441d1e54d498a9afe2aeb944b57" cid="LBL009" type="ui-label" name="&lt;Role&gt;" owner="831483b1b2c040598b76b8051d55b3f6" creation-date="10/07/2026 08:13:50" />
+    <item id="6a8e8d9d502b4677bf6f37644acf19e4" cid="LBL008" type="ui-label" name="&lt;nom d'utilisateur&gt;" owner="831483b1b2c040598b76b8051d55b3f6" creation-date="10/07/2026 08:13:23" />
+    <item id="725f3781e9424d16be19f0a2b0bb6ede" cid="BTN009" type="ui-button" name="Annuler" owner="eacd83ffea8146a7b1390668b42c5bb5" creation-date="10/07/2026 08:27:29">
+      <button />
+    </item>
+    <item id="ec90d73f141f4947965782d825607108" cid="LBL016" type="ui-label" name="Liste des tickets" owner="21a12f279eff45a895df9190da7239ba" creation-date="10/07/2026 08:28:48" />
+    <item id="99adbb39f4754d16b8c7575cfd9c2b51" cid="LBL010" type="ui-label" name="Acceuil/Créer ticket" owner="831483b1b2c040598b76b8051d55b3f6" creation-date="10/07/2026 08:17:35">
+      <style style-name="Custom Style" shadow-type="smooth" shadow-offset="1,1" shadow-visible="true" shadow-color="#32000000" gloss-effect="rounded" wrap-name-text="true" wrap-other-text="true" padding="1" field-padding="1" glow-color="#FFFFFF" accuracy="0.9">
+        <text-style type="name" color="#000000" font="Verdana;10;" horizontal-alignment="left" vertical-alignment="top" />
+        <text-style type="part-header" color="#1E1E1E" font="Verdana;9;I" />
+        <text-style type="text" color="#000000" font="Verdana;10;" horizontal-alignment="left" vertical-alignment="top" />
+        <text-style type="tagged-value" color="#1E1E1E" font="Verdana;10;" horizontal-alignment="left" vertical-alignment="top" />
+        <text-style type="stereotype" color="#1E1E1E" font="Verdana;10;" horizontal-alignment="left" vertical-alignment="top" />
+        <background type="forward-diagonal" colors="#FFFFFF,#EBEBEB" />
+        <border color="#000000" />
+        <label-connector color="#80000000" dash-style="Dash" />
+        <alternate-styles>
+          <alternate-style style-name="Alternate" shadow-type="smooth" shadow-offset="1,1" shadow-color="#32000000" gloss-effect="rounded" wrap-name-text="true" wrap-other-text="true" padding="1" field-padding="1" margin="3" glow-color="#FFFFFF" accuracy="0.9">
+            <text-style type="name" color="#000000" font="Verdana;10;B" />
+            <text-style type="part-header" color="#1E1E1E" font="Verdana;9;I" />
+            <text-style type="text" color="#000000" font="Verdana;9;" horizontal-alignment="left" />
+            <text-style type="tagged-value" color="#1E1E1E" font="Verdana;9;I" />
+            <text-style type="stereotype" color="#1E1E1E" font="Verdana;9;I" />
+            <background type="vertical-linear" colors="#1E90FF,#87CEFA" />
+            <border color="#00008B" />
+            <label-connector color="#000000" />
+          </alternate-style>
+        </alternate-styles>
+      </style>
+    </item>
+  </items>
+  <models>
+    <model id="p0798edcc6af54207989119b228c11c05_353291208" name="Model1" namespace="" order-index="1">
+      <meta>
+        <authors>
+          <author> </author>
+        </authors>
+        <description />
+        <creation-date>10/07/2026 08:00:56</creation-date>
+        <change-date>01/01/0001 00:00:00</change-date>
+        <revision-count>0</revision-count>
+        <version />
+      </meta>
+      <abstract-items />
+      <sub-models />
+      <diagram type="user-interface" id="p807bbc6d4ca54a2496bcaf510cac79c1_611129977" name="Connection" order-index="1" uid="" name-style="" auto-routed-paths="false" default-line-style="default" view-location="21,21">
+        <style>
+          <background-color index="1" color="#FFFFFFFF" />
+          <background-color index="2" color="#FFFFFFFF" />
+          <background-type type="vertical-linear" />
+        </style>
+        <meta>
+          <authors>
+            <author> </author>
+          </authors>
+          <description />
+          <creation-date>10/07/2026 08:00:56</creation-date>
+          <change-date>10/07/2026 08:10:20</change-date>
+          <revision-count>0</revision-count>
+          <version />
+        </meta>
+        <abstract-items>
+          <item id="3414f256ec56460bb548a7e3a4b9483d" cid="LBL002" type="ui-label" name="Mot de passe :" owner="e728bb430ad14b6aa9051f51406136f7" creator="" creation-date="10/07/2026 08:07:15" />
+          <item id="57cd8d57c4d74bf88e8978cda61276d0" cid="LBL001" type="ui-label" name="Nom d'utilisateur :" owner="e728bb430ad14b6aa9051f51406136f7" creator="" creation-date="10/07/2026 08:02:10" />
+          <item id="214a5159c6694b85a36b68c48b49ebe9" cid="LBL004" type="ui-label" name="TEXTE" owner="e728bb430ad14b6aa9051f51406136f7" creator="" creation-date="10/07/2026 08:08:59" />
+          <item id="6c2fabe638db41a8ba53c3a43456da63" cid="ELEM001" type="ui-panel" name="Panel1" owner="e728bb430ad14b6aa9051f51406136f7" creator="" creation-date="10/07/2026 08:07:58" />
+          <item id="186135d7208d4a1384a9e26dc5e6c472" cid="BTN001" type="ui-button" name="Connexion" owner="e728bb430ad14b6aa9051f51406136f7" creator="" creation-date="10/07/2026 08:10:20">
+            <button />
+          </item>
+          <item id="e728bb430ad14b6aa9051f51406136f7" cid="WND001" type="ui-window" name="Gestionaire de ticket" creator="" creation-date="10/07/2026 08:01:01">
+            <owned-items />
+            <window show-min-button="true" show-max-button="true" show-close-button="true" show-size-grip="false" />
+          </item>
+          <item id="6220bd8d5ed54261ab4e2453cb28a826" cid="ELEM002" type="ui-panel" name="Panel2" owner="e728bb430ad14b6aa9051f51406136f7" creator="" creation-date="10/07/2026 08:08:05" />
+        </abstract-items>
+        <layer id="f6616f8dd80444069947bed932acd93a" name="Default" visible="true" enabled="true" locked="false">
+          <item id="e728bb430ad14b6aa9051f51406136f7" iid="70172e6219b64eb1b416ee8517a8bb1d" creation-date="10/07/2026 08:01:01" order-index="0" type="ui-window">
+            <layout ax="332" ay="101" awidth="536" aheight="287" x="332" y="101" width="536" height="287" expanded="332,101,536,287" collapsed="0,0,0,0" />
+          </item>
+          <item id="57cd8d57c4d74bf88e8978cda61276d0" iid="43aca86cd5644c7e915c750831058778" container="e728bb430ad14b6aa9051f51406136f7" container-iid="70172e6219b64eb1b416ee8517a8bb1d" creation-date="10/07/2026 08:02:10" order-index="1" type="ui-label">
+            <layout ax="400" ay="213.5" awidth="150" aheight="36" x="400" y="213.5" width="150" height="36" />
+          </item>
+          <item id="6c2fabe638db41a8ba53c3a43456da63" iid="1fd4bb1bcbe04aa5a2be0f80bc167d7e" container="e728bb430ad14b6aa9051f51406136f7" container-iid="70172e6219b64eb1b416ee8517a8bb1d" creation-date="10/07/2026 08:07:58" order-index="3" type="ui-panel">
+            <layout ax="550" ay="213.5" awidth="250" aheight="36" x="550" y="213.5" width="250" height="36" expanded="550,234,250,36" collapsed="0,0,0,0" />
+          </item>
+          <item id="6220bd8d5ed54261ab4e2453cb28a826" iid="4769b6845e4041118ccc1be2777c6509" container="e728bb430ad14b6aa9051f51406136f7" container-iid="70172e6219b64eb1b416ee8517a8bb1d" creation-date="10/07/2026 08:08:05" order-index="4" type="ui-panel">
+            <layout ax="550" ay="267.5" awidth="250" aheight="36" x="550" y="267.5" width="250" height="36" expanded="550,288,250,36" collapsed="0,0,0,0" />
+          </item>
+          <item id="214a5159c6694b85a36b68c48b49ebe9" iid="81be20090a04400ba489b8c324f27515" container="e728bb430ad14b6aa9051f51406136f7" container-iid="70172e6219b64eb1b416ee8517a8bb1d" creation-date="10/07/2026 08:08:59" order-index="5" type="ui-label">
+            <layout ax="525" ay="160.5" awidth="150" aheight="36" x="525" y="160.5" width="150" height="20" />
+          </item>
+          <item id="186135d7208d4a1384a9e26dc5e6c472" iid="8ec2f94e186c45198f2fa5aff51ff03a" container="e728bb430ad14b6aa9051f51406136f7" container-iid="70172e6219b64eb1b416ee8517a8bb1d" creation-date="10/07/2026 08:10:20" order-index="6" type="ui-button">
+            <layout ax="550" ay="321.5" awidth="100" aheight="36" x="550" y="321.5" width="100" height="36" />
+          </item>
+          <item id="3414f256ec56460bb548a7e3a4b9483d" iid="bbf59a7c55764b1cb513ef726ab596b6" container="e728bb430ad14b6aa9051f51406136f7" container-iid="70172e6219b64eb1b416ee8517a8bb1d" creation-date="10/07/2026 08:07:15" order-index="2" type="ui-label">
+            <layout ax="415" ay="265.5" awidth="150" aheight="36" x="415" y="265.5" width="150" height="20" />
+          </item>
+        </layer>
+      </diagram>
+      <diagram type="user-interface" id="p47fe2cb311a8493d9600d5be5c60488f_914358960" name="Acceuil" order-index="2" overview-order-index="0" uid="" name-style="" auto-routed-paths="false" default-line-style="default" view-location="-184,119" zoom="1.2">
+        <style>
+          <background-color index="1" color="#FFFFFFFF" />
+          <background-color index="2" color="#FFFFFFFF" />
+          <background-type type="vertical-linear" />
+        </style>
+        <meta>
+          <authors>
+            <author> </author>
+          </authors>
+          <description />
+          <creation-date>10/07/2026 08:12:10</creation-date>
+          <change-date>10/07/2026 08:22:08</change-date>
+          <revision-count>0</revision-count>
+          <version />
+        </meta>
+        <abstract-items>
+          <item id="699eaa0af58f45e88d0ddd167c7ecd81" cid="LBL009" type="ui-label" name="&lt;Role&gt;" owner="243510874fa24475a6bcd58cc18ae7f1" creator="" creation-date="10/07/2026 08:13:50" />
+          <item id="4f025cfa87e94592bb247b22b9938848" cid="LBL010" type="ui-label" name="Acceuil" owner="243510874fa24475a6bcd58cc18ae7f1" creator="" creation-date="10/07/2026 08:17:35">
+            <style style-name="Custom Style" shadow-type="smooth" shadow-offset="1,1" shadow-visible="true" shadow-color="#32000000" gloss-effect="rounded" wrap-name-text="true" wrap-other-text="true" padding="1" field-padding="1" glow-color="#FFFFFF" accuracy="0.9">
+              <text-style type="name" color="#000000" font="Verdana;10;" horizontal-alignment="left" vertical-alignment="top" />
+              <text-style type="part-header" color="#1E1E1E" font="Verdana;9;I" />
+              <text-style type="text" color="#000000" font="Verdana;10;" horizontal-alignment="left" vertical-alignment="top" />
+              <text-style type="tagged-value" color="#1E1E1E" font="Verdana;10;" horizontal-alignment="left" vertical-alignment="top" />
+              <text-style type="stereotype" color="#1E1E1E" font="Verdana;10;" horizontal-alignment="left" vertical-alignment="top" />
+              <background type="forward-diagonal" colors="#FFFFFF,#EBEBEB" />
+              <border color="#000000" />
+              <label-connector color="#80000000" dash-style="Dash" />
+              <alternate-styles>
+                <alternate-style style-name="Alternate" shadow-type="smooth" shadow-offset="1,1" shadow-color="#32000000" gloss-effect="rounded" wrap-name-text="true" wrap-other-text="true" padding="1" field-padding="1" margin="3" glow-color="#FFFFFF" accuracy="0.9">
+                  <text-style type="name" color="#000000" font="Verdana;10;B" />
+                  <text-style type="part-header" color="#1E1E1E" font="Verdana;9;I" />
+                  <text-style type="text" color="#000000" font="Verdana;9;" horizontal-alignment="left" />
+                  <text-style type="tagged-value" color="#1E1E1E" font="Verdana;9;I" />
+                  <text-style type="stereotype" color="#1E1E1E" font="Verdana;9;I" />
+                  <background type="vertical-linear" colors="#1E90FF,#87CEFA" />
+                  <border color="#00008B" />
+                  <label-connector color="#000000" />
+                </alternate-style>
+              </alternate-styles>
+            </style>
+          </item>
+          <item id="b4e000a130bf4f34b979cd26dd4e0e48" cid="BTN005" type="ui-button" name="Créer ticket" owner="243510874fa24475a6bcd58cc18ae7f1" creator="" creation-date="10/07/2026 08:14:47">
+            <button />
+          </item>
+          <item id="56c8a692c37b4eb6b6e2fbf288b80ee6" cid="BTN008" type="ui-button" name="Déconnexion" owner="243510874fa24475a6bcd58cc18ae7f1" creator="" creation-date="10/07/2026 08:14:57">
+            <button />
+          </item>
+          <item id="b0e4f71570984a2fb355d4e68ff90125" cid="BTN007" type="ui-button" name="Mettre à jour ticket " owner="243510874fa24475a6bcd58cc18ae7f1" creator="" creation-date="10/07/2026 08:14:52">
+            <button />
+          </item>
+          <item id="5b6847cd5f454ad5857c8fe3ef35a8fc" cid="BTN003" type="ui-button" name="Fermer ticket" owner="243510874fa24475a6bcd58cc18ae7f1" creator="" creation-date="10/07/2026 08:14:40">
+            <button />
+          </item>
+          <item id="1dbde2638cd148bcb58f3fec1eb81e58" cid="BTN002" type="ui-button" name="Assigner ticket" owner="243510874fa24475a6bcd58cc18ae7f1" creator="" creation-date="10/07/2026 08:14:37">
+            <button />
+          </item>
+          <item id="243510874fa24475a6bcd58cc18ae7f1" cid="WND002" type="ui-window" name="Gestionnaire de ticket" creator="" creation-date="10/07/2026 08:12:12">
+            <owned-items />
+            <window show-min-button="true" show-max-button="true" show-close-button="true" show-size-grip="false" />
+          </item>
+          <item id="f868311732a742529bc31d06f9a048ca" cid="LBL007" type="ui-label" name="Bienvenu " owner="243510874fa24475a6bcd58cc18ae7f1" creator="" creation-date="10/07/2026 08:13:06" />
+          <item id="848588b6654d44a785a0d0da8ff87593" cid="BTN006" type="ui-button" name="Afficher ticket" owner="243510874fa24475a6bcd58cc18ae7f1" creator="" creation-date="10/07/2026 08:14:49">
+            <button />
+          </item>
+          <item id="3b08e699a5ad427f9aa2906786ada214" cid="BTN004" type="ui-button" name="Liste tickets" owner="243510874fa24475a6bcd58cc18ae7f1" creator="" creation-date="10/07/2026 08:14:42">
+            <button />
+          </item>
+          <item id="c15ab947b77249b5b5ba9bbad7af7979" cid="LBL008" type="ui-label" name="&lt;nom d'utilisateur&gt;" owner="243510874fa24475a6bcd58cc18ae7f1" creator="" creation-date="10/07/2026 08:13:23" />
+        </abstract-items>
+        <layer id="53437fd035ca46d094051cc1f390a884" name="Default" visible="true" enabled="true" locked="false">
+          <item id="243510874fa24475a6bcd58cc18ae7f1" iid="0b8a83f6fb874b888e6e66e764f43ad8" creation-date="10/07/2026 08:12:12" order-index="0" type="ui-window">
+            <layout ax="275" ay="56" awidth="433" aheight="251" x="275" y="56" width="433" height="251" expanded="275,56,433,251" collapsed="0,0,0,0" />
+          </item>
+          <item id="f868311732a742529bc31d06f9a048ca" iid="6a43408afef447399751b1a0c06db529" container="243510874fa24475a6bcd58cc18ae7f1" container-iid="0b8a83f6fb874b888e6e66e764f43ad8" creation-date="10/07/2026 08:13:06" order-index="1" type="ui-label">
+            <layout ax="295.5" ay="102" awidth="84" aheight="36" x="295.5" y="102" width="84" height="20" />
+          </item>
+          <item id="699eaa0af58f45e88d0ddd167c7ecd81" iid="d6b700b38ee84576b1b35f7a4e88e082" container="243510874fa24475a6bcd58cc18ae7f1" container-iid="0b8a83f6fb874b888e6e66e764f43ad8" creation-date="10/07/2026 08:13:50" order-index="3" type="ui-label">
+            <layout ax="563.5" ay="102" awidth="124" aheight="36" x="563.5" y="102" width="104" height="36" />
+          </item>
+          <item id="3b08e699a5ad427f9aa2906786ada214" iid="5a73b909dfac4e819c976b4ca054a9f6" container="243510874fa24475a6bcd58cc18ae7f1" container-iid="0b8a83f6fb874b888e6e66e764f43ad8" creation-date="10/07/2026 08:14:42" order-index="6" type="ui-button">
+            <layout ax="524" ay="174.5" awidth="104" aheight="36" x="524" y="174.5" width="100" height="30" />
+          </item>
+          <item id="b4e000a130bf4f34b979cd26dd4e0e48" iid="25f4d92d00ed462db70625eff516c738" container="243510874fa24475a6bcd58cc18ae7f1" container-iid="0b8a83f6fb874b888e6e66e764f43ad8" creation-date="10/07/2026 08:14:47" order-index="7" type="ui-button">
+            <layout ax="355" ay="173" awidth="104" aheight="36" x="355" y="173" width="100" height="30" />
+          </item>
+          <item id="56c8a692c37b4eb6b6e2fbf288b80ee6" iid="2ec99e7cc558444ab3555cfae7b2a3c3" container="243510874fa24475a6bcd58cc18ae7f1" container-iid="0b8a83f6fb874b888e6e66e764f43ad8" creation-date="10/07/2026 08:14:57" order-index="10" type="ui-button">
+            <layout ax="439.5" ay="244" awidth="104" aheight="36" x="439.5" y="244" width="100" height="30" />
+          </item>
+          <item id="4f025cfa87e94592bb247b22b9938848" iid="385d1edf379946f3affdb0e20debf150" container="243510874fa24475a6bcd58cc18ae7f1" container-iid="0b8a83f6fb874b888e6e66e764f43ad8" creation-date="10/07/2026 08:17:35" order-index="11" type="ui-label">
+            <layout ax="300.5" ay="138" awidth="150" aheight="22" x="300.5" y="138" width="150" height="22" />
+          </item>
+          <item id="c15ab947b77249b5b5ba9bbad7af7979" iid="1f971bea01024c64a61bbc5257142da1" container="243510874fa24475a6bcd58cc18ae7f1" container-iid="0b8a83f6fb874b888e6e66e764f43ad8" creation-date="10/07/2026 08:13:23" order-index="2" type="ui-label">
+            <layout ax="367.5" ay="102" awidth="161" aheight="36" x="367.5" y="102" width="150" height="20" />
+          </item>
+        </layer>
+      </diagram>
+      <diagram type="user-interface" id="p622d1ff541d04a0692b9b1c5ce71da4a_781618428" name="CréerTicket" order-index="3" overview-order-index="1" uid="" name-style="" auto-routed-paths="false" default-line-style="default" view-location="-61,-37" zoom="0.7">
+        <style>
+          <background-color index="1" color="#FFFFFFFF" />
+          <background-color index="2" color="#FFFFFFFF" />
+          <background-type type="vertical-linear" />
+        </style>
+        <meta>
+          <authors>
+            <author> </author>
+          </authors>
+          <description />
+          <creation-date>10/07/2026 08:24:20</creation-date>
+          <change-date>10/07/2026 08:50:02</change-date>
+          <revision-count>0</revision-count>
+          <version />
+        </meta>
+        <abstract-items>
+          <item id="459305bad8374e7084688fc832e1c624" cid="WND007" type="ui-window" name="Gestionnaire de ticket" creator="" creation-date="10/07/2026 08:44:46">
+            <owned-items />
+            <window show-min-button="true" show-max-button="true" show-close-button="true" show-size-grip="false" />
+          </item>
+          <item id="841d2b8a32b042e98a6719af5fe36273" cid="LBL016" type="ui-label" name="Création de ticket" owner="831483b1b2c040598b76b8051d55b3f6" creator="" creation-date="10/07/2026 08:28:48" />
+          <item id="154d08870b354ec383c781bedc520e28" cid="LBL018" type="ui-label" name="Priorité : " owner="831483b1b2c040598b76b8051d55b3f6" creator="" creation-date="10/07/2026 08:29:54" />
+          <item id="14a07bbc829f455aab36d6d64b716855" cid="GRD001" type="ui-grid" name="Grid1" owner="831483b1b2c040598b76b8051d55b3f6" creator="" creation-date="10/07/2026 08:36:44">
+            <grid>
+              <columns>
+                <column id="uigc-123933b1-d47a-402e-888a-56696f3b3127" name="Description" />
+                <column id="uigc-c707803d-b038-4326-9621-42bbfef3a4bb" name="Type" />
+                <column id="uigc-adc8d5c7-1d76-4301-b2cb-acbf0a94e52b" name="Action" />
+              </columns>
+            </grid>
+          </item>
+          <item id="453da9b9e6264189914caf5fddb71eae" cid="CMB001" type="ui-combo-box" name="Ajouter Description" owner="831483b1b2c040598b76b8051d55b3f6" creator="" creation-date="10/07/2026 08:43:12" />
+          <item id="49812d723d274e12a49b591d573b36ba" cid="ELEM006" type="ui-multi-line" name="&lt;Description&gt;" owner="831483b1b2c040598b76b8051d55b3f6" creator="" creation-date="10/07/2026 08:32:55">
+            <multiline-text-box />
+          </item>
+          <item id="45d3d0b4e5e24ba2ba55c75fb7cb4dff" cid="LBL017" type="ui-label" name="Description : " owner="831483b1b2c040598b76b8051d55b3f6" creator="" creation-date="10/07/2026 08:29:20" />
+          <item id="4e9ff755b69b4d07b2b7f4fb51825ee4" cid="LST001" type="ui-list-box" name="ListBox1" owner="831483b1b2c040598b76b8051d55b3f6" creator="" creation-date="10/07/2026 08:36:07">
+            <list-box>
+              <list-items />
+            </list-box>
+          </item>
+          <item id="af52dca7348f416490f7ca2b7ba1f616" cid="ELEM010" type="ui-panel" name="&lt;aperçu&gt;" owner="459305bad8374e7084688fc832e1c624" creator="" creation-date="10/07/2026 08:50:02" />
+          <item id="eacd83ffea8146a7b1390668b42c5bb5" cid="WND006" type="ui-window" name="Gestionnaire de ticket" creator="" creation-date="10/07/2026 08:44:43">
+            <owned-items />
+            <window show-min-button="true" show-max-button="true" show-close-button="true" show-size-grip="false" />
+          </item>
+          <item id="be825e6db68249e494920b58ecc02e0e" cid="BTN010" type="ui-button" name="Créer" owner="831483b1b2c040598b76b8051d55b3f6" creator="" creation-date="10/07/2026 08:27:32">
+            <button />
+          </item>
+          <item id="b35d5291b3c9458c98b3f4aafc953bb8" cid="BTN012" type="ui-button" name="Sélectionner" owner="459305bad8374e7084688fc832e1c624" creator="" creation-date="10/07/2026 08:48:06">
+            <button />
+          </item>
+          <item id="566afdefb11747dbb7850e3066ac3ce1" cid="TXT002" type="ui-text-box" name="&lt;Description" owner="831483b1b2c040598b76b8051d55b3f6" creator="" creation-date="10/07/2026 08:32:33">
+            <text-box />
+          </item>
+          <item id="bd2545a3cae0465e985b6480dca66936" cid="BTN011" type="ui-button" name="Ajouter Description" owner="831483b1b2c040598b76b8051d55b3f6" creator="" creation-date="10/07/2026 08:35:15">
+            <button />
+          </item>
+          <item id="6c914a33184f452ba52fa5ad4cbce4bf" cid="LBL015" type="ui-label" name="Titre :" owner="831483b1b2c040598b76b8051d55b3f6" creator="" creation-date="10/07/2026 08:28:22" />
+          <item id="37bbac8e17c845fd82e23eac00542163" cid="TXT003" type="ui-text-box" name="&lt;Priorité" owner="831483b1b2c040598b76b8051d55b3f6" creator="" creation-date="10/07/2026 08:33:35">
+            <text-box />
+          </item>
+          <item id="70f5d5e9bd5c43c3babf60edc1d59c7d" cid="ELEM004" type="ui-panel" name="Panel4" owner="831483b1b2c040598b76b8051d55b3f6" creator="" creation-date="10/07/2026 08:31:42" />
+          <item id="7f01c2b05c114e36a4fbf9b84e410132" cid="TXT004" type="ui-text-box" name="&lt;chemin&gt;" owner="459305bad8374e7084688fc832e1c624" creator="" creation-date="10/07/2026 08:48:56">
+            <text-box />
+          </item>
+          <item id="ba2b161a790d402bb7e44524e132c040" cid="ELEM007" type="ui-multi-line" owner="eacd83ffea8146a7b1390668b42c5bb5" creator="" creation-date="10/07/2026 08:45:37">
+            <multiline-text-box />
+          </item>
+          <item id="b7f2b85f2c6e48f2ba0a1ba8976e2373" cid="ELEM009" type="ui-panel" name="&lt;chemin&gt;" owner="459305bad8374e7084688fc832e1c624" creator="" creation-date="10/07/2026 08:49:11" />
+          <item id="831483b1b2c040598b76b8051d55b3f6" cid="WND003" type="ui-window" name="Gestionnaire de ticket" creator="" creation-date="10/07/2026 08:24:23">
+            <owned-items />
+            <window show-min-button="true" show-max-button="true" show-close-button="true" show-size-grip="false" />
+          </item>
+          <item id="0b9b54b782954b7593c0e0061b4574d0" cid="BTN009" type="ui-button" name="Annuler" owner="831483b1b2c040598b76b8051d55b3f6" creator="" creation-date="10/07/2026 08:27:29">
+            <button />
+          </item>
+          <item id="95cd0ad4a39d45b498e08061a3a9b42d" cid="TXT001" type="ui-text-box" name="&lt;Titre&gt;" owner="831483b1b2c040598b76b8051d55b3f6" creator="" creation-date="10/07/2026 08:32:04">
+            <text-box />
+          </item>
+          <item id="1fbe3d5100a74ea298a2cd2750edabd0" cid="LBL019" type="ui-label" name="Ajouter une description" owner="eacd83ffea8146a7b1390668b42c5bb5" creator="" creation-date="10/07/2026 08:45:21" />
+        </abstract-items>
+        <layer id="c50e7a8ec2fb4511a8565197b131b122" name="Default" visible="true" enabled="true" locked="false">
+          <item id="831483b1b2c040598b76b8051d55b3f6" iid="88c4876bddfb4d3ab883b61e675ea4bc" creation-date="10/07/2026 08:24:23" order-index="0" type="ui-window">
+            <layout ax="219" ay="78" awidth="754" aheight="630" x="219" y="78" width="754" height="630" expanded="219,78,754,630" collapsed="0,0,0,0" />
+          </item>
+          <item id="99adbb39f4754d16b8c7575cfd9c2b51" iid="da1ba769117446a8aa7a240d2d754577" container="831483b1b2c040598b76b8051d55b3f6" container-iid="88c4876bddfb4d3ab883b61e675ea4bc" creation-date="10/07/2026 08:17:35" order-index="0" type="ui-label">
+            <layout ax="243.5" ay="153" awidth="150" aheight="22" x="446.5" y="170" width="150" height="22" />
+          </item>
+          <item id="81979441d1e54d498a9afe2aeb944b57" iid="3057a4076f864a1b95cc5bc6753662e6" container="831483b1b2c040598b76b8051d55b3f6" container-iid="88c4876bddfb4d3ab883b61e675ea4bc" creation-date="10/07/2026 08:13:50" order-index="0" type="ui-label">
+            <layout ax="841.25" ay="117" awidth="124" aheight="36" x="841.25" y="117" width="104" height="36" />
+          </item>
+          <item id="0b9b54b782954b7593c0e0061b4574d0" iid="c06660be6fa44e28aa5b0d4baea252de" container="831483b1b2c040598b76b8051d55b3f6" container-iid="88c4876bddfb4d3ab883b61e675ea4bc" creation-date="10/07/2026 08:27:29" order-index="3" type="ui-button">
+            <layout ax="231.25" ay="659" awidth="100" aheight="36" x="231.25" y="659" width="100" height="30" />
+          </item>
+          <item id="be825e6db68249e494920b58ecc02e0e" iid="f607fa140b2e46d9ad5e38aca04d481b" container="831483b1b2c040598b76b8051d55b3f6" container-iid="88c4876bddfb4d3ab883b61e675ea4bc" creation-date="10/07/2026 08:27:32" order-index="4" type="ui-button">
+            <layout ax="853.25" ay="659" awidth="100" aheight="36" x="853.25" y="659" width="100" height="30" />
+          </item>
+          <item id="6c914a33184f452ba52fa5ad4cbce4bf" iid="881c0c14b5d74b088e8f23c5c979070e" container="831483b1b2c040598b76b8051d55b3f6" container-iid="88c4876bddfb4d3ab883b61e675ea4bc" creation-date="10/07/2026 08:28:22" order-index="5" type="ui-label">
+            <layout ax="279.5" ay="227.5" awidth="90" aheight="36" x="482.5" y="244.5" width="90" height="20" />
+          </item>
+          <item id="841d2b8a32b042e98a6719af5fe36273" iid="08a2bc456b274e6698e95ecc9ef057a0" container="831483b1b2c040598b76b8051d55b3f6" container-iid="88c4876bddfb4d3ab883b61e675ea4bc" creation-date="10/07/2026 08:28:48" order-index="6" type="ui-label">
+            <layout ax="486" ay="174" awidth="150" aheight="36" x="689" y="191" width="150" height="20" />
+          </item>
+          <item id="45d3d0b4e5e24ba2ba55c75fb7cb4dff" iid="0bd7872ccc8f4cf28819189f2b38ef30" container="831483b1b2c040598b76b8051d55b3f6" container-iid="88c4876bddfb4d3ab883b61e675ea4bc" creation-date="10/07/2026 08:29:20" order-index="7" type="ui-label">
+            <layout ax="243.5" ay="282.5" awidth="111" aheight="40" x="446.5" y="299.5" width="111" height="40" />
+          </item>
+          <item id="154d08870b354ec383c781bedc520e28" iid="36656621e39242a2bf2fc2e80c111ada" container="831483b1b2c040598b76b8051d55b3f6" container-iid="88c4876bddfb4d3ab883b61e675ea4bc" creation-date="10/07/2026 08:29:54" order-index="8" type="ui-label">
+            <layout ax="261.5" ay="341.5" awidth="100" aheight="36" x="464.5" y="358.5" width="100" height="20" />
+          </item>
+          <item id="6a8e8d9d502b4677bf6f37644acf19e4" iid="d724203c977d48d8abcdcd047d1e99ae" container="831483b1b2c040598b76b8051d55b3f6" container-iid="88c4876bddfb4d3ab883b61e675ea4bc" creation-date="10/07/2026 08:13:23" order-index="2" type="ui-label">
+            <layout ax="232.5" ay="117" awidth="161" aheight="36" x="435.5" y="134" width="150" height="20" />
+          </item>
+          <item id="49812d723d274e12a49b591d573b36ba" iid="004117476004468aa29e0d6ed58b43d7" container="831483b1b2c040598b76b8051d55b3f6" container-iid="88c4876bddfb4d3ab883b61e675ea4bc" creation-date="10/07/2026 08:32:55" order-index="11" type="ui-multi-line">
+            <layout ax="370" ay="271.5" awidth="583.25" aheight="60" x="573" y="288.5" width="583.25" height="60" />
+          </item>
+          <item id="37bbac8e17c845fd82e23eac00542163" iid="e8e1bfaefbaa49a9b2505d9c617669e8" container="831483b1b2c040598b76b8051d55b3f6" container-iid="88c4876bddfb4d3ab883b61e675ea4bc" creation-date="10/07/2026 08:33:35" order-index="12" type="ui-text-box">
+            <layout ax="370" ay="340.5" awidth="583.25" aheight="36" x="573" y="357.5" width="583.25" height="20" />
+          </item>
+          <item id="14a07bbc829f455aab36d6d64b716855" iid="cb78361910864af1bf9471bf34260f70" container="831483b1b2c040598b76b8051d55b3f6" container-iid="88c4876bddfb4d3ab883b61e675ea4bc" creation-date="10/07/2026 08:36:44" order-index="14" type="ui-grid">
+            <layout ax="249.75" ay="463.5" awidth="692.5" aheight="164.5" x="249.75" y="463.5" width="692.5" height="164.5">
+              <columns widths="293.26172,74.302734,72.46826" />
+            </layout>
+          </item>
+          <item id="453da9b9e6264189914caf5fddb71eae" iid="79c26c1eec524557b041768aefd6fd27" container="831483b1b2c040598b76b8051d55b3f6" container-iid="88c4876bddfb4d3ab883b61e675ea4bc" creation-date="10/07/2026 08:43:12" order-index="15" type="ui-combo-box">
+            <layout ax="251.5" ay="404.5" awidth="174" aheight="36" x="251.5" y="404.5" width="174" height="20" />
+            <combo-box drop-down-size="0,0" />
+          </item>
+          <item id="95cd0ad4a39d45b498e08061a3a9b42d" iid="e3dc0174468f4c0e856a18ce182474fa" container="831483b1b2c040598b76b8051d55b3f6" container-iid="88c4876bddfb4d3ab883b61e675ea4bc" creation-date="10/07/2026 08:32:04" order-index="10" type="ui-text-box">
+            <layout ax="369.5" ay="227.5" awidth="583.75" aheight="36" x="572.5" y="244.5" width="583.75" height="36" />
+          </item>
+          <item id="eacd83ffea8146a7b1390668b42c5bb5" iid="aafc8502294e4a74b9dc94af0ba47438" creation-date="10/07/2026 08:44:43" order-index="16" type="ui-window">
+            <layout ax="1023" ay="78" awidth="402" aheight="300" x="1025" y="75" width="400" height="300" expanded="1023,78,402,300" collapsed="0,0,0,0" />
+          </item>
+          <item id="459305bad8374e7084688fc832e1c624" iid="522b00af25c5417b9b134b12f1f03405" creation-date="10/07/2026 08:44:46" order-index="17" type="ui-window">
+            <layout ax="1023" ay="404.5" awidth="478" aheight="356.5" x="1023" y="404.5" width="478" height="356.5" expanded="1023,404.5,478,356.5" collapsed="0,0,0,0" />
+          </item>
+          <item id="1fbe3d5100a74ea298a2cd2750edabd0" iid="69142c196499426698354cec465ca8e5" container="eacd83ffea8146a7b1390668b42c5bb5" container-iid="aafc8502294e4a74b9dc94af0ba47438" creation-date="10/07/2026 08:45:21" order-index="18" type="ui-label">
+            <layout ax="1131" ay="126.5" awidth="186" aheight="36" x="1131" y="126.5" width="150" height="20" />
+          </item>
+          <item id="ba2b161a790d402bb7e44524e132c040" iid="7df0d961022541ad92f54248a84a99c5" container="eacd83ffea8146a7b1390668b42c5bb5" container-iid="aafc8502294e4a74b9dc94af0ba47438" creation-date="10/07/2026 08:45:37" order-index="19" type="ui-multi-line">
+            <layout ax="1045.5" ay="163" awidth="353" aheight="141" x="1047.5" y="163" width="353" height="141" />
+          </item>
+          <item id="725f3781e9424d16be19f0a2b0bb6ede" iid="8725fd4505404d1e9fd63967a87ba9c7" container="eacd83ffea8146a7b1390668b42c5bb5" container-iid="aafc8502294e4a74b9dc94af0ba47438" creation-date="10/07/2026 08:27:29" order-index="0" type="ui-button">
+            <layout ax="1048" ay="322.5" awidth="100" aheight="36" x="1049" y="322.5" width="100" height="30" />
+          </item>
+          <item id="2d4c5f50f8354cf990cc51f69dc62c3d" iid="857edc24eb6540c18625b0b8f7f63634" container="eacd83ffea8146a7b1390668b42c5bb5" container-iid="aafc8502294e4a74b9dc94af0ba47438" creation-date="10/07/2026 08:27:29" order-index="0" type="ui-button">
+            <layout ax="1298" ay="322.5" awidth="100" aheight="36" x="1298" y="322.5" width="100" height="30" />
+          </item>
+          <item id="ac3858a21e314b2da4b238df11f1ae6f" iid="930fe09268714df0a57e5fa4954d4096" container="459305bad8374e7084688fc832e1c624" container-iid="522b00af25c5417b9b134b12f1f03405" creation-date="10/07/2026 08:27:29" order-index="0" type="ui-button">
+            <layout ax="1046" ay="710" awidth="100" aheight="36" x="1048" y="710" width="100" height="30" />
+          </item>
+          <item id="2d7c3f59b5b1416f9bac711412576b4f" iid="68d68530377b40b49a0a6be79c3f6a29" container="459305bad8374e7084688fc832e1c624" container-iid="522b00af25c5417b9b134b12f1f03405" creation-date="10/07/2026 08:27:29" order-index="1" type="ui-button">
+            <layout ax="1390" ay="710" awidth="100" aheight="36" x="1392" y="710" width="100" height="30" />
+          </item>
+          <item id="b35d5291b3c9458c98b3f4aafc953bb8" iid="66b2a1fbfa2747a0a118f3671b88153c" container="459305bad8374e7084688fc832e1c624" container-iid="522b00af25c5417b9b134b12f1f03405" creation-date="10/07/2026 08:48:06" order-index="20" type="ui-button">
+            <layout ax="1047" ay="481.5" awidth="100" aheight="36" x="1049" y="481.5" width="100" height="30" />
+          </item>
+          <item id="af52dca7348f416490f7ca2b7ba1f616" iid="3661baf9041141269afe30be8cee8609" container="459305bad8374e7084688fc832e1c624" container-iid="522b00af25c5417b9b134b12f1f03405" creation-date="10/07/2026 08:50:02" order-index="22" type="ui-panel">
+            <layout ax="1111" ay="532.75" awidth="312" aheight="162.25" x="1113" y="532.75" width="312" height="162.25" expanded="1113,532.75,312,162.25" collapsed="0,0,0,0" />
+          </item>
+          <item id="b7f2b85f2c6e48f2ba0a1ba8976e2373" iid="26cf852cd07445bf93fd6cb3fcb3fc84" container="459305bad8374e7084688fc832e1c624" container-iid="522b00af25c5417b9b134b12f1f03405" creation-date="10/07/2026 08:49:11" order-index="21" type="ui-panel">
+            <layout ax="1157" ay="482.25" awidth="325" aheight="34.5" x="1159" y="482.25" width="325" height="34.5" expanded="1159,482.25,325,34.5" collapsed="0,0,0,0" />
+          </item>
+          <item id="4619e6691cb345d4bceab2cd8ff8bc4f" iid="31072bb55e8d4a7b9b0a98f0bbdcdd82" container="459305bad8374e7084688fc832e1c624" container-iid="522b00af25c5417b9b134b12f1f03405" creation-date="10/07/2026 08:45:21" order-index="0" type="ui-label">
+            <layout ax="1169" ay="446.25" awidth="186" aheight="36" x="1171" y="446.25" width="150" height="20" />
+          </item>
+        </layer>
+      </diagram>
+      <diagram type="user-interface" id="pb8d35d77bdfd48198a21958734a3706c_398647779" name="Liste des tickets" order-index="4" overview-order-index="2" uid="" name-style="" auto-routed-paths="false" default-line-style="default" view-location="-58,-53" zoom="0.9">
+        <style>
+          <background-color index="1" color="#FFFFFFFF" />
+          <background-color index="2" color="#FFFFFFFF" />
+          <background-type type="vertical-linear" />
+        </style>
+        <meta>
+          <authors>
+            <author> </author>
+          </authors>
+          <description />
+          <creation-date>10/07/2026 08:43:53</creation-date>
+          <change-date>10/07/2026 09:01:12</change-date>
+          <revision-count>0</revision-count>
+          <version />
+        </meta>
+        <abstract-items>
+          <item id="0195c5d78f274310a9d3371a4e1adb9a" cid="BTN013" type="ui-button" name="Retour" owner="21a12f279eff45a895df9190da7239ba" creator="" creation-date="10/07/2026 08:52:50">
+            <button />
+          </item>
+          <item id="dd825c92669f4148ab64a7cd460ca8af" cid="BTN016" type="ui-button" owner="21a12f279eff45a895df9190da7239ba" creator="" creation-date="10/07/2026 09:00:44">
+            <button />
+          </item>
+          <item id="bd5732164e5542f3bde7ab0627b9ed7e" cid="BTN017" type="ui-button" name="Créer" owner="21a12f279eff45a895df9190da7239ba" creator="" creation-date="10/07/2026 09:01:12">
+            <button />
+          </item>
+          <item id="33b6af7d711d48f693b72d34d76c5e6b" cid="GRD002" type="ui-grid" name="Grid2" owner="21a12f279eff45a895df9190da7239ba" creator="" creation-date="10/07/2026 08:53:07">
+            <grid>
+              <columns>
+                <column id="uigc-d1efa8c2-2e40-4ad8-a00c-ea46d266f3f1" name="Identifiant" />
+                <column id="uigc-7309729a-e730-451f-901d-d502577eb972" name="Titre" />
+                <column id="uigc-11af9aeb-0453-47fe-928d-d4692592057b" name="Action" />
+              </columns>
+            </grid>
+          </item>
+          <item id="21f81bff93c54ec1960880726cb4e347" cid="BTN015" type="ui-button" name="Supprimer" owner="21a12f279eff45a895df9190da7239ba" creator="" creation-date="10/07/2026 09:00:35">
+            <button />
+          </item>
+          <item id="21a12f279eff45a895df9190da7239ba" cid="WND004" type="ui-window" name="Gestionnaire de ticket" creator="" creation-date="10/07/2026 08:44:00">
+            <owned-items />
+            <window show-min-button="true" show-max-button="true" show-close-button="true" show-size-grip="false" />
+          </item>
+          <item id="67ffac94210a43ad8c7468ccb0603d96" cid="BTN014" type="ui-button" name="Assigner" owner="21a12f279eff45a895df9190da7239ba" creator="" creation-date="10/07/2026 08:56:38">
+            <button />
+          </item>
+          <item id="1ad3a621e84c4681aff01b5c696b3694" cid="CHB001" type="ui-check-box" owner="21a12f279eff45a895df9190da7239ba" creator="" creation-date="10/07/2026 08:57:29">
+            <check-box state="Checked" />
+          </item>
+        </abstract-items>
+        <layer id="b3c9abb3f9504ff78f7d6dd3fdbb16ac" name="Default" visible="true" enabled="true" locked="false">
+          <item id="21a12f279eff45a895df9190da7239ba" iid="310d67ba15b246d793a34e426d164406" creation-date="10/07/2026 08:44:00" order-index="0" type="ui-window">
+            <layout ax="340" ay="65" awidth="733" aheight="492" x="341" y="65" width="629" height="492" expanded="340,65,733,492" collapsed="0,0,0,0" />
+          </item>
+          <item id="e9c9de6f75ed49059fcb55b409457a65" iid="bdade580488a478ea127950f052aa82f" container="21a12f279eff45a895df9190da7239ba" container-iid="310d67ba15b246d793a34e426d164406" creation-date="10/07/2026 08:17:35" order-index="0" type="ui-label">
+            <layout ax="351" ay="130" awidth="149" aheight="22" x="352" y="130" width="149" height="22" />
+          </item>
+          <item id="5b446a5439a34b819355afa749c0b990" iid="1f75943e2b854f3382bb55e33ff1d19f" container="21a12f279eff45a895df9190da7239ba" container-iid="310d67ba15b246d793a34e426d164406" creation-date="10/07/2026 08:13:50" order-index="1" type="ui-label">
+            <layout ax="948" ay="94" awidth="124" aheight="36" x="949" y="94" width="104" height="36" />
+          </item>
+          <item id="ec90d73f141f4947965782d825607108" iid="ee7701cea7704bf9a48ff57bf6514cde" container="21a12f279eff45a895df9190da7239ba" container-iid="310d67ba15b246d793a34e426d164406" creation-date="10/07/2026 08:28:48" order-index="2" type="ui-label">
+            <layout ax="631.5" ay="136" awidth="150" aheight="36" x="631.5" y="136" width="150" height="20" />
+          </item>
+          <item id="0195c5d78f274310a9d3371a4e1adb9a" iid="6f1035ccc0cc4c668c8cf9923a0db3c4" container="21a12f279eff45a895df9190da7239ba" container-iid="310d67ba15b246d793a34e426d164406" creation-date="10/07/2026 08:52:50" order-index="4" type="ui-button">
+            <layout ax="369.5" ay="505" awidth="100" aheight="36" x="369.5" y="505" width="100" height="30" />
+          </item>
+          <item id="33b6af7d711d48f693b72d34d76c5e6b" iid="5cd5f2f83f3349daacfe7555b7451c31" container="21a12f279eff45a895df9190da7239ba" container-iid="310d67ba15b246d793a34e426d164406" creation-date="10/07/2026 08:53:07" order-index="5" type="ui-grid">
+            <layout ax="371" ay="188" awidth="672" aheight="301" x="371" y="188" width="672" height="301">
+              <columns widths="-1,388.8081,112.46826" />
+            </layout>
+          </item>
+          <item id="67ffac94210a43ad8c7468ccb0603d96" iid="728373390f104293bbdb8395a902bdde" container="21a12f279eff45a895df9190da7239ba" container-iid="310d67ba15b246d793a34e426d164406" creation-date="10/07/2026 08:56:38" order-index="6" type="ui-button">
+            <layout ax="827" ay="508" awidth="100" aheight="36" x="827" y="508" width="100" height="30" />
+          </item>
+          <item id="1ad3a621e84c4681aff01b5c696b3694" iid="c0918cf672e84b18a15fd998c52dfb84" container="21a12f279eff45a895df9190da7239ba" container-iid="310d67ba15b246d793a34e426d164406" creation-date="10/07/2026 08:57:29" order-index="7" type="ui-check-box">
+            <layout ax="1011" ay="223" awidth="14" aheight="36" x="1011" y="223" width="14" height="20" />
+          </item>
+          <item id="21f81bff93c54ec1960880726cb4e347" iid="6603d606a1064be39aba2dfd36dbfb18" container="21a12f279eff45a895df9190da7239ba" container-iid="310d67ba15b246d793a34e426d164406" creation-date="10/07/2026 09:00:35" order-index="8" type="ui-button">
+            <layout ax="943" ay="508" awidth="100" aheight="36" x="943" y="508" width="100" height="30" />
+          </item>
+          <item id="bd5732164e5542f3bde7ab0627b9ed7e" iid="1e5a8a340c5846cc9649acb2d89c1993" container="21a12f279eff45a895df9190da7239ba" container-iid="310d67ba15b246d793a34e426d164406" creation-date="10/07/2026 09:01:12" order-index="9" type="ui-button">
+            <layout ax="711" ay="508" awidth="100" aheight="36" x="711" y="508" width="100" height="30" />
+          </item>
+          <item id="6837ec4b0b5e4e41a7663a83ebb454f7" iid="efa591c3cbcb4f1a8017be120eaa0fb6" container="21a12f279eff45a895df9190da7239ba" container-iid="310d67ba15b246d793a34e426d164406" creation-date="10/07/2026 08:13:23" order-index="3" type="ui-label">
+            <layout ax="339" ay="94" awidth="161" aheight="36" x="340" y="94" width="150" height="20" />
+          </item>
+        </layer>
+      </diagram>
+    </model>
+  </models>
+</sim-project>
