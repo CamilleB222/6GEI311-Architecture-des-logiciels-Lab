@@ -29,14 +29,15 @@ def register_user(user : User):
     ticket_manager.register_user(user)
 
 def get_ticket_by_id() -> Ticket | None:
-    ticket_choisi : Ticket | None
+    ticket_choisi : Ticket | None = None
     ticket_existe : bool = False
 
     while not ticket_existe:
         nbr_valide : bool = False
+        ticket_id : int = 0
         while not nbr_valide:
             try:
-                ticket_id : int = int(input("\nVeuillez entrer l'ID du ticket (Entrez 0 pour quitter) : "))
+                ticket_id = int(input("\nVeuillez entrer l'ID du ticket (Entrez 0 pour quitter) : "))
                 nbr_valide = True
             except ValueError:
                 print("\nErreur : Veillez entrer un nombre entier")
@@ -62,14 +63,15 @@ def assigner_ticket(connect_admin : Admin):
         print("\nAucun ticket n'existe")
         return 
 
-    ticket_choisi : Ticket
+    ticket_choisi : Ticket | None
     ticket_asign : bool = False
     while not ticket_asign:
         ticket_choisi = get_ticket_by_id()
 
         if ticket_choisi is not None:
             user_existe : bool = False
-            user_choisi : User | None
+            user_choisi : User | None = None
+            user_name = "0"
 
             while not user_existe:
                 user_name = input("\nEntrer le nom de l'utilisateur à qui assigner le ticket (Entrez 0 pour quitter) : ")
@@ -209,11 +211,12 @@ def mise_a_jour_ticket(connect_user : User):
 
     ticket_existe : bool = False
     nbr_valide : bool = False
+    ticket_id = 0
     while not ticket_existe:
         nbr_valide = False
         while not nbr_valide:
             try:
-                ticket_id : int = int(input("\nVeuillez entrer l'ID du ticket (Entrez 0 pour quitter) : "))
+                ticket_id = int(input("\nVeuillez entrer l'ID du ticket (Entrez 0 pour quitter) : "))
                 nbr_valide = True
             except ValueError:
                 print("\nErreur : Veillez entrer un nombre entier")
@@ -221,12 +224,13 @@ def mise_a_jour_ticket(connect_user : User):
 
         if ticket_id != 0:
             ticket : Ticket
+            ticket_choisi : Ticket | None = None
             for ticket in connect_user.asign_tickets:
                 if ticket_id == ticket.ticket_id:
                     ticket_choisi = ticket
                     ticket_existe = True
 
-            if not ticket_existe:
+            if ticket_choisi is None :
                 print("\nErreur : ID n'existe pas")
             else:
                 status_ticket = ticket_choisi.status
@@ -252,7 +256,7 @@ def main():
     connexion : str
     connexion_reussi : bool = False
     deconnexion : bool = False
-    action : int
+    action : str
 
 
     while not connexion_reussi:
@@ -304,7 +308,7 @@ def main():
                         case '4': #Deconnexion
                             deconnexion = True
                         case _:
-                            action = print("\nErreur : Action non valide")
+                            print("\nErreur : Action non valide")
         
             case _:
                 print("\nErreur : Identifiant non valise")
