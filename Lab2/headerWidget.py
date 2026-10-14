@@ -28,7 +28,7 @@ class HeaderWidget(QWidget):
         self.breadcrumb_container.setObjectName("breadcrumbContainer")
         self.breadcrumb_layout = QHBoxLayout(self.breadcrumb_container)
         self.breadcrumb_layout.setContentsMargins(0, 0, 0, 0)
-        self.breadcrumb_layout.setSpacing(5)
+        self.breadcrumb_layout.setSpacing(2)
 
         user_info_layout = QHBoxLayout()
 
@@ -85,3 +85,4 @@ class HeaderWidget(QWidget):
                 current_lbl = QLabel(text)
                 current_lbl.setObjectName("breadcrumbCurrentLabel")
                 self.breadcrumb_layout.addWidget(current_lbl)
+        self.breadcrumb_layout.addStretch()

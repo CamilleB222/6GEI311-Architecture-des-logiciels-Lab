@@ -55,3 +55,56 @@ QPushButton[class="btnAcc"]:pressed {
     background-color: #b0b0b0; /* Gris plus foncé au clic */
     border-color: black;
 }
+
+QPushButton[class="btnListTicket"] {
+    font-size: 20px;
+    font-weight: bold;
+    border: 2px solid black;
+    padding: 6px;
+}
+
+QPushButton[class="btnListTicket"]:hover {
+    background-color: #e0e0e0; /* Gris clair */
+}
+
+QPushButton[class="btnListTicket"]:pressed {
+    background-color: #b0b0b0; /* Gris plus foncé au clic */
+    border-color: black;
+}
+
+QLabel#listTicketTitle {
+    font-size: 20px;
+}
+
+/* 1. État normal (Non sélectionné) */
+QListView::item, 
+QListWidget::item {
+    background-color: transparent;
+    color: #000000;
+}
+
+/* 2. Annulation du survol sur les éléments non sélectionnés */
+QListView::item:hover, 
+QListWidget::item:hover {
+    background-color: transparent; /* Conserve le fond transparent */
+    color: #000000;                /* Conserve la couleur du texte */
+}
+
+/* 3. État sélectionné */
+QListView::item:selected, 
+QListWidget::item:selected {
+    background-color: #e0e0e0;     /* Votre couleur de sélection neutre */
+    color: #000000;
+}
+
+/* 4. Annulation du survol sur les éléments DÉJÀ sélectionnés */
+QListView::item:selected:hover, 
+QListWidget::item:selected:hover {
+    background-color: #e0e0e0;     /* Garde exactement la même couleur de sélection */
+    color: #000000;
+}
+
+/* 5. Supprimer le contour bleu / rectangle de focus */
+QListView, QListWidget {
+    outline: none;
+}
