@@ -11,7 +11,8 @@ from ticketManager import TicketManager
 from descriptionTicket import DescriptionTicket
 from descriptionTicketImage import DescriptionTicketImage
 from descriptionTicketTexte import DescriptionTicketTexte
-from PyQt6.QtWidgets import QMessageBox
+from PyQt6.QtWidgets import QMessageBox, QWidget
+from mainWindow import MainWindow
 
 
 class ControleurGestionTicket:
@@ -28,6 +29,7 @@ class ControleurGestionTicket:
     _list_user : list[User]
     _list_admin : list[Admin]
     _list_ticket : list[Ticket]
+    _main_window : MainWindow | None
 
     def __init__(self, list_user : list[User], list_admin : list[Admin], list_ticket : list[Ticket]):
         self._list_user = list_user
@@ -47,6 +49,7 @@ class ControleurGestionTicket:
         self._user_name = None
         self._user_password = None
         self._user_connected = None
+        self._main_window = None
 
     def gerer_changement_texte_nom(self):
         self._user_name = self.window_connect.textbox_nom.text()
@@ -77,8 +80,45 @@ class ControleurGestionTicket:
 
         self._user_connected = user_connected
         self.window_connect.close()
-        self.window_acceuil = WindowAcceuil()
-        self.window_acceuil.show()
+
+        self.gerer_window_acceuil()
+
+    def gerer_main_window(self, prochaine_fenetre : QWidget):
+        if self._main_window is None:
+            self._main_window = MainWindow()
+            self._main_window.show()
+
+        self._main_window.setCentralWidget(prochaine_fenetre)
+
+
+    def gerer_window_acceuil(self):
+        self.window_acceuil = WindowAcceuil(self._user_connected.name, self._user_connected.role)
+
+        self.window_acceuil.btn_create_ticket.clicked.connect(self.gerer_clic_bouton_creer_ticket)
+        self.window_acceuil.btn_list_ticket.clicked.connect(self.gerer_clic_bouton_liste_ticket)
+        self.window_acceuil.btn_disconect.clicked.connect(self.gerer_clic_bouton_deconnexion)
+
+        self.gerer_main_window(self.window_acceuil)
+
+
+    def gerer_clic_bouton_creer_ticket(self):
+        pass
+
+    def gerer_clic_bouton_liste_ticket(self):
+        pass
+
+    def gerer_clic_bouton_deconnexion(self):
+        self._main_window.close()
+        self._user_connected = None
+        self.window_acceuil = None
+        self.window_cree_ticket = None
+        self.window_list_ticket = None
+        self._main_window = None
+
+        self.window_connect.textbox_nom.clear()
+        self.window_connect.textbox_mdp.clear()
+        self.window_connect.button_connect.setEnabled(False)
+        self.window_connect.show()
 
 
         

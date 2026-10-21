@@ -10,7 +10,7 @@ class WindowListTicket(QWidget):
             self.setWindowTitle("Gestionnaire de tickets")
             self.setFixedSize(700,400)
 
-            self.header_widget = HeaderWidget("Xavier", "Admin")
+            self.header_widget = HeaderWidget(nom, role)
             self.header_widget.set_breadcrumbs(breadcrumbs)
 
             self.titre_label = QLabel("Liste dees tickets")
