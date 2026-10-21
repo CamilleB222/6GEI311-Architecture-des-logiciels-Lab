@@ -129,7 +129,8 @@ class ControleurGestionTicket:
         self.window_cree_ticket.textbox_description_ticket.textChanged.connect(self.gerer_changement_texte_description_ticket)
         self.window_cree_ticket.textbox_priorite_ticket.textChanged.connect(self.gerer_changement_texte_priorite_ticket)
 
-        self.window_cree_ticket.ajouter_descrtion_texte.trigger()
+        self.window_cree_ticket.ajouter_descrtion_texte.trigger(self.gerer_ajouter_description_texte)
+        self.window_cree_ticket.ajouter_description_image.trigger(self.gerer_ajout_description_image)
         
         self.window_cree_ticket.btn_annuler.clicked.connect(self.gerer_clic_bouton_annuler)
         self.window_cree_ticket.btn_creer_ticket.clicked.connect(self.gerer_clic_bouton_creer_ticket)

@@ -1,7 +1,6 @@
 from headerWidget import HeaderWidget
-from PyQt6.QtWidgets import QApplication, QHBoxLayout, QLabel, QPushButton, QVBoxLayout, QWidget, QLineEdit, QGridLayout
-from PyQt6.QtCore import QSize, Qt
-from PyQt6.QtGui import QFont
+from PyQt6.QtWidgets import QPushButton, QWidget, QGridLayout
+from PyQt6.QtCore import Qt
 
 class WindowAcceuil(QWidget):
     def __init__(self, nom : str, role : str):
