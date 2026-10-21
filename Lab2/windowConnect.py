@@ -16,29 +16,30 @@ class WindowConnect(QWidget):
 
         font_info = QFont("Arial", 15)
         
-        label_nom = QLabel("Nom d'utilisateur : ", self)
-        label_nom.setFont(font_info)
+        self.label_nom = QLabel("Nom d'utilisateur : ", self)
+        self.label_nom.setFont(font_info)
 
-        textbox_nom = QLineEdit(self)
-        textbox_nom.setFont(font_info)
+        self.textbox_nom = QLineEdit(self)
+        self.textbox_nom.setFont(font_info)
 
-        label_mdp = QLabel("Mot de passe : ", self)
-        label_mdp.setFont(font_info)
+        self.label_mdp = QLabel("Mot de passe : ", self)
+        self.label_mdp.setFont(font_info)
 
-        textbox_mdp = QLineEdit(self)
-        textbox_mdp.setFont(font_info)
+        self.textbox_mdp = QLineEdit(self)
+        self.textbox_mdp.setFont(font_info)
 
-        grid.addWidget(label_nom, 0, 0, alignment=Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignRight)
-        grid.addWidget(textbox_nom, 0, 1, alignment=Qt.AlignmentFlag.AlignVCenter)
+        grid.addWidget(self.label_nom, 0, 0, alignment=Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignRight)
+        grid.addWidget(self.textbox_nom, 0, 1, alignment=Qt.AlignmentFlag.AlignVCenter)
 
-        grid.addWidget(label_mdp, 1, 0, alignment=Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignRight)
-        grid.addWidget(textbox_mdp, 1, 1, alignment=Qt.AlignmentFlag.AlignVCenter)
+        grid.addWidget(self.label_mdp, 1, 0, alignment=Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignRight)
+        grid.addWidget(self.textbox_mdp, 1, 1, alignment=Qt.AlignmentFlag.AlignVCenter)
 
-        button_connect = QPushButton("Connexion", self)
+        self.button_connect = QPushButton("Connexion", self)
+        self.button_connect.setEnabled(False)
 
         layout_principal = QVBoxLayout()
         layout_principal.addWidget(label_titre, 0)
         layout_principal.addLayout(grid)
-        layout_principal.addWidget(button_connect)
+        layout_principal.addWidget(self.button_connect)
 
         self.setLayout(layout_principal)
