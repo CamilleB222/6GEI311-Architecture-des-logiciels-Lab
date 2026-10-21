@@ -9,20 +9,20 @@ class WindowAjoutTexte(QWidget):
         self.setWindowTitle("Gestionnaire de tickets")
         self.setFixedSize(500,300)
 
-        labe_titre_page = QLabel("Ajouter une description", self)
+        self.labe_titre_page = QLabel("Ajouter une description", self)
 
-        description = QPlainTextEdit(self)
+        self.description = QPlainTextEdit(self)
 
-        btn_annuler = QPushButton("Annuler", self)
-        btn_ajouter = QPushButton("Ajouter", self)
+        self.btn_annuler = QPushButton("Annuler", self)
+        self.btn_ajouter = QPushButton("Ajouter", self)
 
-        layout_btn = QHBoxLayout()
-        layout_btn.addWidget(btn_annuler, alignment=Qt.AlignmentFlag.AlignLeft)
-        layout_btn.addWidget(btn_ajouter, alignment=Qt.AlignmentFlag.AlignRight)
+        self.layout_btn = QHBoxLayout()
+        self.layout_btn.addWidget(self.btn_annuler, alignment=Qt.AlignmentFlag.AlignLeft)
+        self.layout_btn.addWidget(self.btn_ajouter, alignment=Qt.AlignmentFlag.AlignRight)
 
-        layout_principal = QVBoxLayout()
-        layout_principal.addWidget(labe_titre_page, alignment=Qt.AlignmentFlag.AlignCenter)
-        layout_principal.addWidget(description)
-        layout_principal.addLayout(layout_btn)
+        self.layout_principal = QVBoxLayout()
+        self.layout_principal.addWidget(self.labe_titre_page, alignment=Qt.AlignmentFlag.AlignCenter)
+        self.layout_principal.addWidget(self.description)
+        self.layout_principal.addLayout(self.layout_btn)
 
-        self.setLayout(layout_principal)
+        self.setLayout(self.layout_principal)

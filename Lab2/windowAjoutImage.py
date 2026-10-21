@@ -1,7 +1,5 @@
-from headerWidget import HeaderWidget
-from PyQt6.QtWidgets import QApplication, QHBoxLayout, QHeaderView, QLabel, QMenu, QPlainTextEdit, QPushButton, QTableWidget, QVBoxLayout, QWidget, QLineEdit, QGridLayout
-from PyQt6.QtCore import QSize, Qt
-from PyQt6.QtGui import QAction, QFont
+from PyQt6.QtWidgets import QHBoxLayout, QLabel, QPushButton, QVBoxLayout, QWidget, QLineEdit
+from PyQt6.QtCore import Qt
 
 class WindowAjoutImage(QWidget):
     def __init__(self):
@@ -9,28 +7,28 @@ class WindowAjoutImage(QWidget):
         self.setWindowTitle("Gestionnaire de tickets")
         self.setFixedSize(500,300)
 
-        labe_titre_page = QLabel("Ajouter une image", self)
+        self.labe_titre_page = QLabel("Ajouter une image", self)
 
-        btn_selection = QPushButton("Sélectionner", self)
-        textbox_selection = QLineEdit(self)
+        self.btn_selection = QPushButton("Sélectionner", self)
+        self.textbox_selection = QLineEdit(self)
 
-        label_image_preview = QLabel("Aperçu de l'image", self)
+        self.label_image_preview = QLabel("Aperçu de l'image", self)
 
-        btn_annuler = QPushButton("Annuler", self)
-        btn_ajouter = QPushButton("Ajouter", self)
+        self.btn_annuler = QPushButton("Annuler", self)
+        self.btn_ajouter = QPushButton("Ajouter", self)
 
-        layout_selection = QHBoxLayout()
-        layout_selection.addWidget(btn_selection, alignment=Qt.AlignmentFlag.AlignLeft)
-        layout_selection.addWidget(textbox_selection)
+        self.layout_selection = QHBoxLayout()
+        self.layout_selection.addWidget(self.btn_selection, alignment=Qt.AlignmentFlag.AlignLeft)
+        self.layout_selection.addWidget(self.textbox_selection)
         
-        layout_btn = QHBoxLayout()
-        layout_btn.addWidget(btn_annuler, alignment=Qt.AlignmentFlag.AlignLeft)
-        layout_btn.addWidget(btn_ajouter, alignment=Qt.AlignmentFlag.AlignRight)
+        self.layout_btn = QHBoxLayout()
+        self.layout_btn.addWidget(self.btn_annuler, alignment=Qt.AlignmentFlag.AlignLeft)
+        self.layout_btn.addWidget(self.btn_ajouter, alignment=Qt.AlignmentFlag.AlignRight)
 
-        layout_principal = QVBoxLayout()
-        layout_principal.addWidget(labe_titre_page, 0, alignment=Qt.AlignmentFlag.AlignCenter)
-        layout_principal.addLayout(layout_selection)
-        layout_principal.addWidget(label_image_preview, 1, alignment=Qt.AlignmentFlag.AlignCenter)
-        layout_principal.addLayout(layout_btn)
+        self.layout_principal = QVBoxLayout()
+        self.layout_principal.addWidget(self.labe_titre_page, 0, alignment=Qt.AlignmentFlag.AlignCenter)
+        self.layout_principal.addLayout(self.layout_selection)
+        self.layout_principal.addWidget(self.label_image_preview, 1, alignment=Qt.AlignmentFlag.AlignCenter)
+        self.layout_principal.addLayout(self.layout_btn)
 
-        self.setLayout(layout_principal)
+        self.setLayout(self.layout_principal)
