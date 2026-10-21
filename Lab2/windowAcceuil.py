@@ -4,7 +4,7 @@ from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QFont
 
 class WindowAcceuil(QWidget):
-    def __init__(self):
+    def __init__(self, nom : str, role : str):
             super().__init__()
             self.setWindowTitle("Gestionnaire de tickets")
             self.setFixedSize(500,300)

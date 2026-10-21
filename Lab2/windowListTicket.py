@@ -2,15 +2,16 @@ from headerWidget import HeaderWidget
 from PyQt6.QtWidgets import QCheckBox, QHBoxLayout, QLabel, QPushButton, QTableWidgetItem, QWidget, QHeaderView, QGridLayout,QTableWidget,QAbstractItemView
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QFont
+from breadcrumbPage import BreadcrumbPage
 
 class WindowListTicket(QWidget):
-    def __init__(self):
+    def __init__(self, nom : str, role : str, breadcrumbs : list[tuple[BreadcrumbPage, str]]):
             super().__init__()
             self.setWindowTitle("Gestionnaire de tickets")
             self.setFixedSize(700,400)
 
             header_widget = HeaderWidget("Xavier", "Admin")
-            header_widget.set_breadcrumbs(["Acceuil", "Liste ticket"])
+            header_widget.set_breadcrumbs(breadcrumbs)
 
             titre_label = QLabel("Liste dees tickets")
             titre_label.setObjectName("listTicketTitle")
