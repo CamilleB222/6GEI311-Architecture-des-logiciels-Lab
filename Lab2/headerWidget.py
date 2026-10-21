@@ -8,10 +8,11 @@ from PyQt6.QtWidgets import (
     QWidget,
     QSizePolicy
 )
+from breadcrumbPage import BreadcrumbPage
 
 
 class HeaderWidget(QWidget):
-    breadcrumb_clicked = pyqtSignal(int)
+    breadcrumb_clicked = pyqtSignal(BreadcrumbPage)
 
     def __init__(
         self, username="Invité", role="Utilisateur", parent=None
@@ -48,14 +49,14 @@ class HeaderWidget(QWidget):
         layout.addWidget(self.breadcrumb_container)
 
         # Initialisation du fil d'Ariane
-        self.set_breadcrumbs(["Accueil"])
+        self.set_breadcrumbs([(BreadcrumbPage.Accueil,"Accueil")])
 
     def set_user_info(self, username: str, role: str):
         """Met à jour le nom et le rôle de l'utilisateur."""
         self.user_label.setText(username)
         self.role_label.setText(role)
 
-    def set_breadcrumbs(self, items: list[str]):
+    def set_breadcrumbs(self, items: list[tuple[BreadcrumbPage, str]]):
         """Génère dynamiquement le fil d'Ariane."""
         while self.breadcrumb_layout.count():
             item : QLayoutItem | None = self.breadcrumb_layout.takeAt(0)
@@ -64,15 +65,16 @@ class HeaderWidget(QWidget):
                 if widget is not None: 
                     widget.deleteLater()
 
-        for index, text in enumerate(items):
+        for index, page in enumerate(items):
             is_last = index == len(items) - 1
+            page , text = page
 
             if not is_last:
                 # Étape cliquable
                 btn = QPushButton(text)
                 btn.setObjectName("breadcrumbBtn")
                 btn.clicked.connect(
-                    lambda _, idx=index: self.breadcrumb_clicked.emit(idx)
+                    lambda _, page=page: self.breadcrumb_clicked.emit(page)
                 )
                 self.breadcrumb_layout.addWidget(btn)
 

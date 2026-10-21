@@ -1,4 +1,5 @@
 from headerWidget import HeaderWidget
+from breadcrumbPage import BreadcrumbPage
 from PyQt6.QtWidgets import QApplication, QHBoxLayout, QHeaderView, QLabel, QMenu, QPlainTextEdit, QPushButton, QTableWidget, QVBoxLayout, QWidget, QLineEdit, QGridLayout
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QAction, QFont
@@ -7,12 +8,14 @@ from windowAjoutImage import WindowAjoutImage
 from windowAjoutTexte import WindowAjoutTexte
 
 class WindowCreeTicket(QWidget):
-    def __init__(self):
+    def __init__(self, nom : str, role : str, breadcrumbs : list[tuple[BreadcrumbPage, str]]):
         super().__init__()
         self.setWindowTitle("Gestionnaire de tickets")
         self.setFixedSize(500,500)
 
-        header = HeaderWidget("Camille", "Admin")
+        header = HeaderWidget(nom, role)
+        header.set_breadcrumbs(breadcrumbs)
+
         label_titre_page = QLabel("Création d'un ticket", self)
         label_titre_page.setAlignment(Qt.AlignmentFlag.AlignCenter)
         label_titre_page.setStyleSheet("font-size: 30px; font-weight: bold; margin-bottom: 20px;")
@@ -45,7 +48,9 @@ class WindowCreeTicket(QWidget):
         self.table.setRowCount(0)
 
         btn_annuler = QPushButton("Annuler", self)
+        btn_annuler.setProperty("class", "btnListTicket")
         btn_creer_ticket = QPushButton("Créer", self)
+        btn_creer_ticket.setProperty("class", "btnListTicket")
 
         grid_description = QGridLayout()
         grid_description.addWidget(label_titre_ticket, 0, 0, alignment=Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignRight)

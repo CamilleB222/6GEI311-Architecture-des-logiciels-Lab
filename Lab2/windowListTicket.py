@@ -2,35 +2,36 @@ from headerWidget import HeaderWidget
 from PyQt6.QtWidgets import QCheckBox, QHBoxLayout, QLabel, QPushButton, QTableWidgetItem, QWidget, QHeaderView, QGridLayout,QTableWidget,QAbstractItemView
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QFont
+from breadcrumbPage import BreadcrumbPage
 
 class WindowListTicket(QWidget):
-    def __init__(self):
+    def __init__(self, nom : str, role : str, breadcrumbs : list[tuple[BreadcrumbPage, str]]):
             super().__init__()
             self.setWindowTitle("Gestionnaire de tickets")
             self.setFixedSize(700,400)
 
-            header_widget = HeaderWidget("Xavier", "Admin")
-            header_widget.set_breadcrumbs(["Acceuil", "Liste ticket"])
+            self.header_widget = HeaderWidget("Xavier", "Admin")
+            self.header_widget.set_breadcrumbs(breadcrumbs)
 
-            titre_label = QLabel("Liste dees tickets")
-            titre_label.setObjectName("listTicketTitle")
+            self.titre_label = QLabel("Liste dees tickets")
+            self.titre_label.setObjectName("listTicketTitle")
             
-            btn_layout = QHBoxLayout()
+            self.btn_layout = QHBoxLayout()
 
-            btn_back = QPushButton("Retour")
-            btn_back.setProperty("class", "btnListTicket")
-            btn_create = QPushButton("Créer")
-            btn_create.setProperty("class", "btnListTicket")
-            btn_assign = QPushButton("Assigner")
-            btn_assign.setProperty("class", "btnListTicket")
-            btn_delete = QPushButton("Supprimer")
-            btn_delete.setProperty("class", "btnListTicket")
+            self.btn_back = QPushButton("Retour")
+            self.btn_back.setProperty("class", "btnListTicket")
+            self.btn_create = QPushButton("Créer")
+            self.btn_create.setProperty("class", "btnListTicket")
+            self.btn_assign = QPushButton("Assigner")
+            self.btn_assign.setProperty("class", "btnListTicket")
+            self.btn_delete = QPushButton("Supprimer")
+            self.btn_delete.setProperty("class", "btnListTicket")
 
-            btn_layout.addWidget(btn_back)
-            btn_layout.addStretch()
-            btn_layout.addWidget(btn_create)
-            btn_layout.addWidget(btn_assign)
-            btn_layout.addWidget(btn_delete)
+            self.btn_layout.addWidget(self.btn_back)
+            self.btn_layout.addStretch()
+            self.btn_layout.addWidget(self.btn_create)
+            self.btn_layout.addWidget(self.btn_assign)
+            self.btn_layout.addWidget(self.btn_delete)
 
             # 1. Création du tableau : 4 colonnes
             self.table = QTableWidget()
@@ -105,15 +106,15 @@ class WindowListTicket(QWidget):
                 self.table.setCellWidget(row, 3, actions_widget)
 
 
-            layout_principal = QGridLayout()
-            layout_principal.addWidget(header_widget, 0, 0)
-            layout_principal.addWidget(self.table, 1,0)
-            layout_principal.addLayout(btn_layout,2,0)
+            self.layout_principal = QGridLayout()
+            self.layout_principal.addWidget(self.header_widget, 0, 0)
+            self.layout_principal.addWidget(self.table, 1,0)
+            self.layout_principal.addLayout(self.btn_layout,2,0)
 
-            layout_principal.setRowStretch(0,0)
-            layout_principal.setRowStretch(1,1)
+            self.layout_principal.setRowStretch(0,0)
+            self.layout_principal.setRowStretch(1,1)
 
-            self.setLayout(layout_principal)
+            self.setLayout(self.layout_principal)
 
     def _create_actions_widget(self, ticket_id):
         """Crée un conteneur horizontal avec des boutons d'actions pour la ligne."""
