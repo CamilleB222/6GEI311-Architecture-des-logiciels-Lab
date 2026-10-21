@@ -55,3 +55,23 @@ QPushButton[class="btnAcc"]:pressed {
     background-color: #b0b0b0; /* Gris plus foncé au clic */
     border-color: black;
 }
+
+QPushButton[class="btnListTicket"] {
+    font-size: 20px;
+    font-weight: bold;
+    border: 2px solid black;
+    padding: 6px;
+}
+
+QPushButton[class="btnListTicket"]:hover {
+    background-color: #e0e0e0; /* Gris clair */
+}
+
+QPushButton[class="btnListTicket"]:pressed {
+    background-color: #b0b0b0; /* Gris plus foncé au clic */
+    border-color: black;
+}
+
+QLabel#listTicketTitle {
+    font-size: 20px;
+}
