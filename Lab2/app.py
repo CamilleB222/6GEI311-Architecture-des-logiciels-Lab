@@ -1,5 +1,8 @@
+from windowAjoutImage import WindowAjoutImage
+from windowAjoutTexte import WindowAjoutTexte
 from windowConnect import WindowConnect
 from windowAcceuil import WindowAcceuil
+from windowCreeTicket import WindowCreeTicket
 from PyQt6.QtWidgets import QApplication
 
 def load_stylesheet(app, filename):
@@ -9,7 +12,7 @@ def load_stylesheet(app, filename):
 
 app = QApplication([])
 load_stylesheet(app, "style.qss")
-window_connect = WindowAcceuil()
+window_connect = WindowCreeTicket()
 window_connect.show()
 
 app.exec()
