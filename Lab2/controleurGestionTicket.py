@@ -13,6 +13,7 @@ from descriptionTicketImage import DescriptionTicketImage
 from descriptionTicketTexte import DescriptionTicketTexte
 from PyQt6.QtWidgets import QMessageBox, QWidget
 from mainWindow import MainWindow
+from breadcrumbPage import BreadcrumbPage
 
 
 class ControleurGestionTicket:
@@ -102,10 +103,11 @@ class ControleurGestionTicket:
 
 
     def gerer_clic_bouton_creer_ticket(self):
-        pass
+        self.gerer_main_window(self.window_cree_ticket)
+        self.gerer_window_cree_ticket(self._user_connected.name, self._user_connected.role, [(BreadcrumbPage.Accueil,"Accueil"), (BreadcrumbPage.CreeTicket,"Créer ticket")])
 
     def gerer_clic_bouton_liste_ticket(self):
-        pass
+        self.gerer_main_window(self.window_list_ticket)
 
     def gerer_clic_bouton_deconnexion(self):
         self._main_window.close()
@@ -119,6 +121,20 @@ class ControleurGestionTicket:
         self.window_connect.textbox_mdp.clear()
         self.window_connect.button_connect.setEnabled(False)
         self.window_connect.show()
+
+    def gerer_window_cree_ticket(self, nom : str, role : str, breadcrumbs : list[tuple[BreadcrumbPage, str]]):
+        self.window_cree_ticket = WindowCreeTicket(nom, role, breadcrumbs)
+
+        self.window_cree_ticket.textbox_titre_ticket.textChanged.connect(self.gerer_changement_texte_titre_ticket)
+        self.window_cree_ticket.textbox_description_ticket.textChanged.connect(self.gerer_changement_texte_description_ticket)
+        self.window_cree_ticket.textbox_priorite_ticket.textChanged.connect(self.gerer_changement_texte_priorite_ticket)
+
+        self.window_cree_ticket.ajouter_descrtion_texte.trigger()
+        
+        self.window_cree_ticket.btn_annuler.clicked.connect(self.gerer_clic_bouton_annuler)
+        self.window_cree_ticket.btn_creer_ticket.clicked.connect(self.gerer_clic_bouton_creer_ticket)
+        
+        self.gerer_main_window(self.window_cree_ticket)
 
 
         
