@@ -3,9 +3,10 @@ from PyQt6.QtWidgets import QCheckBox, QHBoxLayout, QLabel, QPushButton, QTableW
 from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QFont
 from breadcrumbPage import BreadcrumbPage
+from ticket import Ticket
 
 class WindowListTicket(QWidget):
-    def __init__(self, nom : str, role : str, breadcrumbs : list[tuple[BreadcrumbPage, str]]):
+    def __init__(self, nom : str, role : str, breadcrumbs : list[tuple[BreadcrumbPage, str]], list_ticket : list[Ticket]):
             super().__init__()
             self.setWindowTitle("Gestionnaire de tickets")
             self.setFixedSize(700,400)
@@ -68,16 +69,10 @@ class WindowListTicket(QWidget):
                     3, QHeaderView.ResizeMode.ResizeToContents
                 )  # Actions (Ajusté)
 
-            # Données de test
-            tickets = [
-                (101, "Erreur d'accès à la base de données"),
-                (102, "Problème d'impression bureau 3"),
-                (103, "Mise à jour du pare-feu requise"),
-            ]
 
             # 3. Remplissage du tableau
-            self.table.setRowCount(len(tickets))
-            for row, (ticket_id, title) in enumerate(tickets):
+            self.table.setRowCount(len(list_ticket))
+            for row, ticket in enumerate(list_ticket):
                 # Col 0 : Checkbox pour multi-sélection
                 chk_container = QWidget()
                 chk_layout = QHBoxLayout(chk_container)
@@ -87,7 +82,7 @@ class WindowListTicket(QWidget):
                 self.table.setCellWidget(row, 0, chk_container)
 
                 # Col 1 : ID (Non éditable)
-                item_id = QTableWidgetItem(str(ticket_id))
+                item_id = QTableWidgetItem(str(ticket.ticket_id))
                 item_id.setFlags(
                     item_id.flags() ^ Qt.ItemFlag.ItemIsEditable
                 )
@@ -95,14 +90,14 @@ class WindowListTicket(QWidget):
                 self.table.setItem(row, 1, item_id)
 
                 # Col 2 : Titre
-                item_title = QTableWidgetItem(title)
+                item_title = QTableWidgetItem(ticket.title)
                 item_title.setFlags(
                     item_title.flags() ^ Qt.ItemFlag.ItemIsEditable
                 )
                 self.table.setItem(row, 2, item_title)
 
                 # Col 3 : Actions avec pictogrammes/boutons
-                actions_widget = self._create_actions_widget(ticket_id)
+                actions_widget = self._create_actions_widget(ticket.ticket_id)
                 self.table.setCellWidget(row, 3, actions_widget)
 
 

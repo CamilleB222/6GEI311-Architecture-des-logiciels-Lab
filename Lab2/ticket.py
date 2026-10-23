@@ -7,6 +7,7 @@ from statutTicket import StatutTicket
 class Ticket:
     _ticket_id : int
     _title : str
+    _description_ini : str
     _list_description : list[DescriptionTicket]
     _status : StatutTicket
     _priority : str
@@ -17,7 +18,7 @@ class Ticket:
     def __init__(self, ticket_id : int, title : str, description_initiale : str, priority : str, creation_date : datetime, update_date : datetime):
         self._ticket_id = ticket_id
         self._title = title
-        self._description = description_initiale
+        self._description_ini = description_initiale
         self._list_description = list[DescriptionTicket]()
         #self.add_description(DescriptionTicketTexte, description_initiale)   
         self._status = StatutTicket.OUVERT
@@ -33,6 +34,10 @@ class Ticket:
     @property
     def title(self):
         return self._title
+
+    @property
+    def description_ini(self):
+        return self._description
 
     @property
     def list_description(self):

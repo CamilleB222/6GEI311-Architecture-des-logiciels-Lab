@@ -95,7 +95,7 @@ class WindowCreeTicket(QWidget):
 
         self.setLayout(self.layout_principal)
 
-    def _create_actions_widget(self, ticket_id):
+    def _create_actions_widget(self, titre_description : str):
             """Crée un conteneur horizontal avec des boutons d'actions pour la ligne."""
             container = QWidget()
             layout = QHBoxLayout(container)
@@ -107,7 +107,7 @@ class WindowCreeTicket(QWidget):
             btn_edit.setObjectName("actionBtnEdit")
             btn_edit.setToolTip("Modifier")
             btn_edit.clicked.connect(
-                lambda: print(f"Édition du ticket {ticket_id}")
+                lambda: print(f"Édition du ticket {titre_description}")
             )
     
             # Bouton Suppression
@@ -115,7 +115,7 @@ class WindowCreeTicket(QWidget):
             btn_delete.setObjectName("actionBtnDelete")
             btn_delete.setToolTip("Supprimer")
             btn_delete.clicked.connect(
-                lambda: print(f"Suppression du ticket {ticket_id}")
+                lambda: print(f"Suppression du ticket {titre_description}")
             )
     
             layout.addWidget(btn_edit)

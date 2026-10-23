@@ -2,6 +2,7 @@ from datetime import datetime
 from pathlib import Path
 from tkinter import filedialog
 
+from windowVoirEditTicket import WindowVoirEditTicket
 from windowAcceuil import WindowAcceuil
 from windowCreeTicket import WindowCreeTicket
 from windowListTicket import WindowListTicket
@@ -30,6 +31,7 @@ class ControleurGestionTicket:
     window_list_ticket : WindowListTicket | None
     window_ajout_texte : WindowAjoutTexte | None
     window_ajout_image : WindowAjoutImage | None
+    window_voir_edit_ticket : WindowVoirEditTicket | None
     _user_name : str | None
     _user_password : str | None
     _user_connected : User | None
@@ -45,6 +47,7 @@ class ControleurGestionTicket:
     _list_description_ticket : DescriptionTicket | None
     _ajout_description : str | None
     _list_Description : list[DescriptionTicket]
+    _ticket_edit : Ticket | None
 
     def __init__(self, list_user : list[User], list_admin : list[Admin], list_ticket : list[Ticket]):
         self._list_user = list_user
@@ -74,6 +77,7 @@ class ControleurGestionTicket:
         self._description_ticket = None
         self._priorité_ticket = None
         self._list_Description = []
+        self._ticket_edit = None
 
     def gerer_changement_texte_nom(self):
         self._user_name = self.window_connect.textbox_nom.text()
@@ -139,7 +143,10 @@ class ControleurGestionTicket:
             self.gerer_window_cree_ticket(self._user_connected.name, self._user_connected.role, [(BreadcrumbPage.Accueil,"Accueil"), (BreadcrumbPage.ListTicket, "Liste ticket"), (BreadcrumbPage.CreeTicket,"Créer ticket")], self._list_Description)
 
     def gerer_clic_bouton_liste_ticket(self):
-        self.gerer_window_list_ticket(self._user_connected.name, self._user_connected.role, [(BreadcrumbPage.Accueil,"Accueil"), (BreadcrumbPage.CreeTicket,"Liste ticket")])
+        if self._user_connected.role == "admin":
+            self.gerer_window_list_ticket(self._user_connected.name, self._user_connected.role, [(BreadcrumbPage.Accueil,"Accueil"), (BreadcrumbPage.CreeTicket,"Liste ticket")], self._list_ticket)
+        else:
+            self.gerer_window_list_ticket(self._user_connected.name, self._user_connected.role, [(BreadcrumbPage.Accueil,"Accueil"), (BreadcrumbPage.CreeTicket,"Liste ticket")], self._user_connected.asign_tickets)
 
     def gerer_clic_bouton_deconnexion(self):
         self._main_window.close()
@@ -162,14 +169,16 @@ class ControleurGestionTicket:
         self.window_cree_ticket.textbox_priorite_ticket.setText(self._priorité_ticket)
 
         self.window_cree_ticket.header.breadcrumb_clicked.connect(self.gerer_clic_breadcrumb)
+        self.window_cree_ticket.btn_creer_ticket.setEnabled(False)
 
-        self.window_cree_ticket.textbox_titre_ticket.textChanged.connect(self.gerer_changement_texte_titre_ticket)
-        self.window_cree_ticket.textbox_description_ticket.textChanged.connect(self.gerer_changement_texte_description_ticket)
-        self.window_cree_ticket.textbox_priorite_ticket.textChanged.connect(self.gerer_changement_texte_priorite_ticket)
+        self.window_cree_ticket.textbox_titre_ticket.textChanged.connect(self.gerer_changement_texte_creer)
+        self.window_cree_ticket.textbox_description_ticket.textChanged.connect(self.gerer_changement_texte_creer)
+        self.window_cree_ticket.textbox_priorite_ticket.textChanged.connect(self.gerer_changement_texte_creer)
 
         self.window_cree_ticket.ajouter_descrtion_texte.triggered.connect(self.gerer_ajouter_description_texte)
         self.window_cree_ticket.ajouter_description_image.triggered.connect(self.gerer_ajout_description_image)
-        
+        #bouton voir description
+        #bouton supprimer description
         self.window_cree_ticket.btn_annuler.clicked.connect(lambda: self.gerer_clic_bouton_annuler(breadcrumbs[-2][1]))
         self.window_cree_ticket.btn_creer_ticket.clicked.connect(self.gerer_clic_bouton_creer)
         
@@ -179,16 +188,16 @@ class ControleurGestionTicket:
         if page == BreadcrumbPage.Accueil:
             self.gerer_window_acceuil()
         elif page == BreadcrumbPage.ListTicket:
-            self.gerer_window_list_ticket(self._user_connected.name, self._user_connected.role, [(BreadcrumbPage.Accueil,"Accueil"), (BreadcrumbPage.CreeTicket,"Liste ticket")])
+            self.gerer_window_list_ticket(self._user_connected.name, self._user_connected.role, [(BreadcrumbPage.Accueil,"Accueil"), (BreadcrumbPage.CreeTicket,"Liste ticket")], self._list_ticket)
 
-    def gerer_changement_texte_titre_ticket(self):
+    def gerer_changement_texte_creer(self):
         self._titre_ticket = self.window_cree_ticket.textbox_titre_ticket.text()
-
-    def gerer_changement_texte_description_ticket(self):
         self._description_ini_ticket = self.window_cree_ticket.textbox_description_ticket.toPlainText()
-
-    def gerer_changement_texte_priorite_ticket(self):
         self._priorité_ticket = self.window_cree_ticket.textbox_priorite_ticket.text()
+        if self._titre_ticket and self._description_ini_ticket and self._priorité_ticket:
+            self.window_cree_ticket.btn_creer_ticket.setEnabled(True)
+        else:
+            self.window_cree_ticket.btn_creer_ticket.setEnabled(False)
 
     def gerer_ajouter_description_texte(self):
         if self.window_ajout_texte is None:
@@ -338,9 +347,15 @@ class ControleurGestionTicket:
         self._titre_description = ""
         self._description_ticket = ""
     
-    def gerer_window_list_ticket(self, nom : str, role : str, breadcrumbs : list[tuple[BreadcrumbPage, str]]):
-        self.window_list_ticket = WindowListTicket(nom,role,breadcrumbs)
+    def gerer_window_list_ticket(self, nom : str, role : str, breadcrumbs : list[tuple[BreadcrumbPage, str]], list_ticket : list [Ticket]):
+        self.window_list_ticket = WindowListTicket(nom,role,breadcrumbs,list_ticket)
 
+        if isinstance(self._user_connected,Admin):
+            self.window_list_ticket.btn_assign.setEnabled(True)
+        else:
+            self.window_list_ticket.btn_assign.setEnabled(False)
+        self.window_list_ticket.header_widget.breadcrumb_clicked.connect(self.gerer_clic_breadcrumb)
+        
         self.window_list_ticket.btn_assign.clicked.connect(self.gerer_clic_bouton_assign)
         self.window_list_ticket.btn_back.clicked.connect(lambda : self.gerer_clic_bouton_annuler(breadcrumbs[-2][1]))
         self.window_list_ticket.btn_create.clicked.connect(self.gerer_clic_bouton_creer_ticket)
@@ -352,4 +367,57 @@ class ControleurGestionTicket:
         pass
 
     def gerer_clic_bouton_supprimer(self):
+        pass
+
+    def gerer_window_voir_edit_ticket(self, ticket:Ticket):
+        self.window_voir_edit_ticket = WindowVoirEditTicket(ticket)
+        self._ticket_edit = ticket
+        self.window_voir_edit_ticket.textbox_titre_ticket.setText(ticket.title)
+        self.window_voir_edit_ticket.textbox_description_ticket.setPlainText(ticket.description_ini)
+        self.window_voir_edit_ticket.textbox_priorite_ticket.setText(ticket.priority)
+
+        self.window_voir_edit_ticket.btn_enregister_ticket.setEnabled(False)
+
+        self.window_voir_edit_ticket.textbox_titre_ticket.textChanged.connect(self.gerer_changement_texte_edit)
+        self.window_voir_edit_ticket.textbox_description_ticket.textChanged.connect(self.gerer_changement_texte_edit)
+        self.window_voir_edit_ticket.textbox_priorite_ticket.textChanged.connect(self.gerer_changement_texte_edit)
+
+        self.window_voir_edit_ticket.btn_modif_status.clicked.connect(self.gerer_clic_bouton_modif_status)
+        self.window_voir_edit_ticket.btn_fermer_status.clicked.connect(self.gerer_clic_bouton_fermer_status)
+        self.window_voir_edit_ticket.ajouter_descrtion_texte.triggered.connect(self.gerer_ajouter_description_texte)
+        self.window_voir_edit_ticket.ajouter_description_image.triggered.connect(self.gerer_ajout_description_image)
+        #bouton voir description
+        #bouton supprimer description
+        self.window_voir_edit_ticket.btn_annuler.clicked.connect(self.gerer_bouton_annuler_ajout)
+        self.window_voir_edit_ticket.btn_enregister_ticket.clicked.connect(self.gerer_clic_bouton_enregister_edit)
+
+    def gerer_changement_texte_edit(self):
+        self._titre_ticket = self.window_voir_edit_ticket.textbox_titre_ticket.text()
+        self._description_ini_ticket = self.window_voir_edit_ticket.textbox_description_ticket.toPlainText()
+        self._priorité_ticket = self.window_voir_edit_ticket.textbox_priorite_ticket.text()
+        if self._titre_ticket and self._description_ini_ticket and self._priorité_ticket:
+            self.window_voir_edit_ticket.btn_enregister_ticket.setEnabled(True)
+        else:
+            self.window_voir_edit_ticket.btn_enregister_ticket.setEnabled(False)
+
+    def gerer_clic_bouton_modif_status(self):
+        self.ticket_manager.update_ticket(self._user_connected,self._ticket_edit)
+
+    def gerer_clic_bouton_fermer_status(self):
+        self.ticket_manager.close_ticket(self._user_connected,self._ticket_edit)
+
+    def gerer_edit_description_texte(self):
+        pass
+        #self._titre_description = self._titre_description
+        #self._description_ticket = self._description_ticket
+        #utiliser la fonction gerer_ajout_texte() 
+
+    def gerer_edit_description_image(self):
+        pass
+        #self._titre_description = self._titre_description
+        #self._description_ticket = self._description_ticket
+        #utiliser la fonction gerer_ajout_image() 
+
+
+    def gerer_clic_bouton_enregister_edit(self):
         pass

@@ -162,7 +162,7 @@
       <button />
     </item>
     <item id="1ad2cd16bd4d4ba99b4bb8257093fd6c" cid="LBL016" type="ui-label" name="Lecture/edition de ticket" owner="a5cbc38bb50f4091bff2128d19b2fab6" creation-date="10/07/2026 08:28:48" />
-    <item id="2d6ddbddd97946b1abbaef8beace25fe" cid="BTN010" type="ui-button" name="Créer" owner="a5cbc38bb50f4091bff2128d19b2fab6" creation-date="10/07/2026 08:27:32">
+    <item id="2d6ddbddd97946b1abbaef8beace25fe" cid="BTN010" type="ui-button" name="Enregister" owner="a5cbc38bb50f4091bff2128d19b2fab6" creation-date="10/07/2026 08:27:32">
       <button />
     </item>
     <item id="ec90d73f141f4947965782d825607108" cid="LBL016" type="ui-label" name="Liste des tickets" owner="21a12f279eff45a895df9190da7239ba" creation-date="10/07/2026 08:28:48" />
@@ -491,7 +491,7 @@
           </item>
         </layer>
       </diagram>
-      <diagram type="user-interface" id="p622d1ff541d04a0692b9b1c5ce71da4a_781618428" name="CréerTicket" order-index="3" overview-order-index="1" uid="" name-style="" auto-routed-paths="false" default-line-style="default" view-location="0,86" zoom="0.7">
+      <diagram type="user-interface" id="p622d1ff541d04a0692b9b1c5ce71da4a_781618428" name="CréerTicket" order-index="3" overview-order-index="1" uid="" name-style="" auto-routed-paths="false" default-line-style="default" view-location="0,806" zoom="0.7">
         <style>
           <background-color index="1" color="#FFFFFFFF" />
           <background-color index="2" color="#FFFFFFFF" />
@@ -730,7 +730,7 @@
           </item>
         </layer>
       </diagram>
-      <diagram type="user-interface" id="pb8d35d77bdfd48198a21958734a3706c_398647779" name="Liste des tickets" order-index="4" overview-order-index="2" uid="" name-style="" auto-routed-paths="false" default-line-style="default" view-location="-58,-53" zoom="0.9">
+      <diagram type="user-interface" id="pb8d35d77bdfd48198a21958734a3706c_398647779" name="Liste des tickets" order-index="4" overview-order-index="2" uid="" name-style="" auto-routed-paths="false" default-line-style="default" view-location="-91,-83" zoom="0.9">
         <style>
           <background-color index="1" color="#FFFFFFFF" />
           <background-color index="2" color="#FFFFFFFF" />

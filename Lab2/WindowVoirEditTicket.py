@@ -8,7 +8,7 @@ from descriptionTicket import DescriptionTicket
 from ticket import Ticket
 
 class WindowVoirEditTicket(QWidget):
-    def __init__(self, role : str, ticket : Ticket):
+    def __init__(self, ticket : Ticket):
         super().__init__()
         self.setWindowTitle("Gestionnaire de tickets")
         self.setFixedSize(500,500)
