@@ -2,6 +2,7 @@ from datetime import datetime
 from pathlib import Path
 from tkinter import filedialog
 
+from windowAssignation import WindowAssignation
 from windowVoirEditTicket import WindowVoirEditTicket
 from windowAcceuil import WindowAcceuil
 from windowCreeTicket import WindowCreeTicket
@@ -32,6 +33,7 @@ class ControleurGestionTicket:
     window_ajout_texte : WindowAjoutTexte | None
     window_ajout_image : WindowAjoutImage | None
     window_voir_edit_ticket : WindowVoirEditTicket | None
+    window_assignation : WindowAssignation | None
     _user_name : str | None
     _user_password : str | None
     _user_connected : User | None
@@ -355,7 +357,8 @@ class ControleurGestionTicket:
         else:
             self.window_list_ticket.btn_assign.setEnabled(False)
         self.window_list_ticket.header_widget.breadcrumb_clicked.connect(self.gerer_clic_breadcrumb)
-        
+        #bouton voir ticket (si ticket status fermer on ne peux pas enregistrer de modif, mais seulement le voir)
+        #bouton supprimer ticket
         self.window_list_ticket.btn_assign.clicked.connect(self.gerer_clic_bouton_assign)
         self.window_list_ticket.btn_back.clicked.connect(lambda : self.gerer_clic_bouton_annuler(breadcrumbs[-2][1]))
         self.window_list_ticket.btn_create.clicked.connect(self.gerer_clic_bouton_creer_ticket)
@@ -365,6 +368,8 @@ class ControleurGestionTicket:
 
     def gerer_clic_bouton_assign(self):
         pass
+        #self.window_assignation.show()
+        #gerer_window_assignation(list_ticket_cocher)
 
     def gerer_clic_bouton_supprimer(self):
         pass
@@ -418,6 +423,35 @@ class ControleurGestionTicket:
         #self._description_ticket = self._description_ticket
         #utiliser la fonction gerer_ajout_image() 
 
-
     def gerer_clic_bouton_enregister_edit(self):
         pass
+
+    def gerer_window_assignation(self, list_ticket_assigne : list[Ticket]):
+        self.window_assignation = WindowAssignation(self.ticket_manager.list_user_assignable)
+        
+        nom_ticket : str
+        i : int = 1
+        for ticket in list_ticket_assigne:
+            nom_ticket += ticket.title
+            if i <= len(list_ticket_assigne):
+                nom_ticket += ", "
+
+        #si aucun employé de cocher bouton assigner indisponible
+        #si seulement 1 employé de cocher à la fois
+
+        self.window_assignation.label_list_ticket.setText(nom_ticket)
+
+        self.window_assignation.btn_annuler.clicked.connect(self.gerer_clic_bouton_annuler_assignation)
+        self.window_assignation.btn_assigner.clicked.connect(self.gerer_clic_bouton_assignation(list_ticket_assigne))
+
+
+    def gerer_clic_bouton_annuler_assignation(self):
+        self.window_assignation.close()
+        self.window_assignation = None
+
+    def gerer_clic_bouton_assignation(self, list_ticket : list[Ticket]):
+        pass
+        #user_selectionne : User
+        #for ticket in list_ticket:
+        #    self.ticket_manager.assign_Ticket(self._user_connected, user_selectionne, ticket)
+
