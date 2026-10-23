@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QHBoxLayout, QLabel, QPlainTextEdit, QPushButton, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QHBoxLayout, QLabel, QLineEdit, QPlainTextEdit, QPushButton, QVBoxLayout, QWidget
 from PyQt6.QtCore import Qt
 
 class WindowAjoutTexte(QWidget):
@@ -9,17 +9,25 @@ class WindowAjoutTexte(QWidget):
 
         self.labe_titre_page = QLabel("Ajouter une description", self)
 
+        self.label_titre_description = QLabel("Titre : ", self)
+        self.textbox_titre = QLineEdit(self)
+        
         self.description = QPlainTextEdit(self)
 
         self.btn_annuler = QPushButton("Annuler", self)
         self.btn_ajouter = QPushButton("Ajouter", self)
 
+        self.layout_titre = QHBoxLayout()
+        self.layout_titre.addWidget(self.label_titre_description, alignment=Qt.AlignmentFlag.AlignLeft)
+        self.layout_titre.addWidget(self.textbox_titre)
+        
         self.layout_btn = QHBoxLayout()
         self.layout_btn.addWidget(self.btn_annuler, alignment=Qt.AlignmentFlag.AlignLeft)
         self.layout_btn.addWidget(self.btn_ajouter, alignment=Qt.AlignmentFlag.AlignRight)
 
         self.layout_principal = QVBoxLayout()
         self.layout_principal.addWidget(self.labe_titre_page, alignment=Qt.AlignmentFlag.AlignCenter)
+        self.layout_principal.addLayout(self.layout_titre)
         self.layout_principal.addWidget(self.description)
         self.layout_principal.addLayout(self.layout_btn)
 

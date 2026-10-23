@@ -1,14 +1,13 @@
 from headerWidget import HeaderWidget
 from breadcrumbPage import BreadcrumbPage
-from PyQt6.QtWidgets import QApplication, QHBoxLayout, QHeaderView, QLabel, QMenu, QPlainTextEdit, QPushButton, QTableWidget, QVBoxLayout, QWidget, QLineEdit, QGridLayout
-from PyQt6.QtCore import QSize, Qt
-from PyQt6.QtGui import QAction, QFont
-
-from windowAjoutImage import WindowAjoutImage
-from windowAjoutTexte import WindowAjoutTexte
+from PyQt6.QtWidgets import QHBoxLayout, QHeaderView, QLabel, QMenu, QTableWidgetItem, QPlainTextEdit, QPushButton, QTableWidget, QVBoxLayout, QWidget, QLineEdit, QGridLayout, QAbstractItemView
+from PyQt6.QtCore import Qt, pyqtSignal
+from PyQt6.QtGui import QAction
+from descriptionTicket import DescriptionTicket
+from descriptionTicketTexte import DescriptionTicketTexte
 
 class WindowCreeTicket(QWidget):
-    def __init__(self, nom : str, role : str, breadcrumbs : list[tuple[BreadcrumbPage, str]]):
+    def __init__(self, nom : str, role : str, breadcrumbs : list[tuple[BreadcrumbPage, str]], list_description : list[DescriptionTicket] ):
         super().__init__()
         self.setWindowTitle("Gestionnaire de tickets")
         self.setFixedSize(500,500)
@@ -40,12 +39,34 @@ class WindowCreeTicket(QWidget):
         self.table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
         self.table.setSelectionBehavior(QTableWidget.SelectionBehavior.SelectRows)
         self.table.setColumnCount(3)
-        self.table.setHorizontalHeaderLabels(["Description", "Type", "Action"])
+        self.table.setHorizontalHeaderLabels(["Titre description", "Type", "Action"])
+        self.table.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
+        self.table.setSelectionMode(QAbstractItemView.SelectionMode.NoSelection)
+        self.table.setAlternatingRowColors(True)
         self.table_heander = self.table.horizontalHeader()
         self.table_heander.setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
         self.table_heander.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
         self.table_heander.setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)
-        self.table.setRowCount(0)
+        #Remplissage tableau
+        self.table.setRowCount(len(list_description))
+        for row, description in enumerate(list_description):
+            titre = description.get_titre()
+            #col 0
+            titre_description = QTableWidgetItem(str(titre))
+            titre_description.setFlags(titre_description.flags() ^ Qt.ItemFlag.ItemIsEditable)
+            titre_description.setTextAlignment(Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft)
+            self.table.setItem(row,0,titre_description)
+            #col 1 : type
+            if isinstance(description, DescriptionTicketTexte):
+                type_description = QTableWidgetItem(str("Texte"))
+            else:
+                type_description = QTableWidgetItem(str("Image"))
+            type_description.setFlags(type_description.flags() ^ Qt.ItemFlag.ItemIsEditable)
+            type_description.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+            self.table.setItem(row,1,type_description)
+            #col 2 : Actions
+            actions_widget = self._create_actions_widget(titre_description)
+            self.table.setCellWidget(row, 2, actions_widget)
 
         self.btn_annuler = QPushButton("Annuler", self)
         self.btn_annuler.setProperty("class", "btnListTicket")
@@ -73,4 +94,31 @@ class WindowCreeTicket(QWidget):
         self.layout_principal.addLayout(self.grid_btn)
 
         self.setLayout(self.layout_principal)
+
+    def _create_actions_widget(self, ticket_id):
+            """Crée un conteneur horizontal avec des boutons d'actions pour la ligne."""
+            container = QWidget()
+            layout = QHBoxLayout(container)
+            layout.setContentsMargins(4, 2, 4, 2)
+            layout.setSpacing(6)
+            
+            # Bouton Édition / Voir
+            btn_edit = QPushButton("✏️")  # Ou QIcon("path/to/edit.png")
+            btn_edit.setObjectName("actionBtnEdit")
+            btn_edit.setToolTip("Modifier")
+            btn_edit.clicked.connect(
+                lambda: print(f"Édition du ticket {ticket_id}")
+            )
+    
+            # Bouton Suppression
+            btn_delete = QPushButton("🗑️")  # Ou QIcon("path/to/delete.png")
+            btn_delete.setObjectName("actionBtnDelete")
+            btn_delete.setToolTip("Supprimer")
+            btn_delete.clicked.connect(
+                lambda: print(f"Suppression du ticket {ticket_id}")
+            )
+    
+            layout.addWidget(btn_edit)
+            layout.addWidget(btn_delete)
+            return container
 

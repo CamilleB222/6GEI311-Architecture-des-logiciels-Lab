@@ -122,7 +122,7 @@ class WindowListTicket(QWidget):
         layout = QHBoxLayout(container)
         layout.setContentsMargins(4, 2, 4, 2)
         layout.setSpacing(6)
-
+        
         # Bouton Édition / Voir
         btn_edit = QPushButton("✏️")  # Ou QIcon("path/to/edit.png")
         btn_edit.setObjectName("actionBtnEdit")
