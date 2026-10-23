@@ -1,3 +1,4 @@
+from descriptionTicket import DescriptionTicket
 from headerWidget import HeaderWidget
 from breadcrumbPage import BreadcrumbPage
 from PyQt6.QtWidgets import QHBoxLayout, QHeaderView, QLabel, QMenu, QTableWidgetItem, QPlainTextEdit, QPushButton, QTableWidget, QVBoxLayout, QWidget, QLineEdit, QGridLayout, QAbstractItemView
@@ -5,9 +6,10 @@ from PyQt6.QtCore import Qt, pyqtSignal
 from PyQt6.QtGui import QAction
 from descriptionTicket import DescriptionTicket
 from descriptionTicketTexte import DescriptionTicketTexte
+from typing import Callable
 
 class WindowCreeTicket(QWidget):
-    def __init__(self, nom : str, role : str, breadcrumbs : list[tuple[BreadcrumbPage, str]], list_description : list[DescriptionTicket] ):
+    def __init__(self, nom : str, role : str, breadcrumbs : list[tuple[BreadcrumbPage, str]]):
         super().__init__()
         self.setWindowTitle("Gestionnaire de tickets")
         self.setFixedSize(500,500)
@@ -47,26 +49,6 @@ class WindowCreeTicket(QWidget):
         self.table_heander.setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
         self.table_heander.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
         self.table_heander.setSectionResizeMode(2, QHeaderView.ResizeMode.ResizeToContents)
-        #Remplissage tableau
-        self.table.setRowCount(len(list_description))
-        for row, description in enumerate(list_description):
-            titre = description.get_titre()
-            #col 0
-            titre_description = QTableWidgetItem(str(titre))
-            titre_description.setFlags(titre_description.flags() ^ Qt.ItemFlag.ItemIsEditable)
-            titre_description.setTextAlignment(Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft)
-            self.table.setItem(row,0,titre_description)
-            #col 1 : type
-            if isinstance(description, DescriptionTicketTexte):
-                type_description = QTableWidgetItem(str("Texte"))
-            else:
-                type_description = QTableWidgetItem(str("Image"))
-            type_description.setFlags(type_description.flags() ^ Qt.ItemFlag.ItemIsEditable)
-            type_description.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
-            self.table.setItem(row,1,type_description)
-            #col 2 : Actions
-            actions_widget = self._create_actions_widget(titre_description)
-            self.table.setCellWidget(row, 2, actions_widget)
 
         self.btn_annuler = QPushButton("Annuler", self)
         self.btn_annuler.setProperty("class", "btnListTicket")
@@ -95,30 +77,82 @@ class WindowCreeTicket(QWidget):
 
         self.setLayout(self.layout_principal)
 
-    def _create_actions_widget(self, titre_description : str):
-            """Crée un conteneur horizontal avec des boutons d'actions pour la ligne."""
-            container = QWidget()
-            layout = QHBoxLayout(container)
-            layout.setContentsMargins(4, 2, 4, 2)
-            layout.setSpacing(6)
+    def add_description(self, description : DescriptionTicket, edit : Callable[[int], None], delete : Callable[[int], None]):
+        row = self.table.rowCount()
+        self.table.setRowCount(row + 1)
+        titre = description.get_titre()
+
+        #col 0
+        titre_description = QTableWidgetItem(str(titre))
+        titre_description.setFlags(titre_description.flags() ^ Qt.ItemFlag.ItemIsEditable)
+        titre_description.setTextAlignment(Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft)
+        self.table.setItem(row,0,titre_description)
+
+        #col 1 : type
+        if isinstance(description, DescriptionTicketTexte):
+            type_description = QTableWidgetItem(str("Texte"))
+        else:
+            type_description = QTableWidgetItem(str("Image"))
+
+        type_description.setFlags(type_description.flags() ^ Qt.ItemFlag.ItemIsEditable)
+        type_description.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.table.setItem(row,1,type_description)
+
+        #col 2 : Actions
+        actions_widget = self._create_actions_widget(edit, delete)
+        self.table.setCellWidget(row, 2, actions_widget)
+
+    def edit_description(self, row: int, description: DescriptionTicket):
+        """Met à jour le titre et le type d'une ligne existante."""
+        if 0 <= row < self.table.rowCount():
+            # Col 0 : Mise à jour du titre
+            self.table.item(row, 0).setText(str(description.get_titre()))
             
-            # Bouton Édition / Voir
-            btn_edit = QPushButton("✏️")  # Ou QIcon("path/to/edit.png")
-            btn_edit.setObjectName("actionBtnEdit")
-            btn_edit.setToolTip("Modifier")
-            btn_edit.clicked.connect(
-                lambda: print(f"Édition du ticket {titre_description}")
-            )
-    
-            # Bouton Suppression
-            btn_delete = QPushButton("🗑️")  # Ou QIcon("path/to/delete.png")
-            btn_delete.setObjectName("actionBtnDelete")
-            btn_delete.setToolTip("Supprimer")
-            btn_delete.clicked.connect(
-                lambda: print(f"Suppression du ticket {titre_description}")
-            )
-    
-            layout.addWidget(btn_edit)
-            layout.addWidget(btn_delete)
-            return container
+            # Col 1 : Mise à jour du type
+            type_str = "Texte" if isinstance(description, DescriptionTicketTexte) else "Image"
+            self.table.item(row, 1).setText(type_str)
+
+    def remove_description(self, row):
+         self.table.removeRow(row)
+
+    def _get_current_row(self, widget: QWidget) -> int:
+        """Retrouve la ligne courante d'un widget imbriqué dans la table."""
+        # Convertit la position relative du widget en coordonnées globales de la table
+        pos = widget.parentWidget().mapTo(self.table.viewport(), widget.pos())
+        index = self.table.indexAt(pos)
+        return index.row() if index.isValid() else -1
+
+    def _create_actions_widget(self, edit: Callable[[int], None], delete: Callable[[int], None]):
+        """Crée un conteneur horizontal avec des boutons d'actions pour la ligne."""
+        container = QWidget()
+        layout = QHBoxLayout(container)
+        layout.setContentsMargins(4, 2, 4, 2)
+        layout.setSpacing(6)
+
+        # Bouton Édition
+        btn_edit = QPushButton("✏️")
+        btn_edit.setObjectName("actionBtnEdit")
+        btn_edit.setToolTip("Modifier")
+        btn_edit.clicked.connect(
+            lambda _, b=btn_edit: self._handle_action(b, edit)
+        )
+
+        # Bouton Suppression
+        btn_delete = QPushButton("🗑️")
+        btn_delete.setObjectName("actionBtnDelete")
+        btn_delete.setToolTip("Supprimer")
+        btn_delete.clicked.connect(
+            lambda _, b=btn_delete: self._handle_action(b, delete)
+        )
+
+        layout.addWidget(btn_edit)
+        layout.addWidget(btn_delete)
+        return container
+
+    def _handle_action(self, button: QPushButton, callback: Callable[[int], None]):
+        """Exécute le callback avec l'index de ligne calculé à la volée."""
+        current_row = self._get_current_row(button)
+        if current_row != -1:
+            callback(current_row)
 

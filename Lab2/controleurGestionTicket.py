@@ -1,7 +1,7 @@
 from datetime import datetime
 from pathlib import Path
+import select
 from tkinter import filedialog
-
 from windowVoirEditTicket import WindowVoirEditTicket
 from windowAcceuil import WindowAcceuil
 from windowCreeTicket import WindowCreeTicket
@@ -41,6 +41,7 @@ class ControleurGestionTicket:
     _main_window : MainWindow | None
     _titre_ticket : str | None
     _titre_description : str
+    _row_description : int
     _description_ini_ticket : str | None
     _description_ticket : str | None
     _priorité_ticket : str | None
@@ -73,6 +74,7 @@ class ControleurGestionTicket:
         self.window_ajout_image = None
         self._titre_ticket = None
         self._titre_description = None
+        self._row_description = -1
         self._description_ini_ticket = None
         self._description_ticket = None
         self._priorité_ticket = None
@@ -138,9 +140,9 @@ class ControleurGestionTicket:
         self._priorité_ticket = ""
         self._list_Description.clear()
         if isinstance(widget_actuel, WindowAcceuil):
-            self.gerer_window_cree_ticket(self._user_connected.name, self._user_connected.role, [(BreadcrumbPage.Accueil,"Accueil"), (BreadcrumbPage.CreeTicket,"Créer ticket")], self._list_Description)
+            self.gerer_window_cree_ticket(self._user_connected.name, self._user_connected.role, [(BreadcrumbPage.Accueil,"Accueil"), (BreadcrumbPage.CreeTicket,"Créer ticket")])
         else:
-            self.gerer_window_cree_ticket(self._user_connected.name, self._user_connected.role, [(BreadcrumbPage.Accueil,"Accueil"), (BreadcrumbPage.ListTicket, "Liste ticket"), (BreadcrumbPage.CreeTicket,"Créer ticket")], self._list_Description)
+            self.gerer_window_cree_ticket(self._user_connected.name, self._user_connected.role, [(BreadcrumbPage.Accueil,"Accueil"), (BreadcrumbPage.ListTicket, "Liste ticket"), (BreadcrumbPage.CreeTicket,"Créer ticket")])
 
     def gerer_clic_bouton_liste_ticket(self):
         if self._user_connected.role == "admin":
@@ -161,8 +163,8 @@ class ControleurGestionTicket:
         self.window_connect.button_connect.setEnabled(False)
         self.window_connect.show()
 
-    def gerer_window_cree_ticket(self, nom : str, role : str, breadcrumbs : list[tuple[BreadcrumbPage, str]], list_description : list[DescriptionTicket]):
-        self.window_cree_ticket = WindowCreeTicket(nom, role, breadcrumbs, list_description)
+    def gerer_window_cree_ticket(self, nom : str, role : str, breadcrumbs : list[tuple[BreadcrumbPage, str]]):
+        self.window_cree_ticket = WindowCreeTicket(nom, role, breadcrumbs)
 
         self.window_cree_ticket.textbox_titre_ticket.setText(self._titre_ticket)
         self.window_cree_ticket.textbox_description_ticket.setPlainText(self._description_ini_ticket)
@@ -215,7 +217,7 @@ class ControleurGestionTicket:
         if ancienne_page == "Accueil":
             self.gerer_window_acceuil()
         elif ancienne_page == "Liste ticket":
-            self.gerer_window_list_ticket(self._user_connected.name, self._user_connected.role, [(BreadcrumbPage.Accueil,"Accueil"), (BreadcrumbPage.CreeTicket,"Liste ticket")])
+            self.gerer_window_list_ticket(self._user_connected.name, self._user_connected.role, [(BreadcrumbPage.Accueil,"Accueil"), (BreadcrumbPage.CreeTicket,"Liste ticket")], self._list_ticket)
 
     def gerer_clic_bouton_creer(self):
         if not len(self._list_ticket) == 0:
@@ -264,31 +266,19 @@ class ControleurGestionTicket:
     def gerer_bouton_annuler_ajout(self):
         self._titre_description = ""
         self._description_ticket = ""
-        self._list_Description.clear()
-        if not self.window_ajout_texte == None:
-            self.window_ajout_texte.textbox_titre.clear()
-            self.window_ajout_texte.description.clear()
-            self.window_ajout_texte.close()
-            self.window_ajout_texte = None
-        if not self.window_ajout_image == None:
-            self.window_ajout_image.textbox_titre.clear()
-            self.window_ajout_image.textbox_selection.clear()
-            self.window_ajout_image.close()
-            self.window_ajout_image = None
+        self.window_ajout_texte = None
+        self.window_ajout_image = None
+
 
     def gerer_clic_bouton_ajout_text(self):
-        widget_actuel = self._main_window.centralWidget()
         description_texte = DescriptionTicketTexte(self._titre_description, self._description_ticket)
         self._list_Description.append(description_texte)
         self.window_ajout_texte.close()
-        self.window_ajout_texte.btn_annuler.clicked.disconnect(self.gerer_bouton_annuler_ajout)
-        self.window_ajout_texte.btn_ajouter.clicked.disconnect(self.gerer_clic_bouton_ajout_text)
-        if isinstance(widget_actuel, WindowCreeTicket):
-            self.gerer_window_cree_ticket(self._user_connected.name, self._user_connected.role, [(BreadcrumbPage.Accueil,"Accueil"), (BreadcrumbPage.CreeTicket,"Créer ticket")], self._list_Description)
-        else:
-            self.gerer_window_cree_ticket(self._user_connected.name, self._user_connected.role, [(BreadcrumbPage.Accueil,"Accueil"), (BreadcrumbPage.ListTicket, "Liste ticket"), (BreadcrumbPage.CreeTicket,"Créer ticket")], self._list_Description)
-        self.window_ajout_texte.textbox_titre.clear()
-        self.window_ajout_texte.description.clear()
+        self.window_ajout_texte = None
+
+        if self.window_cree_ticket is not None:
+            self.window_cree_ticket.add_description(description_texte, self.gerer_clic_bouton_modifie_description, self.gerer_clic_bouton_supprimer_description)
+        
         self._titre_description = ""
         self._description_ticket = ""
 
@@ -331,21 +321,89 @@ class ControleurGestionTicket:
         self.window_ajout_image.label_image_preview.setPixmap(pixmap_redim)
     
     def gerer_clic_bouton_ajout_image(self):
-        widget_actuel = self._main_window.centralWidget()
         description_image = DescriptionTicketImage(self._titre_description, self._description_ticket)
         self._list_Description.append(description_image)
         self.window_ajout_image.close()
-        self.window_ajout_image.btn_annuler.clicked.disconnect(self.gerer_bouton_annuler_ajout)
-        self.window_ajout_image.btn_ajouter.clicked.disconnect(self.gerer_clic_bouton_ajout_image)
-        if isinstance(widget_actuel, WindowCreeTicket):
-            self.gerer_window_cree_ticket(self._user_connected.name, self._user_connected.role, [(BreadcrumbPage.Accueil,"Accueil"), (BreadcrumbPage.CreeTicket,"Créer ticket")], self._list_Description)
-        else:
-            self.gerer_window_cree_ticket(self._user_connected.name, self._user_connected.role, [(BreadcrumbPage.Accueil,"Accueil"), (BreadcrumbPage.ListTicket, "Liste ticket"), (BreadcrumbPage.CreeTicket,"Créer ticket")], self._list_Description)
-        self.window_ajout_image.textbox_titre.clear()
-        self.window_ajout_image.textbox_selection.clear()
-        self.window_ajout_image.label_image_preview.clear()
+        self.window_ajout_image = None
+
+        if self.window_cree_ticket is not None:
+            self.window_cree_ticket.add_description(description_image, self.gerer_clic_bouton_modifie_description, self.gerer_clic_bouton_supprimer_description)
+
         self._titre_description = ""
         self._description_ticket = ""
+
+    def gerer_clic_bouton_modifie_description(self, row : int):
+        # Ouvrir la page de création de description en mode modification
+        description : DescriptionTicket = self._list_Description[row]
+        if type(description) == DescriptionTicketTexte:
+            #Ouvrir la fenêtre
+            if self.window_ajout_texte is None:
+                self.window_ajout_texte = WindowAjoutTexte()
+            self.window_ajout_texte.show()
+
+            #Modifier les bouton pour la modificaiton
+            self.window_ajout_texte.textbox_titre.textChanged.connect(self.gerer_changement_champ_texte)
+            self.window_ajout_texte.description.textChanged.connect(self.gerer_changement_champ_texte)
+            self._row_description = row
+
+            self.window_ajout_texte.textbox_titre.setText(description.get_titre())
+            self.window_ajout_texte.description.setPlainText(description.get_description())
+
+            self.window_ajout_texte.btn_ajouter.setText("Modifier")
+            self.window_ajout_texte.labe_titre_page.setText("Modifier une description")
+
+            self.window_ajout_texte.btn_annuler.clicked.connect(self.gerer_bouton_annuler_ajout)
+            self.window_ajout_texte.btn_ajouter.clicked.connect(self.gerer_clic_bouton_modifier_text)
+        else:
+            if self.window_ajout_image is None:
+                self.window_ajout_image = WindowAjoutImage()
+            self.window_ajout_image.show()
+
+            self.window_ajout_image.textbox_titre.textChanged.connect(self.gerer_changement_champ_image)
+            self.window_ajout_image.textbox_selection.textChanged.connect(self.gerer_changement_champ_image)
+
+            self.window_ajout_image.textbox_titre.setText(description.get_titre())
+            self.window_ajout_image.textbox_selection.setText(description.get_description())
+
+            self.window_ajout_image.btn_selection.clicked.connect(self.gerer_bouton_selectionner)
+            self.window_ajout_image.btn_annuler.clicked.connect(self.gerer_bouton_annuler_ajout)
+            self.window_ajout_image.btn_ajouter.clicked.connect(self.gerer_clic_bouton_modifier_image)
+            # TODO faire fonctionner modifier image 
+
+            pass
+
+    def gerer_clic_bouton_modifier_text(self):
+        description_texte = DescriptionTicketTexte(self._titre_description, self._description_ticket)
+        self._list_Description[self._row_description] = description_texte
+
+        self.window_ajout_texte.close()
+        self.window_ajout_texte = None
+
+        if self.window_cree_ticket is not None:
+            self.window_cree_ticket.edit_description(self._row_description,description_texte)
+        
+        self._titre_description = ""
+        self._description_ticket = ""
+
+    def gerer_clic_bouton_modifier_image(self):
+            description_texte = DescriptionTicketTexte(self._titre_description, self._description_ticket)
+            self._list_Description[self._row_description] = description_texte
+    
+            self.window_ajout_texte.close()
+            self.window_ajout_texte = None
+    
+            if self.window_cree_ticket is not None:
+                self.window_cree_ticket.edit_description(self._row_description,description_texte)
+            
+            self._titre_description = ""
+            self._description_ticket = ""
+
+    def gerer_clic_bouton_supprimer_description(self, row : int):
+        if self.window_cree_ticket is not None:
+            self.window_cree_ticket.remove_description(row)
+
+        del self._list_Description[row]
+        pass
     
     def gerer_window_list_ticket(self, nom : str, role : str, breadcrumbs : list[tuple[BreadcrumbPage, str]], list_ticket : list [Ticket]):
         self.window_list_ticket = WindowListTicket(nom,role,breadcrumbs,list_ticket)

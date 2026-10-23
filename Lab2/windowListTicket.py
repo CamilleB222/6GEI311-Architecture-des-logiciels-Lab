@@ -58,16 +58,16 @@ class WindowListTicket(QWidget):
             if header is not None:
                 header.setSectionResizeMode(
                     0, QHeaderView.ResizeMode.ResizeToContents
-                )  # Multi-sélection (Ajusté)
+                )  # Multi-sélection
                 header.setSectionResizeMode(
                     1, QHeaderView.ResizeMode.ResizeToContents
-                )  # ID (Ajusté)
+                )  # ID
                 header.setSectionResizeMode(
                     2, QHeaderView.ResizeMode.Stretch
-                )  # Titre (Prend tout l'espace)
+                )  # Titre
                 header.setSectionResizeMode(
                     3, QHeaderView.ResizeMode.ResizeToContents
-                )  # Actions (Ajusté)
+                )  # Actions
 
 
             # 3. Remplissage du tableau
@@ -81,7 +81,7 @@ class WindowListTicket(QWidget):
                 chk_layout.setContentsMargins(0, 0, 0, 0)
                 self.table.setCellWidget(row, 0, chk_container)
 
-                # Col 1 : ID (Non éditable)
+                # Col 1 : ID
                 item_id = QTableWidgetItem(str(ticket.ticket_id))
                 item_id.setFlags(
                     item_id.flags() ^ Qt.ItemFlag.ItemIsEditable

@@ -10,9 +10,10 @@ from windowAcceuil import WindowAcceuil
 from windowCreeTicket import WindowCreeTicket
 from windowListTicket import WindowListTicket
 from PyQt6.QtWidgets import QApplication
+import os
 
-app : QApplication = None
-controleur : ControleurGestionTicket = None
+app : QApplication
+controleur : ControleurGestionTicket
 
 list_user : list[User] = list[User]()
 list_admin : list[Admin] = list[Admin]()
@@ -42,7 +43,8 @@ def main():
     register_user(user2)
 
     app = QApplication([])
-    load_stylesheet(app, "style.qss")
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    load_stylesheet(app,  dir_path + "/style.qss")
 
     controleur = ControleurGestionTicket(list_user, list_admin, list_tickets)
     app.exec()
