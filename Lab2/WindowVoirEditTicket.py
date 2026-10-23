@@ -1,10 +1,7 @@
 from descriptionTicketTexte import DescriptionTicketTexte
-from headerWidget import HeaderWidget
-from breadcrumbPage import BreadcrumbPage
 from PyQt6.QtWidgets import QAbstractItemView, QHBoxLayout, QHeaderView, QLabel, QMenu, QPlainTextEdit, QPushButton, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget, QLineEdit, QGridLayout
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QAction
-from descriptionTicket import DescriptionTicket
 from ticket import Ticket
 
 class WindowVoirEditTicket(QWidget):
