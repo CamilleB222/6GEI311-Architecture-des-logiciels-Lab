@@ -105,7 +105,7 @@ class WindowListTicket(QWidget):
                 )
                 self.table.setItem(row, 2, item_title)
 
-                # Col 3 : Utilisatuer asigné
+                # Col 3 : Utilisateur asigné
                 item_assign = QTableWidgetItem(str(ticket.user_assign or "Aucun"))
                 item_assign.setFlags(
                     item_assign.flags() ^ Qt.ItemFlag.ItemIsEditable
@@ -114,7 +114,7 @@ class WindowListTicket(QWidget):
                 self.table.setItem(row, 3, item_assign)
 
                 # Col 4 : Actions avec pictogrammes/boutons
-                actions_widget = self._create_actions_widget(ticket.ticket_id, edit, delete)
+                actions_widget = self._create_actions_widget(is_admin, edit, delete)
                 self.table.setCellWidget(row, 4, actions_widget)
 
 
@@ -159,6 +159,23 @@ class WindowListTicket(QWidget):
                         selected_tickets.append(ticket)
                         
         return selected_tickets
+
+    def change_user_assignement(self, nom_utilisateur: str):
+        updated_tickets = []
+        
+        for row in range(self.table.rowCount()):
+            container = self.table.cellWidget(row, 0)
+            if container:
+                checkbox = container.findChild(QCheckBox)
+                if checkbox and checkbox.isChecked():
+                    ticket = checkbox.property("ticket")
+                    if ticket:
+                        #Mise à jour de l'affichage dans le QTableWidget (colonne 3)
+                        item_assign = self.table.item(row, 3)
+                        if item_assign:
+                            item_assign.setText(str(nom_utilisateur or "Aucun"))
+
+        return updated_tickets
 
     def get_selected_ticket_ids(self) -> list[int]:
         """Variante : Retourne uniquement la liste des IDs des tickets cochés."""

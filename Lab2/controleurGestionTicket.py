@@ -76,6 +76,7 @@ class ControleurGestionTicket:
         self.window_ajout_texte = None
         self.window_ajout_image = None
         self.window_assignation = None
+        self.window_voir_edit_ticket = None
         self._titre_ticket = None
         self._titre_description = None
         self._row_description = -1
@@ -183,8 +184,6 @@ class ControleurGestionTicket:
 
         self.window_cree_ticket.ajouter_descrtion_texte.triggered.connect(self.gerer_ajouter_description_texte)
         self.window_cree_ticket.ajouter_description_image.triggered.connect(self.gerer_ajout_description_image)
-        #bouton voir description
-        #bouton supprimer description
         self.window_cree_ticket.btn_annuler.clicked.connect(lambda: self.gerer_clic_bouton_annuler(breadcrumbs[-2][1]))
         self.window_cree_ticket.btn_creer_ticket.clicked.connect(self.gerer_clic_bouton_creer)
         
@@ -421,10 +420,6 @@ class ControleurGestionTicket:
     def gerer_window_list_ticket(self, nom : str, role : str, breadcrumbs : list[tuple[BreadcrumbPage, str]], list_ticket : list [Ticket]):
         self.window_list_ticket = WindowListTicket(nom,role,isinstance(self._user_connected, Admin),breadcrumbs,list_ticket, self.gerer_clic_bouton_modifier, self.gerer_clic_bouton_supprimer)
 
-        if isinstance(self._user_connected,Admin):
-            self.window_list_ticket.btn_assign.setEnabled(True)
-        else:
-            self.window_list_ticket.btn_assign.setEnabled(False)
         self.window_list_ticket.header_widget.breadcrumb_clicked.connect(self.gerer_clic_breadcrumb)
         #bouton voir ticket (si ticket status fermer on ne peux pas enregistrer de modif, mais seulement le voir)
         self.window_list_ticket.btn_assign.clicked.connect(self.gerer_clic_bouton_assign_lot)
@@ -435,9 +430,28 @@ class ControleurGestionTicket:
         self.gerer_main_window(self.window_list_ticket)
 
     def gerer_clic_bouton_assign_lot(self):
-        if self.window_assignation is None:
-            self.window_assignation = WindowAssignation(self.ticket_manager.list_user_assignable)
-        self.window_assignation.show()
+        list_ticket : list[Ticket] = self.window_list_ticket.get_selected_tickets()
+
+        if len(list_ticket) != 0:
+            self.window_assignation = WindowAssignation(self.ticket_manager.list_user_assignable, list_ticket)
+            self.window_assignation.show()
+            self.window_assignation.btn_annuler.clicked.connect(self.gerer_clic_bouton_assign_annuler)
+            self.window_assignation.btn_assigner.clicked.connect(self.gerer_clic_bouton_assign_assigner)
+
+    def gerer_clic_bouton_assign_annuler(self):
+        self.window_assignation.close()
+        self.window_assignation = None
+
+    def gerer_clic_bouton_assign_assigner(self):
+        utilisateur_selectionner : User = self.window_assignation.get_selected_user()
+
+        if utilisateur_selectionner != None:
+            list_ticket = self.window_list_ticket.get_selected_tickets()
+            for ticket in list_ticket:
+                self.ticket_manager.assign_Ticket(self._user_connected, utilisateur_selectionner, ticket)
+                self.window_list_ticket.change_user_assignement(utilisateur_selectionner.name)
+            self.window_assignation.close()
+            self.window_assignation = None
 
     def gerer_clic_bouton_supprimer_lot(self):
         ticket_a_supprimer : list[Ticket] = self.window_list_ticket.get_selected_tickets()
@@ -452,7 +466,14 @@ class ControleurGestionTicket:
         del self._list_ticket[row]
 
     def gerer_clic_bouton_modifier(self, row):
-        pass
+        ticket : Ticket
+        if isinstance(self._user_connected,Admin):
+            ticket = self._list_ticket[row]
+        else:
+            ticket = self._user_connected.asign_tickets[row]
+
+        self.window_voir_edit_ticket = WindowVoirEditTicket(ticket)
+        self.window_voir_edit_ticket.show()
 
     def gerer_window_voir_edit_ticket(self, ticket:Ticket):
         self.window_voir_edit_ticket = WindowVoirEditTicket(ticket)
