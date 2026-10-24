@@ -4,9 +4,10 @@ from PyQt6.QtCore import QSize, Qt
 from PyQt6.QtGui import QFont
 from breadcrumbPage import BreadcrumbPage
 from ticket import Ticket
+from typing import Callable
 
 class WindowListTicket(QWidget):
-    def __init__(self, nom : str, role : str, breadcrumbs : list[tuple[BreadcrumbPage, str]], list_ticket : list[Ticket]):
+    def __init__(self, nom : str, role : str, is_admin : bool ,breadcrumbs : list[tuple[BreadcrumbPage, str]], list_ticket : list[Ticket], edit: Callable[[int], None], delete: Callable[[int], None]):
             super().__init__()
             self.setWindowTitle("Gestionnaire de tickets")
             self.setFixedSize(700,400)
@@ -30,9 +31,11 @@ class WindowListTicket(QWidget):
 
             self.btn_layout.addWidget(self.btn_back)
             self.btn_layout.addStretch()
-            self.btn_layout.addWidget(self.btn_create)
-            self.btn_layout.addWidget(self.btn_assign)
-            self.btn_layout.addWidget(self.btn_delete)
+
+            if is_admin:
+                self.btn_layout.addWidget(self.btn_create)
+                self.btn_layout.addWidget(self.btn_assign)
+                self.btn_layout.addWidget(self.btn_delete)
 
             # 1. Création du tableau : 5 colonnes
             self.table = QTableWidget()
@@ -79,7 +82,10 @@ class WindowListTicket(QWidget):
                 # Col 0 : Checkbox pour multi-sélection
                 chk_container = QWidget()
                 chk_layout = QHBoxLayout(chk_container)
-                chk_layout.addWidget(QCheckBox())
+                checkbox = QCheckBox()
+                # Rattachement de l'objet ticket (ou de ticket.ticket_id)
+                checkbox.setProperty("ticket", ticket)
+                chk_layout.addWidget(checkbox)
                 chk_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
                 chk_layout.setContentsMargins(0, 0, 0, 0)
                 self.table.setCellWidget(row, 0, chk_container)
@@ -108,7 +114,7 @@ class WindowListTicket(QWidget):
                 self.table.setItem(row, 3, item_assign)
 
                 # Col 4 : Actions avec pictogrammes/boutons
-                actions_widget = self._create_actions_widget(ticket.ticket_id)
+                actions_widget = self._create_actions_widget(ticket.ticket_id, edit, delete)
                 self.table.setCellWidget(row, 4, actions_widget)
 
 
@@ -122,7 +128,50 @@ class WindowListTicket(QWidget):
 
             self.setLayout(self.layout_principal)
 
-    def _create_actions_widget(self, ticket_id):
+    def remove_ticket(self, row):
+             self.table.removeRow(row)
+
+    def remove_tickets(self, tickets_to_remove: list[Ticket]) -> None:
+        # Extraction des IDs pour gérer indifféremment des objets Ticket ou des entiers
+        ids_to_remove = { t.ticket_id for t in tickets_to_remove}
+
+        for row in range(self.table.rowCount() - 1, -1, -1):
+            container = self.table.cellWidget(row, 0)
+            if container:
+                checkbox = container.findChild(QCheckBox)
+                if checkbox:
+                    ticket = checkbox.property("ticket")
+                    
+                    if ticket.ticket_id in ids_to_remove:
+                        self.table.removeRow(row)
+
+    def get_selected_tickets(self) -> list[Ticket]:
+        """Retourne la liste des objets Ticket dont la case est cochée."""
+        selected_tickets = []
+        
+        for row in range(self.table.rowCount()):
+            container = self.table.cellWidget(row, 0)
+            if container:
+                checkbox = container.findChild(QCheckBox)
+                if checkbox and checkbox.isChecked():
+                    ticket = checkbox.property("ticket")
+                    if ticket:
+                        selected_tickets.append(ticket)
+                        
+        return selected_tickets
+
+    def get_selected_ticket_ids(self) -> list[int]:
+        """Variante : Retourne uniquement la liste des IDs des tickets cochés."""
+        return [ticket.ticket_id for ticket in self.get_selected_tickets()]
+
+    def _get_current_row(self, widget: QWidget) -> int:
+        """Retrouve la ligne courante d'un widget imbriqué dans la table."""
+        # Convertit la position relative du widget en coordonnées globales de la table
+        pos = widget.parentWidget().mapTo(self.table.viewport(), widget.pos())
+        index = self.table.indexAt(pos)
+        return index.row() if index.isValid() else -1
+
+    def _create_actions_widget(self, is_admin : bool, edit: Callable[[int], None], delete: Callable[[int], None]):
         """Crée un conteneur horizontal avec des boutons d'actions pour la ligne."""
         container = QWidget()
         layout = QHBoxLayout(container)
@@ -130,21 +179,30 @@ class WindowListTicket(QWidget):
         layout.setSpacing(6)
         
         # Bouton Édition / Voir
-        btn_edit = QPushButton("✏️")  # Ou QIcon("path/to/edit.png")
+        btn_edit = QPushButton("👁️/✏️")  # Ou QIcon("path/to/edit.png")
         btn_edit.setObjectName("actionBtnEdit")
         btn_edit.setToolTip("Modifier")
         btn_edit.clicked.connect(
-            lambda: print(f"Édition du ticket {ticket_id}")
-        )
-
-        # Bouton Suppression
-        btn_delete = QPushButton("🗑️")  # Ou QIcon("path/to/delete.png")
-        btn_delete.setObjectName("actionBtnDelete")
-        btn_delete.setToolTip("Supprimer")
-        btn_delete.clicked.connect(
-            lambda: print(f"Suppression du ticket {ticket_id}")
+            lambda _, b=btn_edit: self._handle_action(b, edit)
         )
 
         layout.addWidget(btn_edit)
-        layout.addWidget(btn_delete)
+
+        if is_admin:
+            # Bouton Suppression
+            btn_delete = QPushButton("🗑️")  # Ou QIcon("path/to/delete.png")
+            btn_delete.setObjectName("actionBtnDelete")
+            btn_delete.setToolTip("Supprimer")
+            btn_delete.clicked.connect(
+                lambda _, b=btn_delete: self._handle_action(b, delete)
+            )
+            layout.addWidget(btn_delete)
+
+
         return container
+    
+    def _handle_action(self, button: QPushButton, callback: Callable[[int], None]):
+        """Exécute le callback avec l'index de ligne calculé à la volée."""
+        current_row = self._get_current_row(button)
+        if current_row != -1:
+            callback(current_row)

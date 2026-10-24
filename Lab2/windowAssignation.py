@@ -4,6 +4,7 @@ from user import User
 
 class WindowAssignation(QWidget):
     def __init__(self, list_user : list[User]):
+        super().__init__()
         self.setWindowTitle("Gestionnaire de tickets")
         self.setFixedSize(500,300)
 
@@ -26,8 +27,9 @@ class WindowAssignation(QWidget):
         self.table.setSelectionMode(QAbstractItemView.SelectionMode.NoSelection)
         self.table.setAlternatingRowColors(True)
         self.table_heander = self.table.horizontalHeader()
-        self.table_heander.setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
-        self.table_heander.setSectionResizeMode(1, QHeaderView.ResizeMode.ResizeToContents)
+        self.table_heander.setSectionResizeMode(0, QHeaderView.ResizeMode.ResizeToContents)
+        self.table_heander.setSectionResizeMode(1, QHeaderView.ResizeMode.Stretch)
+
         #Rmplissage tableau
         self.table.setRowCount(len(list_user))
         for row, user in enumerate(list_user):
@@ -39,6 +41,7 @@ class WindowAssignation(QWidget):
             chk_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
             chk_layout.setContentsMargins(0, 0, 0, 0)
             self.table.setCellWidget(row, 0, chk_container)
+
             #col 1
             nom_user = QTableWidgetItem(str(nom))
             nom_user.setFlags(nom_user.flags() ^Qt.ItemFlag.ItemIsEditable)

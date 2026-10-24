@@ -58,7 +58,7 @@ class ControleurGestionTicket:
         self._list_admin = list_admin
         self._list_ticket = list_ticket
 
-        self.ticket_manager = TicketManager(list_ticket, [list_user, list_admin])
+        self.ticket_manager = TicketManager(list_ticket, [*list_user, *list_admin])
 
         self.window_connect = WindowConnect()
 
@@ -75,6 +75,7 @@ class ControleurGestionTicket:
         self.window_acceuil = None
         self.window_ajout_texte = None
         self.window_ajout_image = None
+        self.window_assignation = None
         self._titre_ticket = None
         self._titre_description = None
         self._row_description = -1
@@ -127,7 +128,7 @@ class ControleurGestionTicket:
 
 
     def gerer_window_acceuil(self):
-        self.window_acceuil = WindowAcceuil(self._user_connected.name, self._user_connected.role)
+        self.window_acceuil = WindowAcceuil(self._user_connected.name, self._user_connected.role, isinstance(self._user_connected, Admin))
 
         self.window_acceuil.btn_create_ticket.clicked.connect(self.gerer_clic_bouton_creer_ticket)
         self.window_acceuil.btn_list_ticket.clicked.connect(self.gerer_clic_bouton_liste_ticket)
@@ -418,7 +419,7 @@ class ControleurGestionTicket:
         pass
     
     def gerer_window_list_ticket(self, nom : str, role : str, breadcrumbs : list[tuple[BreadcrumbPage, str]], list_ticket : list [Ticket]):
-        self.window_list_ticket = WindowListTicket(nom,role,breadcrumbs,list_ticket)
+        self.window_list_ticket = WindowListTicket(nom,role,isinstance(self._user_connected, Admin),breadcrumbs,list_ticket, self.gerer_clic_bouton_modifier, self.gerer_clic_bouton_supprimer)
 
         if isinstance(self._user_connected,Admin):
             self.window_list_ticket.btn_assign.setEnabled(True)
@@ -426,20 +427,31 @@ class ControleurGestionTicket:
             self.window_list_ticket.btn_assign.setEnabled(False)
         self.window_list_ticket.header_widget.breadcrumb_clicked.connect(self.gerer_clic_breadcrumb)
         #bouton voir ticket (si ticket status fermer on ne peux pas enregistrer de modif, mais seulement le voir)
-        #bouton supprimer ticket
-        self.window_list_ticket.btn_assign.clicked.connect(self.gerer_clic_bouton_assign)
+        self.window_list_ticket.btn_assign.clicked.connect(self.gerer_clic_bouton_assign_lot)
         self.window_list_ticket.btn_back.clicked.connect(lambda : self.gerer_clic_bouton_annuler(breadcrumbs[-2][1]))
         self.window_list_ticket.btn_create.clicked.connect(self.gerer_clic_bouton_creer_ticket)
-        self.window_list_ticket.btn_delete.clicked.connect(self.gerer_clic_bouton_supprimer)
+        self.window_list_ticket.btn_delete.clicked.connect(self.gerer_clic_bouton_supprimer_lot)
 
         self.gerer_main_window(self.window_list_ticket)
 
-    def gerer_clic_bouton_assign(self):
-        pass
-        #self.window_assignation.show()
-        #gerer_window_assignation(list_ticket_cocher)
+    def gerer_clic_bouton_assign_lot(self):
+        if self.window_assignation is None:
+            self.window_assignation = WindowAssignation(self.ticket_manager.list_user_assignable)
+        self.window_assignation.show()
 
-    def gerer_clic_bouton_supprimer(self):
+    def gerer_clic_bouton_supprimer_lot(self):
+        ticket_a_supprimer : list[Ticket] = self.window_list_ticket.get_selected_tickets()
+        self.window_list_ticket.remove_tickets(ticket_a_supprimer)
+        for ticket in ticket_a_supprimer:
+            self._list_ticket.remove(ticket)
+
+    def gerer_clic_bouton_supprimer(self, row):
+        if self.window_list_ticket is not None:
+            self.window_list_ticket.remove_ticket(row)
+
+        del self._list_ticket[row]
+
+    def gerer_clic_bouton_modifier(self, row):
         pass
 
     def gerer_window_voir_edit_ticket(self, ticket:Ticket):

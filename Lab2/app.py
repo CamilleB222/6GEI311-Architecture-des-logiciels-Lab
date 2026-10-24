@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from controleurGestionTicket import ControleurGestionTicket
 from admin import Admin
 from ticket import Ticket
@@ -34,10 +36,17 @@ def register_user(user : User):
 def main():
     admin1 = Admin(1, 'c', 'cbarrette@etu.uqac.ca')
     register_user(admin1)
-    user1 = User(1,'Xavier Tremblay','xtremblay@etu.uqac.ca', 'développeur')
+    user1 = User(1,'x','xtremblay@etu.uqac.ca', 'développeur')
     user2 = User(2, 'Zachary Harvey', 'zharvey@etu.uqac.ca', 'apprenti')
     register_user(user1)
     register_user(user2)
+
+    #Pour les test
+    list_tickets.append(Ticket(1,"c","c","c",datetime.now(), datetime.now()))
+    list_tickets.append(Ticket(2,"c1","c1","c1",datetime.now(), datetime.now()))
+    list_tickets.append(Ticket(3,"c2","c2","c2",datetime.now(), datetime.now()))
+    list_tickets.append(Ticket(4,"c3","c3","c3",datetime.now(), datetime.now()))
+    list_tickets.append(Ticket(5,"c4","c4","c4",datetime.now(), datetime.now()))
 
     app = QApplication([])
     dir_path = os.path.dirname(os.path.realpath(__file__))
