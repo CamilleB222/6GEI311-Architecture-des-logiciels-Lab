@@ -6,9 +6,9 @@ class TicketManager:
     _list_ticket : list[Ticket]
     _list_user_assignable : list[User]
 
-    def __init__ (self):
-        self._list_ticket = list[Ticket]()
-        self._list_user_assignable = list[User]()
+    def __init__ (self, list_ticket : list[Ticket], list_user_assignable : list[User]):
+        self._list_ticket = list_ticket
+        self._list_user_assignable = list_user_assignable
 
     @property
     def list_user_assignable(self):

@@ -14,6 +14,7 @@ class Ticket:
     _creation_date : datetime
     _update_date : datetime
     _list_commentaires : list[str]
+    _user_assign : str
 
     def __init__(self, ticket_id : int, title : str, description_initiale : str, priority : str, creation_date : datetime, update_date : datetime):
         self._ticket_id = ticket_id
@@ -26,6 +27,7 @@ class Ticket:
         self._creation_date = creation_date
         self._update_date = update_date
         self._list_commentaires = list[str]()
+        self._user_assign = ""
 
     @property
     def ticket_id(self):
@@ -59,8 +61,13 @@ class Ticket:
     def update_date(self):
         return self._update_date
 
+    @property
+    def user_assign(self):
+        return self._user_assign
+
     def assign_to(self, user):
         user.asign_tickets.append(self)
+        self._user_assign = user.name
 
     def update_status(self, status : StatutTicket):
         if self.status == StatutTicket.FERMER or status == StatutTicket.FERMER:
@@ -70,11 +77,11 @@ class Ticket:
         if (self.status == status-1):# Si le Statut actuelle est avant le statut qu'on veut aller
             self._status = status
 
-    def add_description(self, type_description : type, description : str):
+    def add_description(self, type_description : type, titre : str, description : str):
         if (type_description == DescriptionTicketTexte):
-            description_texte = DescriptionTicketTexte(description)
+            description_texte = DescriptionTicketTexte(titre, description)
             self._list_description.append(description_texte)
 
         elif (type_description == DescriptionTicketImage):
-            description_image = DescriptionTicketImage(description)
+            description_image = DescriptionTicketImage(titre, description)
             self._list_description.append(description_image)

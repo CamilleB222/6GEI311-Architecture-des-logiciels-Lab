@@ -18,7 +18,6 @@ controleur : ControleurGestionTicket
 list_user : list[User] = list[User]()
 list_admin : list[Admin] = list[Admin]()
 list_tickets : list[Ticket] = list[Ticket]()
-ticket_manager : TicketManager = TicketManager()
 
 def load_stylesheet(app, filename):
     with open(filename, "r", encoding="utf-8") as f:
@@ -31,8 +30,6 @@ def register_user(user : User):
     else:
         if user not in list_user:
             list_user.append(user)
-
-    ticket_manager.register_user(user)
 
 def main():
     admin1 = Admin(1, 'c', 'cbarrette@etu.uqac.ca')

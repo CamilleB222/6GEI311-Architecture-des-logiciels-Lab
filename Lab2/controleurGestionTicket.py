@@ -58,7 +58,7 @@ class ControleurGestionTicket:
         self._list_admin = list_admin
         self._list_ticket = list_ticket
 
-        self.ticket_manager = TicketManager()
+        self.ticket_manager = TicketManager(list_ticket, [list_user, list_admin])
 
         self.window_connect = WindowConnect()
 
@@ -205,14 +205,16 @@ class ControleurGestionTicket:
             self.window_cree_ticket.btn_creer_ticket.setEnabled(False)
 
     def gerer_ajouter_description_texte(self):
-        if self.window_ajout_texte is None:
-            self.window_ajout_texte = WindowAjoutTexte()
+        self.window_ajout_texte = WindowAjoutTexte()
+        self._titre_description = ""
+        self._description_ticket = ""
         self.window_ajout_texte.show()
         self.gerer_ajout_texte()
 
     def gerer_ajout_description_image(self):
-        if self.window_ajout_image is None:
-            self.window_ajout_image = WindowAjoutImage()
+        self.window_ajout_image = WindowAjoutImage()
+        self._titre_description = ""
+        self._description_ticket = ""
         self.window_ajout_image.show()
         self.gerer_ajout_image()
 
@@ -231,9 +233,9 @@ class ControleurGestionTicket:
         ticket = Ticket(ticket_id, self._titre_ticket, self._description_ini_ticket, self._priorité_ticket, datetime.now(), datetime.now())
         for description in self._list_Description:
             if isinstance(description, DescriptionTicketTexte):
-                ticket.add_description(DescriptionTicketImage, description)
+                ticket.add_description(DescriptionTicketTexte, description.get_titre(), description.get_description())
             else:
-                ticket.add_description(DescriptionTicketImage, description)
+                ticket.add_description(DescriptionTicketImage, description.get_titre(), description.get_description())
 
         self.ticket_manager.creat_ticket(self._user_connected,ticket)
 
@@ -244,6 +246,7 @@ class ControleurGestionTicket:
         self.window_cree_ticket.textbox_priorite_ticket.clear()
         self._priorité_ticket = ""
         self._list_Description.clear()
+        self.window_cree_ticket.remove_all_description()
 
 
     def gerer_ajout_texte(self):
@@ -340,8 +343,7 @@ class ControleurGestionTicket:
         description : DescriptionTicket = self._list_Description[row]
         if type(description) == DescriptionTicketTexte:
             #Ouvrir la fenêtre
-            if self.window_ajout_texte is None:
-                self.window_ajout_texte = WindowAjoutTexte()
+            self.window_ajout_texte = WindowAjoutTexte()
             self.window_ajout_texte.show()
 
             #Modifier les bouton pour la modificaiton
@@ -358,8 +360,7 @@ class ControleurGestionTicket:
             self.window_ajout_texte.btn_annuler.clicked.connect(self.gerer_bouton_annuler_ajout)
             self.window_ajout_texte.btn_ajouter.clicked.connect(self.gerer_clic_bouton_modifier_text)
         else:
-            if self.window_ajout_image is None:
-                self.window_ajout_image = WindowAjoutImage()
+            self.window_ajout_image = WindowAjoutImage()
             self.window_ajout_image.show()
 
             self.window_ajout_image.textbox_titre.textChanged.connect(self.gerer_changement_champ_image)
@@ -368,12 +369,20 @@ class ControleurGestionTicket:
             self.window_ajout_image.textbox_titre.setText(description.get_titre())
             self.window_ajout_image.textbox_selection.setText(description.get_description())
 
+            pixmap = QPixmap(self._description_ticket)
+            pixmap_redim = pixmap.scaled(
+                250,150,
+                Qt.AspectRatioMode.KeepAspectRatio,
+                Qt.TransformationMode.SmoothTransformation
+            )
+            self.window_ajout_image.label_image_preview.setPixmap(pixmap_redim)
+
+            self.window_ajout_image.btn_ajouter.setText("Modifier")
+            self.window_ajout_image.label_titre_page.setText("Modifier une image")
+
             self.window_ajout_image.btn_selection.clicked.connect(self.gerer_bouton_selectionner)
             self.window_ajout_image.btn_annuler.clicked.connect(self.gerer_bouton_annuler_ajout)
             self.window_ajout_image.btn_ajouter.clicked.connect(self.gerer_clic_bouton_modifier_image)
-            # TODO faire fonctionner modifier image 
-
-            pass
 
     def gerer_clic_bouton_modifier_text(self):
         description_texte = DescriptionTicketTexte(self._titre_description, self._description_ticket)
@@ -389,11 +398,11 @@ class ControleurGestionTicket:
         self._description_ticket = ""
 
     def gerer_clic_bouton_modifier_image(self):
-            description_texte = DescriptionTicketTexte(self._titre_description, self._description_ticket)
+            description_texte = DescriptionTicketImage(self._titre_description, self._description_ticket)
             self._list_Description[self._row_description] = description_texte
     
-            self.window_ajout_texte.close()
-            self.window_ajout_texte = None
+            self.window_ajout_image.close()
+            self.window_ajout_image = None
     
             if self.window_cree_ticket is not None:
                 self.window_cree_ticket.edit_description(self._row_description,description_texte)

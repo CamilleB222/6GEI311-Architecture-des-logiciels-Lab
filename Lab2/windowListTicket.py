@@ -34,12 +34,12 @@ class WindowListTicket(QWidget):
             self.btn_layout.addWidget(self.btn_assign)
             self.btn_layout.addWidget(self.btn_delete)
 
-            # 1. Création du tableau : 4 colonnes
+            # 1. Création du tableau : 5 colonnes
             self.table = QTableWidget()
             self.table.setObjectName("ticketTable")
-            self.table.setColumnCount(4)
+            self.table.setColumnCount(5)
             self.table.setHorizontalHeaderLabels(
-                ["", "ID", "Titre", "Actions"]
+                ["", "ID", "Titre", "Utilisateur" ,"Actions"]
             )
 
             # Configuration du comportement de la grille
@@ -67,6 +67,9 @@ class WindowListTicket(QWidget):
                 )  # Titre
                 header.setSectionResizeMode(
                     3, QHeaderView.ResizeMode.ResizeToContents
+                )  # utilisateur assigné
+                header.setSectionResizeMode(
+                    4, QHeaderView.ResizeMode.ResizeToContents
                 )  # Actions
 
 
@@ -96,9 +99,17 @@ class WindowListTicket(QWidget):
                 )
                 self.table.setItem(row, 2, item_title)
 
-                # Col 3 : Actions avec pictogrammes/boutons
+                # Col 3 : Utilisatuer asigné
+                item_assign = QTableWidgetItem(str(ticket.user_assign or "Aucun"))
+                item_assign.setFlags(
+                    item_assign.flags() ^ Qt.ItemFlag.ItemIsEditable
+                )
+                item_assign.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
+                self.table.setItem(row, 3, item_assign)
+
+                # Col 4 : Actions avec pictogrammes/boutons
                 actions_widget = self._create_actions_widget(ticket.ticket_id)
-                self.table.setCellWidget(row, 3, actions_widget)
+                self.table.setCellWidget(row, 4, actions_widget)
 
 
             self.layout_principal = QGridLayout()

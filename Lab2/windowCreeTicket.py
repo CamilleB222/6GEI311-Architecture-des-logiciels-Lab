@@ -116,6 +116,9 @@ class WindowCreeTicket(QWidget):
     def remove_description(self, row):
          self.table.removeRow(row)
 
+    def remove_all_description(self):
+        self.table.setRowCount(0)
+
     def _get_current_row(self, widget: QWidget) -> int:
         """Retrouve la ligne courante d'un widget imbriqué dans la table."""
         # Convertit la position relative du widget en coordonnées globales de la table
