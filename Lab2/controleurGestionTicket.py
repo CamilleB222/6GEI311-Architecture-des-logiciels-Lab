@@ -4,7 +4,7 @@ import select
 from tkinter import filedialog
 
 from windowAssignation import WindowAssignation
-from windowVoirEditTicket import WindowVoirEditTicket
+from WindowVoirEditTicket import WindowVoirEditTicket
 from windowAcceuil import WindowAcceuil
 from windowCreeTicket import WindowCreeTicket
 from windowListTicket import WindowListTicket
@@ -680,7 +680,7 @@ class ControleurGestionTicket:
 
             self.window_ajout_image.btn_selection.clicked.connect(self.gerer_bouton_selectionner)
             self.window_ajout_image.btn_annuler.clicked.connect(self.gerer_bouton_annuler_ajout)
-            self.window_ajout_image.btn_ajouter.clicked.connect(self.gerer_clic_bouton_modifier_image)
+            self.window_ajout_image.btn_ajouter.clicked.connect(self.gerer_clic_bouton_modifier_image_edit)
 
     def gerer_clic_bouton_modifier_text_edit(self):
         description_texte = DescriptionTicketTexte(self._titre_description, self._description_ticket)
