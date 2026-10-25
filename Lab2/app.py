@@ -42,11 +42,23 @@ def main():
     register_user(user2)
 
     #Pour les test
-    list_tickets.append(Ticket(1,"c","c","c",datetime.now(), datetime.now()))
-    list_tickets.append(Ticket(2,"c1","c1","c1",datetime.now(), datetime.now()))
-    list_tickets.append(Ticket(3,"c2","c2","c2",datetime.now(), datetime.now()))
-    list_tickets.append(Ticket(4,"c3","c3","c3",datetime.now(), datetime.now()))
-    list_tickets.append(Ticket(5,"c4","c4","c4",datetime.now(), datetime.now()))
+    c =  Ticket(1,"c","c","c",datetime.now(), datetime.now())
+    c1 = Ticket(2,"c1","c1","c1",datetime.now(), datetime.now())
+    c2 = Ticket(3,"c2","c2","c2",datetime.now(), datetime.now())
+    c3 = Ticket(4,"c3","c3","c3",datetime.now(), datetime.now())
+    c4 = Ticket(5,"c4","c4","c4",datetime.now(), datetime.now())
+
+    list_tickets.append(c)
+    list_tickets.append(c1)
+    list_tickets.append(c2)
+    list_tickets.append(c3)
+    list_tickets.append(c4)
+
+    admin1.create_ticket(c)
+    admin1.create_ticket(c1)
+    admin1.create_ticket(c2)
+    admin1.create_ticket(c3)
+    admin1.create_ticket(c4)
 
     app = QApplication([])
     dir_path = os.path.dirname(os.path.realpath(__file__))

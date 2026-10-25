@@ -1,3 +1,4 @@
+from ast import List
 from datetime import datetime
 from descriptionTicket import DescriptionTicket
 from descriptionTicketImage import DescriptionTicketImage
@@ -19,9 +20,8 @@ class Ticket:
     def __init__(self, ticket_id : int, title : str, description_initiale : str, priority : str, creation_date : datetime, update_date : datetime):
         self._ticket_id = ticket_id
         self._title = title
-        self._description_ini = description_initiale
+        self._description_ini = description_initiale   
         self._list_description = list[DescriptionTicket]()
-        #self.add_description(DescriptionTicketTexte, description_initiale)   
         self._status = StatutTicket.OUVERT
         self._priority = priority
         self._creation_date = creation_date
@@ -39,7 +39,7 @@ class Ticket:
 
     @property
     def description_ini(self):
-        return self._description
+        return self._description_ini
 
     @property
     def list_description(self):

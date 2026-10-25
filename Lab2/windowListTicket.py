@@ -128,6 +128,25 @@ class WindowListTicket(QWidget):
 
             self.setLayout(self.layout_principal)
 
+    def update_ticket(self, updated_ticket: Ticket):
+        for row in range(self.table.rowCount()):
+            item_id = self.table.item(row, 1)
+
+            # Vérification si la ligne correspond au ticket_id
+            if item_id and item_id.text() == str(updated_ticket.ticket_id):
+
+                # Mise à jour du Titre (Colonne 2)
+                item_title = self.table.item(row, 2)
+                if item_title:
+                    item_title.setText(updated_ticket.title)
+
+                # Mise à jour de la référence ticket stockée dans la Checkbox (Colonne 0)
+                chk_container = self.table.cellWidget(row, 0)
+                if chk_container:
+                    checkbox = chk_container.findChild(QCheckBox)
+                    if checkbox:
+                        checkbox.setProperty("ticket", updated_ticket)
+
     def remove_ticket(self, row):
              self.table.removeRow(row)
 

@@ -21,6 +21,11 @@ class TicketManager:
         user.create_ticket(ticket)
         self._list_ticket.append(ticket)
 
+    def update_ticket_complet(self, user : User, old_ticket : Ticket, new_ticket : Ticket):
+        user.update_ticket_complet(old_ticket, new_ticket)
+        index = self._list_ticket.index(old_ticket) 
+        self._list_ticket[index] = new_ticket
+
     def view_ticket(self, user : User, ticket:Ticket) -> str:
         return user.view_ticket(ticket)
 

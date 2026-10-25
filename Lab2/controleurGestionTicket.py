@@ -23,6 +23,7 @@ from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
 from mainWindow import MainWindow
 from breadcrumbPage import BreadcrumbPage
+from statutTicket import StatutTicket
 
 
 class ControleurGestionTicket:
@@ -421,7 +422,6 @@ class ControleurGestionTicket:
         self.window_list_ticket = WindowListTicket(nom,role,isinstance(self._user_connected, Admin),breadcrumbs,list_ticket, self.gerer_clic_bouton_modifier, self.gerer_clic_bouton_supprimer)
 
         self.window_list_ticket.header_widget.breadcrumb_clicked.connect(self.gerer_clic_breadcrumb)
-        #bouton voir ticket (si ticket status fermer on ne peux pas enregistrer de modif, mais seulement le voir)
         self.window_list_ticket.btn_assign.clicked.connect(self.gerer_clic_bouton_assign_lot)
         self.window_list_ticket.btn_back.clicked.connect(lambda : self.gerer_clic_bouton_annuler(breadcrumbs[-2][1]))
         self.window_list_ticket.btn_create.clicked.connect(self.gerer_clic_bouton_creer_ticket)
@@ -472,87 +472,233 @@ class ControleurGestionTicket:
         else:
             ticket = self._user_connected.asign_tickets[row]
 
-        self.window_voir_edit_ticket = WindowVoirEditTicket(ticket)
-        self.window_voir_edit_ticket.show()
+        is_edit : bool = ticket.status != StatutTicket.FERMER
+        is_admin : bool = isinstance(self._user_connected, Admin)
 
-    def gerer_window_voir_edit_ticket(self, ticket:Ticket):
-        self.window_voir_edit_ticket = WindowVoirEditTicket(ticket)
         self._ticket_edit = ticket
-        self.window_voir_edit_ticket.textbox_titre_ticket.setText(ticket.title)
-        self.window_voir_edit_ticket.textbox_description_ticket.setPlainText(ticket.description_ini)
-        self.window_voir_edit_ticket.textbox_priorite_ticket.setText(ticket.priority)
 
-        self.window_voir_edit_ticket.btn_enregister_ticket.setEnabled(False)
+        self._titre_ticket = self._ticket_edit.title
+        self._description_ini_ticket = self._ticket_edit.description_ini
+        self._priorité_ticket = self._ticket_edit.priority 
 
-        self.window_voir_edit_ticket.textbox_titre_ticket.textChanged.connect(self.gerer_changement_texte_edit)
-        self.window_voir_edit_ticket.textbox_description_ticket.textChanged.connect(self.gerer_changement_texte_edit)
-        self.window_voir_edit_ticket.textbox_priorite_ticket.textChanged.connect(self.gerer_changement_texte_edit)
-
-        self.window_voir_edit_ticket.btn_modif_status.clicked.connect(self.gerer_clic_bouton_modif_status)
-        self.window_voir_edit_ticket.btn_fermer_status.clicked.connect(self.gerer_clic_bouton_fermer_status)
-        self.window_voir_edit_ticket.ajouter_descrtion_texte.triggered.connect(self.gerer_ajouter_description_texte)
-        self.window_voir_edit_ticket.ajouter_description_image.triggered.connect(self.gerer_ajout_description_image)
-        #bouton voir description
-        #bouton supprimer description
-        self.window_voir_edit_ticket.btn_annuler.clicked.connect(self.gerer_bouton_annuler_ajout)
-        self.window_voir_edit_ticket.btn_enregister_ticket.clicked.connect(self.gerer_clic_bouton_enregister_edit)
-
-    def gerer_changement_texte_edit(self):
-        self._titre_ticket = self.window_voir_edit_ticket.textbox_titre_ticket.text()
-        self._description_ini_ticket = self.window_voir_edit_ticket.textbox_description_ticket.toPlainText()
-        self._priorité_ticket = self.window_voir_edit_ticket.textbox_priorite_ticket.text()
-        if self._titre_ticket and self._description_ini_ticket and self._priorité_ticket:
-            self.window_voir_edit_ticket.btn_enregister_ticket.setEnabled(True)
+        if is_admin:
+            self.window_voir_edit_ticket = WindowVoirEditTicket(ticket, is_edit, is_admin)
         else:
-            self.window_voir_edit_ticket.btn_enregister_ticket.setEnabled(False)
+            self.window_voir_edit_ticket = WindowVoirEditTicket(ticket, False, is_admin)
+        self.window_voir_edit_ticket.show()
+        self.window_voir_edit_ticket.btn_annuler.clicked.connect(self.gerer_clic_bouton_modifier_annuler)
+        self.window_voir_edit_ticket.btn_modif_status.clicked.connect(self.gerer_clic_bouton_modifier_statut)
+        if is_admin:
+            self.window_voir_edit_ticket.btn_fermer_status.clicked.connect(self.gerer_clic_bouton_modifier_fermer_statut)
+        self.window_voir_edit_ticket.ajouter_descrtion_texte.triggered.connect(self.gerer_ajouter_description_texte_edit)
+        self.window_voir_edit_ticket.ajouter_description_image.triggered.connect(self.gerer_ajout_description_image_edit)
+        self.window_voir_edit_ticket.btn_enregister_ticket.clicked.connect(self.gerer_clic_bouton_enregistrer)
 
-    def gerer_clic_bouton_modif_status(self):
-        self.ticket_manager.update_ticket(self._user_connected,self._ticket_edit)
+        self.window_voir_edit_ticket.textbox_titre_ticket.textChanged.connect(self.gerer_changement_texte_modifier)
+        self.window_voir_edit_ticket.textbox_description_ticket.textChanged.connect(self.gerer_changement_texte_modifier)
+        self.window_voir_edit_ticket.textbox_priorite_ticket.textChanged.connect(self.gerer_changement_texte_modifier)
 
-    def gerer_clic_bouton_fermer_status(self):
-        self.ticket_manager.close_ticket(self._user_connected,self._ticket_edit)
+    def gerer_clic_bouton_modifier_statut(self):
+        self.ticket_manager.update_ticket(self._user_connected, self._ticket_edit)
+        self.window_voir_edit_ticket.label_status_ticket.setText(self._ticket_edit.status.name)
 
-    def gerer_edit_description_texte(self):
-        pass
-        #self._titre_description = self._titre_description
-        #self._description_ticket = self._description_ticket
-        #utiliser la fonction gerer_ajout_texte() 
+    def gerer_clic_bouton_modifier_fermer_statut(self):
+        self.ticket_manager.close_ticket(self._user_connected, self._ticket_edit)
+        self.window_voir_edit_ticket.label_status_ticket.setText(self._ticket_edit.status.name)
 
-    def gerer_edit_description_image(self):
-        pass
-        #self._titre_description = self._titre_description
-        #self._description_ticket = self._description_ticket
-        #utiliser la fonction gerer_ajout_image() 
+        if self._ticket_edit.status == StatutTicket.FERMER:
+            self.window_voir_edit_ticket.stop_edit(isinstance(self._user_connected, Admin))
 
-    def gerer_clic_bouton_enregister_edit(self):
-        pass
+    # Ajouter ou suppriemr des description dasn ajout modificaiton
 
-    def gerer_window_assignation(self, list_ticket_assigne : list[Ticket]):
-        self.window_assignation = WindowAssignation(self.ticket_manager.list_user_assignable)
+    def gerer_clic_bouton_enregistrer(self):
+        ticket = Ticket(self._ticket_edit.ticket_id, self._titre_ticket, self._description_ini_ticket, self._priorité_ticket, self._ticket_edit.creation_date, datetime.now())
+        for description in self._list_Description:
+            if isinstance(description, DescriptionTicketTexte):
+                ticket.add_description(DescriptionTicketTexte, description.get_titre(), description.get_description())
+            else:
+                ticket.add_description(DescriptionTicketImage, description.get_titre(), description.get_description())
+
+        self.ticket_manager.update_ticket_complet(self._user_connected,self._ticket_edit, ticket)
+
+        self._titre_ticket = ""
+        self._description_ini_ticket = ""
+        self._priorité_ticket = ""
+        self.window_voir_edit_ticket.close()
+        self.window_voir_edit_ticket = None
+
+        self.window_list_ticket.update_ticket(ticket)
+
+    def gerer_changement_texte_modifier(self):
+            self._titre_ticket = self.window_voir_edit_ticket.textbox_titre_ticket.text()
+            self._description_ini_ticket = self.window_voir_edit_ticket.textbox_description_ticket.toPlainText()
+            self._priorité_ticket = self.window_voir_edit_ticket.textbox_priorite_ticket.text()
+            if self._titre_ticket and self._description_ini_ticket and self._priorité_ticket:
+                self.window_voir_edit_ticket.btn_enregister_ticket.setEnabled(True)
+            else:
+                self.window_voir_edit_ticket.btn_enregister_ticket.setEnabled(False)
+
+    def gerer_ajouter_description_texte_edit(self):
+        self.window_ajout_texte = WindowAjoutTexte()
+        self._titre_description = ""
+        self._description_ticket = ""
+        self.window_ajout_texte.show()
+        self.gerer_ajout_texte_edit()
+    
+    def gerer_ajout_description_image_edit(self):
+        self.window_ajout_image = WindowAjoutImage()
+        self._titre_description = ""
+        self._description_ticket = ""
+        self.window_ajout_image.show()
+        self.gerer_ajout_image_edit()
+
+    def gerer_ajout_texte_edit(self):
+        self.window_ajout_texte.textbox_titre.setText(self._titre_description)
+        self.window_ajout_texte.description.setPlainText(self._description_ticket)
+
+        self.window_ajout_texte.btn_ajouter.setEnabled(False)
         
-        nom_ticket : str
-        i : int = 1
-        for ticket in list_ticket_assigne:
-            nom_ticket += ticket.title
-            if i <= len(list_ticket_assigne):
-                nom_ticket += ", "
+        self.window_ajout_texte.textbox_titre.textChanged.connect(self.gerer_changement_champ_texte_edit)
+        self.window_ajout_texte.description.textChanged.connect(self.gerer_changement_champ_texte_edit)
 
-        #si aucun employé de cocher bouton assigner indisponible
-        #si seulement 1 employé de cocher à la fois
+        self.window_ajout_texte.btn_annuler.clicked.connect(self.gerer_bouton_annuler_ajout_edit)
+        self.window_ajout_texte.btn_ajouter.clicked.connect(self.gerer_clic_bouton_ajout_text_edit)
 
-        self.window_assignation.label_list_ticket.setText(nom_ticket)
+    def gerer_changement_champ_texte_edit(self):
+        self._titre_description = self.window_ajout_texte.textbox_titre.text()
+        self._description_ticket = self.window_ajout_texte.description.toPlainText()
+        if self._titre_description and self._description_ticket :
+            self.window_ajout_texte.btn_ajouter.setEnabled(True)
+        else:
+            self.window_ajout_texte.btn_ajouter.setEnabled(False)
 
-        self.window_assignation.btn_annuler.clicked.connect(self.gerer_clic_bouton_annuler_assignation)
-        self.window_assignation.btn_assigner.clicked.connect(self.gerer_clic_bouton_assignation(list_ticket_assigne))
+    def gerer_bouton_annuler_ajout_edit(self):
+        self._titre_description = ""
+        self._description_ticket = ""
+        self.window_ajout_texte = None
+        self.window_ajout_image = None
 
 
-    def gerer_clic_bouton_annuler_assignation(self):
-        self.window_assignation.close()
-        self.window_assignation = None
+    def gerer_clic_bouton_ajout_text_edit(self):
+        description_texte = DescriptionTicketTexte(self._titre_description, self._description_ticket)
+        self._list_Description.append(description_texte)
+        self.window_ajout_texte.close()
+        self.window_ajout_texte = None
 
-    def gerer_clic_bouton_assignation(self, list_ticket : list[Ticket]):
+        if self.window_voir_edit_ticket is not None:
+            self.window_voir_edit_ticket.add_description(description_texte, self.gerer_clic_bouton_modifie_description_edit, self.gerer_clic_bouton_supprimer_description_edit)
+        
+        self._titre_description = ""
+        self._description_ticket = ""
+
+    def gerer_ajout_image_edit(self):
+        self.window_ajout_image.textbox_titre.setText(self._titre_description)
+        self.window_ajout_image.textbox_selection.setText(self._description_ticket)
+        
+        self.window_ajout_image.btn_ajouter.setEnabled(False)
+        
+        self.window_ajout_image.textbox_titre.textChanged.connect(self.gerer_changement_champ_image)
+        self.window_ajout_image.textbox_selection.textChanged.connect(self.gerer_changement_champ_image)
+
+        self.window_ajout_image.btn_selection.clicked.connect(self.gerer_bouton_selectionner)
+        self.window_ajout_image.btn_annuler.clicked.connect(self.gerer_bouton_annuler_ajout_edit)
+        self.window_ajout_image.btn_ajouter.clicked.connect(self.gerer_clic_bouton_ajout_image_edit)    
+    
+    def gerer_clic_bouton_ajout_image_edit(self):
+        description_image = DescriptionTicketImage(self._titre_description, self._description_ticket)
+        self._list_Description.append(description_image)
+        self.window_ajout_image.close()
+        self.window_ajout_image = None
+
+        if self.window_voir_edit_ticket is not None:
+            self.window_voir_edit_ticket.add_description(description_image, self.gerer_clic_bouton_modifie_description_edit, self.gerer_clic_bouton_supprimer_description_edit)
+
+        self._titre_description = ""
+        self._description_ticket = ""
+
+    def gerer_clic_bouton_modifie_description_edit(self, row : int):
+        # Ouvrir la page de création de description en mode modification
+        description : DescriptionTicket = self._list_Description[row]
+        if type(description) == DescriptionTicketTexte:
+            #Ouvrir la fenêtre
+            self.window_ajout_texte = WindowAjoutTexte()
+            self.window_ajout_texte.show()
+
+            #Modifier les bouton pour la modificaiton
+            self.window_ajout_texte.textbox_titre.textChanged.connect(self.gerer_changement_champ_texte)
+            self.window_ajout_texte.description.textChanged.connect(self.gerer_changement_champ_texte)
+            self._row_description = row
+
+            self.window_ajout_texte.textbox_titre.setText(description.get_titre())
+            self.window_ajout_texte.description.setPlainText(description.get_description())
+
+            self.window_ajout_texte.btn_ajouter.setText("Modifier")
+            self.window_ajout_texte.labe_titre_page.setText("Modifier une description")
+
+            self.window_ajout_texte.btn_annuler.clicked.connect(self.gerer_bouton_annuler_ajout)
+            self.window_ajout_texte.btn_ajouter.clicked.connect(self.gerer_clic_bouton_modifier_text_edit)
+        else:
+            self.window_ajout_image = WindowAjoutImage()
+            self.window_ajout_image.show()
+
+            self.window_ajout_image.textbox_titre.textChanged.connect(self.gerer_changement_champ_image)
+            self.window_ajout_image.textbox_selection.textChanged.connect(self.gerer_changement_champ_image)
+
+            self.window_ajout_image.textbox_titre.setText(description.get_titre())
+            self.window_ajout_image.textbox_selection.setText(description.get_description())
+
+            pixmap = QPixmap(self._description_ticket)
+            pixmap_redim = pixmap.scaled(
+                250,150,
+                Qt.AspectRatioMode.KeepAspectRatio,
+                Qt.TransformationMode.SmoothTransformation
+            )
+            self.window_ajout_image.label_image_preview.setPixmap(pixmap_redim)
+
+            self.window_ajout_image.btn_ajouter.setText("Modifier")
+            self.window_ajout_image.label_titre_page.setText("Modifier une image")
+
+            self.window_ajout_image.btn_selection.clicked.connect(self.gerer_bouton_selectionner)
+            self.window_ajout_image.btn_annuler.clicked.connect(self.gerer_bouton_annuler_ajout)
+            self.window_ajout_image.btn_ajouter.clicked.connect(self.gerer_clic_bouton_modifier_image)
+
+    def gerer_clic_bouton_modifier_text_edit(self):
+        description_texte = DescriptionTicketTexte(self._titre_description, self._description_ticket)
+        self._list_Description[self._row_description] = description_texte
+
+        self.window_ajout_texte.close()
+        self.window_ajout_texte = None
+
+        if self.window_voir_edit_ticket is not None:
+            self.window_voir_edit_ticket.edit_description(self._row_description,description_texte)
+        
+        self._titre_description = ""
+        self._description_ticket = ""
+
+    def gerer_clic_bouton_modifier_image_edit(self):
+            description_texte = DescriptionTicketImage(self._titre_description, self._description_ticket)
+            self._list_Description[self._row_description] = description_texte
+    
+            self.window_ajout_image.close()
+            self.window_ajout_image = None
+    
+            if self.window_voir_edit_ticket is not None:
+                self.window_voir_edit_ticket.edit_description(self._row_description,description_texte)
+            
+            self._titre_description = ""
+            self._description_ticket = ""
+
+    def gerer_clic_bouton_supprimer_description_edit(self, row : int):
+        if self.window_voir_edit_ticket is not None:
+            self.window_voir_edit_ticket.remove_description(row)
+
+        del self._list_Description[row]
         pass
-        #user_selectionne : User
-        #for ticket in list_ticket:
-        #    self.ticket_manager.assign_Ticket(self._user_connected, user_selectionne, ticket)
+
+    def gerer_clic_bouton_modifier_ticket(self):
+        pass
+
+    def gerer_clic_bouton_modifier_annuler(self):
+        self.window_voir_edit_ticket.close()
+        self.window_voir_edit_ticket = None
 
