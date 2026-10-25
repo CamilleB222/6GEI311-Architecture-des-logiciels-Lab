@@ -44,6 +44,11 @@ class TicketManager:
             self._list_user_assignable.append(user)
 
     def assign_Ticket(self, admin : Admin, user : User, ticket : Ticket):
+        if not ticket.user_assign == "":
+            for utilisateur in self._list_user_assignable:
+                if utilisateur.name == ticket.user_assign:
+                    utilisateur.remove_ticket(ticket.ticket_id)
+        
         admin.assign_ticket(ticket, user)
 
     def close_ticket(self, admin : Admin, ticket : Ticket):

@@ -4,7 +4,7 @@ import select
 from tkinter import filedialog
 
 from windowAssignation import WindowAssignation
-from WindowVoirEditTicket import WindowVoirEditTicket
+from windowVoirEditTicket import WindowVoirEditTicket
 from windowAcceuil import WindowAcceuil
 from windowCreeTicket import WindowCreeTicket
 from windowListTicket import WindowListTicket

@@ -33,9 +33,9 @@ class WindowListTicket(QWidget):
 
             self.btn_layout.addWidget(self.btn_back)
             self.btn_layout.addStretch()
+            self.btn_layout.addWidget(self.btn_create)
 
             if is_admin:
-                self.btn_layout.addWidget(self.btn_create)
                 self.btn_layout.addWidget(self.btn_assign)
                 self.btn_layout.addWidget(self.btn_delete)
 

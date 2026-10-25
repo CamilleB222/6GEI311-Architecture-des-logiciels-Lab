@@ -41,6 +41,11 @@ class User:
     def create_ticket (self, ticket : Ticket):
         self._created_tickets.append(ticket)
 
+    def remove_ticket(self, ticket_id : int):
+        for ticket in self.asign_tickets:
+            if ticket_id == ticket.ticket_id:
+                self._asign_tickets.remove(ticket)
+
     
     def view_ticket (self, ticket : Ticket) -> str:
         if not self._asign_tickets.__contains__(ticket):

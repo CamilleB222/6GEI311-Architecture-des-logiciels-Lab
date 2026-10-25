@@ -34,9 +34,9 @@ def register_user(user : User):
             list_user.append(user)
 
 def main():
-    admin1 = Admin(1, 'c', 'cbarrette@etu.uqac.ca')
+    admin1 = Admin(1, 'Camille Barrette', 'cbarrette@etu.uqac.ca')
     register_user(admin1)
-    user1 = User(1,'x','xtremblay@etu.uqac.ca', 'développeur')
+    user1 = User(1,'Xavier Tremblay','xtremblay@etu.uqac.ca', 'développeur')
     user2 = User(2, 'Zachary Harvey', 'zharvey@etu.uqac.ca', 'apprenti')
     register_user(user1)
     register_user(user2)
