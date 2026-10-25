@@ -2,12 +2,13 @@ from descriptionTicketTexte import DescriptionTicketTexte
 from PyQt6.QtWidgets import QAbstractItemView, QHBoxLayout, QHeaderView, QLabel, QMenu, QPlainTextEdit, QPushButton, QTableWidget, QTableWidgetItem, QVBoxLayout, QWidget, QLineEdit, QGridLayout
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QAction
+from statutTicket import StatutTicket
 from ticket import Ticket
 from typing import Callable
 from descriptionTicket import DescriptionTicket
 
 class WindowVoirEditTicket(QWidget):
-    def __init__(self, ticket : Ticket,is_edit : bool, is_admin : bool):
+    def __init__(self, ticket : Ticket,is_edit : bool, is_admin : bool, edit:Callable[[int],None], delete:Callable[[int], None]):
         super().__init__()
         self.setWindowTitle("Gestionnaire de tickets")
         self.setFixedSize(500,500)
@@ -22,6 +23,7 @@ class WindowVoirEditTicket(QWidget):
         self.label_status = QLabel("Status : ", self)
         self.label_status_ticket = QLabel(ticket.status.name, self)
         self.btn_modif_status = QPushButton("Modifier", self)
+        self.btn_modif_status.setEnabled(ticket.status != StatutTicket.OUVERT and ticket.status != StatutTicket.TERMINÉ)
 
         if is_admin:
             self.btn_fermer_status = QPushButton("Fermer", self)
@@ -78,12 +80,12 @@ class WindowVoirEditTicket(QWidget):
             type_description.setTextAlignment(Qt.AlignmentFlag.AlignCenter)
             self.table.setItem(row,1,type_description)
             #col 2 : Actions
-            actions_widget = self._create_actions_widget(titre_description)
+            actions_widget = self._create_actions_widget(edit,delete)
             self.table.setCellWidget(row, 2, actions_widget)
 
         self.btn_annuler = QPushButton("Annuler", self)
         self.btn_annuler.setProperty("class", "btnListTicket")
-        self.btn_enregister_ticket = QPushButton("Modifier", self)
+        self.btn_enregister_ticket = QPushButton("Enregistrer", self)
         self.btn_enregister_ticket.setProperty("class", "btnListTicket")
 
         self.grid_description = QGridLayout()

@@ -9,11 +9,11 @@
     <entity-names>
       <counter>
         <item-type type-id="ui-window" type="Window" />
-        <value>7</value>
+        <value>8</value>
       </counter>
       <counter>
         <item-type type-id="ui-label" type="Label" />
-        <value>19</value>
+        <value>21</value>
       </counter>
       <counter>
         <item-type type-id="ui-panel" type="Panel" />
@@ -29,7 +29,7 @@
       </counter>
       <counter>
         <item-type type-id="ui-text-box" type="Text Box" />
-        <value>4</value>
+        <value>5</value>
       </counter>
       <counter>
         <item-type type-id="ui-multi-line" type="Multi-Line Text Box" />
@@ -37,11 +37,11 @@
       </counter>
       <counter>
         <item-type type-id="ui-list-box" type="List Box" />
-        <value>1</value>
+        <value>2</value>
       </counter>
       <counter>
         <item-type type-id="ui-grid" type="Grid" />
-        <value>2</value>
+        <value>3</value>
       </counter>
       <counter>
         <item-type type-id="ui-combo-box" type="Combo Box" />
@@ -49,17 +49,17 @@
       </counter>
       <counter>
         <item-type type-id="ui-check-box" type="Check Box" />
-        <value>1</value>
+        <value>2</value>
       </counter>
     </entity-names>
     <entity-ids>
       <counter>
         <item-type type-id="ui-window" type="Window" />
-        <value>8</value>
+        <value>9</value>
       </counter>
       <counter>
         <item-type type-id="ui-label" type="Label" />
-        <value>20</value>
+        <value>22</value>
       </counter>
       <counter>
         <item-type type-id="ui-panel" type="Panel" />
@@ -75,7 +75,7 @@
       </counter>
       <counter>
         <item-type type-id="ui-text-box" type="Text Box" />
-        <value>5</value>
+        <value>6</value>
       </counter>
       <counter>
         <item-type type-id="ui-multi-line" type="Multi-Line Text Box" />
@@ -83,11 +83,11 @@
       </counter>
       <counter>
         <item-type type-id="ui-list-box" type="List Box" />
-        <value>2</value>
+        <value>3</value>
       </counter>
       <counter>
         <item-type type-id="ui-grid" type="Grid" />
-        <value>3</value>
+        <value>4</value>
       </counter>
       <counter>
         <item-type type-id="ui-combo-box" type="Combo Box" />
@@ -95,7 +95,7 @@
       </counter>
       <counter>
         <item-type type-id="ui-check-box" type="Check Box" />
-        <value>2</value>
+        <value>3</value>
       </counter>
     </entity-ids>
     <diagrams>
@@ -163,6 +163,9 @@
     </item>
     <item id="1ad2cd16bd4d4ba99b4bb8257093fd6c" cid="LBL016" type="ui-label" name="Lecture/edition de ticket" owner="a5cbc38bb50f4091bff2128d19b2fab6" creation-date="10/07/2026 08:28:48" />
     <item id="2d6ddbddd97946b1abbaef8beace25fe" cid="BTN010" type="ui-button" name="Enregister" owner="a5cbc38bb50f4091bff2128d19b2fab6" creation-date="10/07/2026 08:27:32">
+      <button />
+    </item>
+    <item id="960eb3164a8b4744878ff7a9794c7f18" cid="BTN013" type="ui-button" name="Annuler" owner="8ded23dfe61c4b0894720778d48b162d" creation-date="10/07/2026 08:52:50">
       <button />
     </item>
     <item id="ec90d73f141f4947965782d825607108" cid="LBL016" type="ui-label" name="Liste des tickets" owner="21a12f279eff45a895df9190da7239ba" creation-date="10/07/2026 08:28:48" />
@@ -278,6 +281,9 @@
       <owned-items />
       <window show-min-button="true" show-max-button="true" show-close-button="true" show-size-grip="false" />
     </item>
+    <item id="3a121ea5fb5148dbbbd906da6ba58d6c" cid="BTN013" type="ui-button" name="Assigner" owner="8ded23dfe61c4b0894720778d48b162d" creation-date="10/07/2026 08:52:50">
+      <button />
+    </item>
     <item id="c30d220d856141b2bb7cb25b7cc5968d" cid="BTN009" type="ui-button" name="Annuler" owner="a5cbc38bb50f4091bff2128d19b2fab6" creation-date="10/07/2026 08:27:29">
       <button />
     </item>
@@ -340,7 +346,7 @@
       </meta>
       <abstract-items />
       <sub-models />
-      <diagram type="user-interface" id="p807bbc6d4ca54a2496bcaf510cac79c1_611129977" name="Connection" order-index="1" uid="" name-style="" auto-routed-paths="false" default-line-style="default" view-location="21,21">
+      <diagram type="user-interface" id="p807bbc6d4ca54a2496bcaf510cac79c1_611129977" name="Connection" order-index="1" uid="" name-style="" auto-routed-paths="false" default-line-style="default" view-location="36,36">
         <style>
           <background-color index="1" color="#FFFFFFFF" />
           <background-color index="2" color="#FFFFFFFF" />
@@ -394,7 +400,7 @@
           </item>
         </layer>
       </diagram>
-      <diagram type="user-interface" id="p47fe2cb311a8493d9600d5be5c60488f_914358960" name="Acceuil" order-index="2" overview-order-index="0" uid="" name-style="" auto-routed-paths="false" default-line-style="default" view-location="-184,119" zoom="1.2">
+      <diagram type="user-interface" id="p47fe2cb311a8493d9600d5be5c60488f_914358960" name="Acceuil" order-index="2" overview-order-index="0" uid="" name-style="" auto-routed-paths="false" default-line-style="default" view-location="-210,249" zoom="1.2">
         <style>
           <background-color index="1" color="#FFFFFFFF" />
           <background-color index="2" color="#FFFFFFFF" />
@@ -491,7 +497,7 @@
           </item>
         </layer>
       </diagram>
-      <diagram type="user-interface" id="p622d1ff541d04a0692b9b1c5ce71da4a_781618428" name="CréerTicket" order-index="3" overview-order-index="1" uid="" name-style="" auto-routed-paths="false" default-line-style="default" view-location="0,806" zoom="0.7">
+      <diagram type="user-interface" id="p622d1ff541d04a0692b9b1c5ce71da4a_781618428" name="CréerTicket" order-index="3" overview-order-index="1" uid="" name-style="" auto-routed-paths="false" default-line-style="default" view-location="-80,476" zoom="0.6">
         <style>
           <background-color index="1" color="#FFFFFFFF" />
           <background-color index="2" color="#FFFFFFFF" />
@@ -730,7 +736,7 @@
           </item>
         </layer>
       </diagram>
-      <diagram type="user-interface" id="pb8d35d77bdfd48198a21958734a3706c_398647779" name="Liste des tickets" order-index="4" overview-order-index="2" uid="" name-style="" auto-routed-paths="false" default-line-style="default" view-location="-91,-83" zoom="0.9">
+      <diagram type="user-interface" id="pb8d35d77bdfd48198a21958734a3706c_398647779" name="Liste des tickets" order-index="4" overview-order-index="2" uid="" name-style="" auto-routed-paths="false" default-line-style="default" view-location="-82,59" zoom="0.6">
         <style>
           <background-color index="1" color="#FFFFFFFF" />
           <background-color index="2" color="#FFFFFFFF" />
@@ -742,7 +748,7 @@
           </authors>
           <description />
           <creation-date>10/07/2026 08:43:53</creation-date>
-          <change-date>10/07/2026 09:01:12</change-date>
+          <change-date>10/23/2026 14:50:05</change-date>
           <revision-count>0</revision-count>
           <version />
         </meta>
@@ -750,12 +756,25 @@
           <item id="0195c5d78f274310a9d3371a4e1adb9a" cid="BTN013" type="ui-button" name="Retour" owner="21a12f279eff45a895df9190da7239ba" creator="" creation-date="10/07/2026 08:52:50">
             <button />
           </item>
+          <item id="c3f82cb1d4f64138986718446594ed86" cid="GRD003" type="ui-grid" name="Grid3" owner="8ded23dfe61c4b0894720778d48b162d" creator="" creation-date="10/23/2026 14:48:10">
+            <grid>
+              <columns>
+                <column id="uigc-aa481cca-3656-4d0e-a0fc-4d552db686cd" name="Selection" />
+                <column id="uigc-830dc94b-4a62-43c9-abf8-3d31a49ec4f0" name="Employer" />
+              </columns>
+            </grid>
+          </item>
           <item id="dd825c92669f4148ab64a7cd460ca8af" cid="BTN016" type="ui-button" owner="21a12f279eff45a895df9190da7239ba" creator="" creation-date="10/07/2026 09:00:44">
             <button />
+          </item>
+          <item id="8ded23dfe61c4b0894720778d48b162d" cid="WND008" type="ui-window" name="Gestionnaire de ticket" creator="" creation-date="10/23/2026 14:46:35">
+            <owned-items />
+            <window show-min-button="true" show-max-button="true" show-close-button="true" show-size-grip="false" />
           </item>
           <item id="bd5732164e5542f3bde7ab0627b9ed7e" cid="BTN017" type="ui-button" name="Créer" owner="21a12f279eff45a895df9190da7239ba" creator="" creation-date="10/07/2026 09:01:12">
             <button />
           </item>
+          <item id="99b69bc5f5774df9a83c24247e4c9ded" cid="LBL021" type="ui-label" name="Ticket(s) : &lt;nom ticket&gt;" owner="8ded23dfe61c4b0894720778d48b162d" creator="" creation-date="10/23/2026 14:47:09" />
           <item id="33b6af7d711d48f693b72d34d76c5e6b" cid="GRD002" type="ui-grid" name="Grid2" owner="21a12f279eff45a895df9190da7239ba" creator="" creation-date="10/07/2026 08:53:07">
             <grid>
               <columns>
@@ -765,9 +784,13 @@
               </columns>
             </grid>
           </item>
+          <item id="580aca0c820c4a0d86e52f7c91ff290e" cid="CHB002" type="ui-check-box" owner="8ded23dfe61c4b0894720778d48b162d" creator="" creation-date="10/23/2026 14:49:41">
+            <check-box state="Checked" />
+          </item>
           <item id="21f81bff93c54ec1960880726cb4e347" cid="BTN015" type="ui-button" name="Supprimer" owner="21a12f279eff45a895df9190da7239ba" creator="" creation-date="10/07/2026 09:00:35">
             <button />
           </item>
+          <item id="e0af0dd87da24f4e830972c479e1df71" cid="LBL020" type="ui-label" name="Assignation de tickets" owner="8ded23dfe61c4b0894720778d48b162d" creator="" creation-date="10/23/2026 14:46:54" />
           <item id="21a12f279eff45a895df9190da7239ba" cid="WND004" type="ui-window" name="Gestionnaire de ticket" creator="" creation-date="10/07/2026 08:44:00">
             <owned-items />
             <window show-min-button="true" show-max-button="true" show-close-button="true" show-size-grip="false" />
@@ -777,6 +800,9 @@
           </item>
           <item id="1ad3a621e84c4681aff01b5c696b3694" cid="CHB001" type="ui-check-box" owner="21a12f279eff45a895df9190da7239ba" creator="" creation-date="10/07/2026 08:57:29">
             <check-box state="Checked" />
+          </item>
+          <item id="ff9b12c04fc44d44b0f8433127c5714a" cid="TXT005" type="ui-text-box" name="TextBox5" owner="8ded23dfe61c4b0894720778d48b162d" creator="" creation-date="10/23/2026 14:47:28">
+            <text-box />
           </item>
         </abstract-items>
         <layer id="b3c9abb3f9504ff78f7d6dd3fdbb16ac" name="Default" visible="true" enabled="true" locked="false">
@@ -814,6 +840,29 @@
           </item>
           <item id="6837ec4b0b5e4e41a7663a83ebb454f7" iid="efa591c3cbcb4f1a8017be120eaa0fb6" container="21a12f279eff45a895df9190da7239ba" container-iid="310d67ba15b246d793a34e426d164406" creation-date="10/07/2026 08:13:23" order-index="3" type="ui-label">
             <layout ax="339" ay="94" awidth="161" aheight="36" x="340" y="94" width="150" height="20" />
+          </item>
+          <item id="8ded23dfe61c4b0894720778d48b162d" iid="dc06cb2aa466439d865bdc46e62f3d9c" creation-date="10/23/2026 14:46:35" order-index="10" type="ui-window">
+            <layout ax="676" ay="600" awidth="397" aheight="340" x="671" y="600" width="400" height="340" expanded="676,600,397,340" collapsed="0,0,0,0" />
+          </item>
+          <item id="e0af0dd87da24f4e830972c479e1df71" iid="aff0e381f050498b9216d2ea1272520d" container="8ded23dfe61c4b0894720778d48b162d" container-iid="dc06cb2aa466439d865bdc46e62f3d9c" creation-date="10/23/2026 14:46:54" order-index="11" type="ui-label">
+            <layout ax="787" ay="641" awidth="174" aheight="36" x="788" y="641" width="150" height="20" />
+          </item>
+          <item id="c3f82cb1d4f64138986718446594ed86" iid="6d8f0832e53f4192b064918887c5a614" container="8ded23dfe61c4b0894720778d48b162d" container-iid="dc06cb2aa466439d865bdc46e62f3d9c" creation-date="10/23/2026 14:48:10" order-index="14" type="ui-grid">
+            <layout ax="710" ay="723" awidth="320" aheight="160" x="711" y="723" width="320" height="160">
+              <columns widths="-1,229.60596" />
+            </layout>
+          </item>
+          <item id="580aca0c820c4a0d86e52f7c91ff290e" iid="c6e15265cfa7491b81acdf564220a320" container="8ded23dfe61c4b0894720778d48b162d" container-iid="dc06cb2aa466439d865bdc46e62f3d9c" creation-date="10/23/2026 14:49:41" order-index="15" type="ui-check-box">
+            <layout ax="740.5" ay="761" awidth="149" aheight="36" x="741.5" y="761" width="150" height="20" />
+          </item>
+          <item id="99b69bc5f5774df9a83c24247e4c9ded" iid="7b3e9804b3a540b5a5be081a5ec89830" container="8ded23dfe61c4b0894720778d48b162d" container-iid="dc06cb2aa466439d865bdc46e62f3d9c" creation-date="10/23/2026 14:47:09" order-index="12" type="ui-label">
+            <layout ax="700.5" ay="677" awidth="189" aheight="36" x="701.5" y="677" width="150" height="20" />
+          </item>
+          <item id="960eb3164a8b4744878ff7a9794c7f18" iid="c76a2459bca74bf58e116f8d9864c3ea" container="8ded23dfe61c4b0894720778d48b162d" container-iid="dc06cb2aa466439d865bdc46e62f3d9c" creation-date="10/07/2026 08:52:50" order-index="0" type="ui-button">
+            <layout ax="687" ay="893" awidth="100" aheight="36" x="687" y="893" width="100" height="30" />
+          </item>
+          <item id="3a121ea5fb5148dbbbd906da6ba58d6c" iid="2ede3b4aa7bb468091ec17b748bf1c69" container="8ded23dfe61c4b0894720778d48b162d" container-iid="dc06cb2aa466439d865bdc46e62f3d9c" creation-date="10/07/2026 08:52:50" order-index="0" type="ui-button">
+            <layout ax="961" ay="893" awidth="100" aheight="36" x="961" y="893" width="100" height="30" />
           </item>
         </layer>
       </diagram>

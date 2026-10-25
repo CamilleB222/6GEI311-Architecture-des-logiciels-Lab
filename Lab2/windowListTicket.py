@@ -26,8 +26,10 @@ class WindowListTicket(QWidget):
             self.btn_create.setProperty("class", "btnListTicket")
             self.btn_assign = QPushButton("Assigner")
             self.btn_assign.setProperty("class", "btnListTicket")
+            self.btn_assign.setEnabled(False)
             self.btn_delete = QPushButton("Supprimer")
             self.btn_delete.setProperty("class", "btnListTicket")
+            self.btn_delete.setEnabled(False)
 
             self.btn_layout.addWidget(self.btn_back)
             self.btn_layout.addStretch()
@@ -85,6 +87,7 @@ class WindowListTicket(QWidget):
                 checkbox = QCheckBox()
                 # Rattachement de l'objet ticket (ou de ticket.ticket_id)
                 checkbox.setProperty("ticket", ticket)
+                checkbox.toggled.connect(self.gerer_changement_selection_ticket)
                 chk_layout.addWidget(checkbox)
                 chk_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
                 chk_layout.setContentsMargins(0, 0, 0, 0)
@@ -127,6 +130,12 @@ class WindowListTicket(QWidget):
             self.layout_principal.setRowStretch(1,1)
 
             self.setLayout(self.layout_principal)
+
+    def gerer_changement_selection_ticket(self):
+        selection = len(self.get_selected_tickets()) > 0
+
+        self.btn_assign.setEnabled(selection)
+        self.btn_delete.setEnabled(selection)
 
     def update_ticket(self, updated_ticket: Ticket):
         for row in range(self.table.rowCount()):

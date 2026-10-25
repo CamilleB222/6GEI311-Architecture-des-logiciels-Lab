@@ -22,9 +22,16 @@ class TicketManager:
         self._list_ticket.append(ticket)
 
     def update_ticket_complet(self, user : User, old_ticket : Ticket, new_ticket : Ticket):
-        user.update_ticket_complet(old_ticket, new_ticket)
-        index = self._list_ticket.index(old_ticket) 
-        self._list_ticket[index] = new_ticket
+        ticket_id = old_ticket.ticket_id
+        
+        for i, ticket in enumerate(self._list_ticket):
+            if ticket.ticket_id == ticket_id:
+                self._list_ticket[i] = new_ticket
+
+        for utilisateur in self._list_user_assignable:
+            for i, ticket in enumerate(utilisateur._asign_tickets):
+                if ticket.ticket_id == ticket_id:
+                    utilisateur._asign_tickets[i] = new_ticket
 
     def view_ticket(self, user : User, ticket:Ticket) -> str:
         return user.view_ticket(ticket)

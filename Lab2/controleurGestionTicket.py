@@ -53,6 +53,9 @@ class ControleurGestionTicket:
     _ajout_description : str | None
     _list_Description : list[DescriptionTicket]
     _ticket_edit : Ticket | None
+    _ticket_edit_fermer_attente : bool
+    _ticket_edit_status_attente : StatutTicket | None
+
 
     def __init__(self, list_user : list[User], list_admin : list[Admin], list_ticket : list[Ticket]):
         self._list_user = list_user
@@ -86,6 +89,8 @@ class ControleurGestionTicket:
         self._priorité_ticket = None
         self._list_Description = []
         self._ticket_edit = None
+        self._ticket_edit_fermer_attente = False
+        self._ticket_edit_status_attente = None
 
     def gerer_changement_texte_nom(self):
         self._user_name = self.window_connect.textbox_nom.text()
@@ -420,7 +425,7 @@ class ControleurGestionTicket:
     
     def gerer_window_list_ticket(self, nom : str, role : str, breadcrumbs : list[tuple[BreadcrumbPage, str]], list_ticket : list [Ticket]):
         self.window_list_ticket = WindowListTicket(nom,role,isinstance(self._user_connected, Admin),breadcrumbs,list_ticket, self.gerer_clic_bouton_modifier, self.gerer_clic_bouton_supprimer)
-
+        
         self.window_list_ticket.header_widget.breadcrumb_clicked.connect(self.gerer_clic_breadcrumb)
         self.window_list_ticket.btn_assign.clicked.connect(self.gerer_clic_bouton_assign_lot)
         self.window_list_ticket.btn_back.clicked.connect(lambda : self.gerer_clic_bouton_annuler(breadcrumbs[-2][1]))
@@ -428,7 +433,7 @@ class ControleurGestionTicket:
         self.window_list_ticket.btn_delete.clicked.connect(self.gerer_clic_bouton_supprimer_lot)
 
         self.gerer_main_window(self.window_list_ticket)
-
+    
     def gerer_clic_bouton_assign_lot(self):
         list_ticket : list[Ticket] = self.window_list_ticket.get_selected_tickets()
 
@@ -476,15 +481,18 @@ class ControleurGestionTicket:
         is_admin : bool = isinstance(self._user_connected, Admin)
 
         self._ticket_edit = ticket
+        self._list_Description = list(ticket.list_description)
+        self._ticket_edit_fermer_attente = False
+        self._ticket_edit_status_attente = ticket.status
 
         self._titre_ticket = self._ticket_edit.title
         self._description_ini_ticket = self._ticket_edit.description_ini
         self._priorité_ticket = self._ticket_edit.priority 
 
         if is_admin:
-            self.window_voir_edit_ticket = WindowVoirEditTicket(ticket, is_edit, is_admin)
+            self.window_voir_edit_ticket = WindowVoirEditTicket(ticket, is_edit, is_admin, self.gerer_clic_bouton_modifie_description_edit, self.gerer_clic_bouton_supprimer_description_edit)
         else:
-            self.window_voir_edit_ticket = WindowVoirEditTicket(ticket, False, is_admin)
+            self.window_voir_edit_ticket = WindowVoirEditTicket(ticket, is_edit, is_admin, self.gerer_clic_bouton_modifie_description_edit, self.gerer_clic_bouton_supprimer_description_edit)
         self.window_voir_edit_ticket.show()
         self.window_voir_edit_ticket.btn_annuler.clicked.connect(self.gerer_clic_bouton_modifier_annuler)
         self.window_voir_edit_ticket.btn_modif_status.clicked.connect(self.gerer_clic_bouton_modifier_statut)
@@ -499,27 +507,39 @@ class ControleurGestionTicket:
         self.window_voir_edit_ticket.textbox_priorite_ticket.textChanged.connect(self.gerer_changement_texte_modifier)
 
     def gerer_clic_bouton_modifier_statut(self):
-        self.ticket_manager.update_ticket(self._user_connected, self._ticket_edit)
-        self.window_voir_edit_ticket.label_status_ticket.setText(self._ticket_edit.status.name)
+        if self._ticket_edit_status_attente == StatutTicket.ASSIGNÉ:
+            self._ticket_edit_status_attente = StatutTicket.VALIDATION
+        elif self._ticket_edit_status_attente == StatutTicket.VALIDATION:
+            self._ticket_edit_status_attente = StatutTicket.TERMINÉ
+                
+
+        self.window_voir_edit_ticket.label_status_ticket.setText(self._ticket_edit_status_attente.name)
 
     def gerer_clic_bouton_modifier_fermer_statut(self):
-        self.ticket_manager.close_ticket(self._user_connected, self._ticket_edit)
-        self.window_voir_edit_ticket.label_status_ticket.setText(self._ticket_edit.status.name)
+        self._ticket_edit_fermer_attente = True
 
-        if self._ticket_edit.status == StatutTicket.FERMER:
-            self.window_voir_edit_ticket.stop_edit(isinstance(self._user_connected, Admin))
+        self.window_voir_edit_ticket.label_status_ticket.setText(StatutTicket.FERMER.name)
 
-    # Ajouter ou suppriemr des description dasn ajout modificaiton
+        self.window_voir_edit_ticket.stop_edit(isinstance(self._user_connected, Admin))
+        self.window_voir_edit_ticket.btn_enregister_ticket.setEnabled(True)
+
+    # Ajouter ou supprimer des description dans ajout modificaiton
 
     def gerer_clic_bouton_enregistrer(self):
-        ticket = Ticket(self._ticket_edit.ticket_id, self._titre_ticket, self._description_ini_ticket, self._priorité_ticket, self._ticket_edit.creation_date, datetime.now())
+        
+        ticket = Ticket(self._ticket_edit.ticket_id, self._titre_ticket, self._description_ini_ticket, self._priorité_ticket, self._ticket_edit.creation_date, datetime.now(),self._ticket_edit_status_attente)
         for description in self._list_Description:
             if isinstance(description, DescriptionTicketTexte):
                 ticket.add_description(DescriptionTicketTexte, description.get_titre(), description.get_description())
             else:
                 ticket.add_description(DescriptionTicketImage, description.get_titre(), description.get_description())
-
+        
+        
         self.ticket_manager.update_ticket_complet(self._user_connected,self._ticket_edit, ticket)
+    
+        
+        if self._ticket_edit_fermer_attente:
+            self.ticket_manager.close_ticket(self._user_connected,ticket)
 
         self._titre_ticket = ""
         self._description_ini_ticket = ""
@@ -699,6 +719,10 @@ class ControleurGestionTicket:
         pass
 
     def gerer_clic_bouton_modifier_annuler(self):
+        self._ticket_edit_fermer_attente = False
+        self._ticket_edit_status_attente = None
+
         self.window_voir_edit_ticket.close()
         self.window_voir_edit_ticket = None
+        
 

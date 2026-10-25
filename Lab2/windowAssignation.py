@@ -19,6 +19,7 @@ class WindowAssignation(QWidget):
 
         self.btn_annuler = QPushButton("Annuler", self)
         self.btn_assigner = QPushButton("Assigner", self)
+        self.btn_assigner.setEnabled(False)
 
         self.table = QTableWidget(self)
         self.table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
@@ -48,7 +49,7 @@ class WindowAssignation(QWidget):
             
             # Ajouter le bouton radio au groupe pour garantir l'exclusivité
             self.button_group.addButton(radio_button)
-            
+            radio_button.toggled.connect(self.gerer_selection_utilisateur)
             radio_layout.addWidget(radio_button)
             radio_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
             radio_layout.setContentsMargins(0, 0, 0, 0)
@@ -83,3 +84,6 @@ class WindowAssignation(QWidget):
         if checked_button:
             return checked_button.property("user")
         return None
+
+    def gerer_selection_utilisateur(self):
+        self.btn_assigner.setEnabled(self.button_group.checkedButton() is not None)

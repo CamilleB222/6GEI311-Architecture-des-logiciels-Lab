@@ -41,9 +41,6 @@ class User:
     def create_ticket (self, ticket : Ticket):
         self._created_tickets.append(ticket)
 
-    def update_ticket_complet(self, old_ticket : Ticket, new_ticket : Ticket):
-        index = self._created_tickets.index(old_ticket)
-        self._created_tickets[index] = new_ticket
     
     def view_ticket (self, ticket : Ticket) -> str:
         if not self._asign_tickets.__contains__(ticket):
