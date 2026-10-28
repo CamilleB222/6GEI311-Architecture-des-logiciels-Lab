@@ -1,0 +1,12 @@
+{
+  "python.analysis.extraPaths": [
+    "../Model"
+  ],
+  "python.analysis.packageIndexDepths": [
+    {
+      "name": "dossier_modeles",
+      "depth": 3
+    }
+  ],
+  "python.analysis.autoSearchPaths": true
+}

@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dossier_modeles"  # Assurez-vous que le nom correspond à l'import
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "pydantic>=2.14.1",
+]
+
+[tool.setuptools]
+packages = ["dossier_modeles"]

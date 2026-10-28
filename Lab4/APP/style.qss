@@ -1,0 +1,77 @@
+HeaderWidget#headerWidget {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+QLabel#headerUserLabel {
+    font-weight: bold;
+    font-size: 20px;
+    color: #212529;
+}
+
+QLabel#headerRoleLabel {
+    color: #212529;
+    font-size: 20px;
+}
+
+QPushButton#breadcrumbBtn {
+    font-size: 15px;
+    border: none;
+    color: #1e88e5;
+    font-weight: 500;
+    background: transparent;
+    padding: 2px 4px;
+}
+
+QPushButton#breadcrumbBtn:hover {
+    text-decoration: underline;
+}
+
+QLabel#breadcrumbSeparator {
+    font-size: 15px;
+    color: #888888;
+    font-weight: bold;
+}
+
+QLabel#breadcrumbCurrentLabel {
+    font-size: 15px;
+    color: #333333;
+    font-weight: bold;
+    padding: 2px 4px;
+}
+
+QPushButton[class="btnAcc"] {
+    font-size: 20px;
+    font-weight: bold;
+    border: 2px solid black;
+    padding: 6px;
+}
+
+QPushButton[class="btnAcc"]:hover {
+    background-color: #e0e0e0; /* Gris clair */
+}
+
+QPushButton[class="btnAcc"]:pressed {
+    background-color: #b0b0b0; /* Gris plus foncé au clic */
+    border-color: black;
+}
+
+QPushButton[class="btnListTicket"] {
+    font-size: 20px;
+    font-weight: bold;
+    border: 2px solid black;
+    padding: 6px;
+}
+
+QPushButton[class="btnListTicket"]:hover {
+    background-color: #e0e0e0; /* Gris clair */
+}
+
+QPushButton[class="btnListTicket"]:pressed {
+    background-color: #b0b0b0; /* Gris plus foncé au clic */
+    border-color: black;
+}
+
+QLabel#listTicketTitle {
+    font-size: 20px;
+}

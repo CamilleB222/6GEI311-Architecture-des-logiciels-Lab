@@ -13,7 +13,7 @@ class TicketManager:
         return self._list_user_assignable
 
     def view_all_ticket(self):
-        return self._list_ticket
+        return self._list_ticketgit 
 
     def creat_ticket(self, user : User, ticket : Ticket):
         user.create_ticket(ticket)

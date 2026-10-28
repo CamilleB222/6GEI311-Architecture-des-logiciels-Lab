@@ -1,0 +1,11 @@
+[project]
+name = "app"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "modeles",
+    "pyqt6>=6.11.0",
+]
+
+[tool.uv.sources]
+modeles = { path = "../Model", editable = true }

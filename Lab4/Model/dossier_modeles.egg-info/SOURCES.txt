@@ -1,0 +1,14 @@
+pyproject.toml
+dossier_modeles/__init__.py
+dossier_modeles/admin.py
+dossier_modeles/descriptionTicket.py
+dossier_modeles/descriptionTicketImage.py
+dossier_modeles/descriptionTicketTexte.py
+dossier_modeles/statutTicket.py
+dossier_modeles/ticket.py
+dossier_modeles/user.py
+dossier_modeles.egg-info/PKG-INFO
+dossier_modeles.egg-info/SOURCES.txt
+dossier_modeles.egg-info/dependency_links.txt
+dossier_modeles.egg-info/requires.txt
+dossier_modeles.egg-info/top_level.txt
