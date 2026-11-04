@@ -1,5 +1,5 @@
-from .ticket import Ticket
-from .statutTicket import StatutTicket
+from ..ticket.ticket import Ticket
+from ..statutTicket import StatutTicket
 from pydantic import BaseModel
 
 class User(BaseModel):
@@ -77,4 +77,4 @@ class User(BaseModel):
             ticket.update_status(StatutTicket.VALIDATION)
 
         elif ticket.status == StatutTicket.VALIDATION:
-            ticket.update_status(StatutTicket.TERMINE)
+            ticket.update_status(StatutTicket.TERMINÉ)

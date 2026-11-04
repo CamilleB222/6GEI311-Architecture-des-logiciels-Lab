@@ -1,9 +1,9 @@
 from datetime import datetime
 from pydantic import BaseModel
-from .descriptionTicket import DescriptionTicket
-from .descriptionTicketImage import DescriptionTicketImage
-from .descriptionTicketTexte import DescriptionTicketTexte
-from .statutTicket import StatutTicket
+from ..descriptionTicket.descriptionTicket import DescriptionTicket
+from ..descriptionTicket.descriptionTicketImage import DescriptionTicketImage
+from ..descriptionTicket.descriptionTicketTexte import DescriptionTicketTexte
+from ..statutTicket import StatutTicket
 
 class Ticket(BaseModel):
     _ticket_id : int
