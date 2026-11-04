@@ -520,7 +520,6 @@ class ControleurGestionTicket:
     # Ajouter ou supprimer des description dans ajout modificaiton
 
     def gerer_clic_bouton_enregistrer(self):
-        
         ticket = Ticket(self._ticket_edit.ticket_id, self._titre_ticket, self._description_ini_ticket, self._priorité_ticket, self._ticket_edit.creation_date, datetime.now(),self._ticket_edit_status_attente)
         for description in self._list_Description:
             if isinstance(description, DescriptionTicketTexte):
