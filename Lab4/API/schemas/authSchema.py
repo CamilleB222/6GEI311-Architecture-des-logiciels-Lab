@@ -1,0 +1,11 @@
+# API/schemas/auth_schema.py
+from pydantic import BaseModel
+from .userSchema import UserResponseSchema
+
+class ConnectRequestSchema(BaseModel):
+    name : str
+    password: str
+
+class ConnectResponseSchema(BaseModel):
+    role : str
+    user: UserResponseSchema

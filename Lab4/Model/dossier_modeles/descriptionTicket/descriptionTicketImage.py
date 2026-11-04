@@ -8,9 +8,9 @@ class DescriptionTicketImage(DescriptionTicket):
         self._titre = titre
         self._filepath = filepath
 
-    def get_titre(self):
+    def get_titre(self) -> str:
         return self._titre
     
-    def get_description(self):
+    def get_description(self) -> str:
         return self._filepath
 
