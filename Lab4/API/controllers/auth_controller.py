@@ -4,12 +4,25 @@ from schemas.authSchema import ConnectRequestSchema, ConnectResponseSchema
 from services.mappers import map_user_to_schema
 from dossier_modeles import User
 
+from program_list import list_user, list_admin
+
 router = APIRouter(tags=["Authentication"])
 
 @router.post("/connect", response_model=ConnectResponseSchema)
 def login(payload: ConnectRequestSchema):
-    # 1. Vérification de l'utilisateur (exemple avec ta logique métier)
-    user_entity = User(1, "Xavier", "xavier400@outlook.fr","Utilisateur")
+    user_entity = None
+    for user in list_user:
+        if user.name == payload.name and not payload.password == "":
+            user_entity = user
+            role = "user"
+            break
+
+    if not user_entity:
+        for admin in list_admin:
+            if admin.name == payload.name and not payload.password == "":
+                user_entity = admin
+                role = "admin"
+                break
     
     if not user_entity:
         raise HTTPException(
@@ -17,8 +30,7 @@ def login(payload: ConnectRequestSchema):
             detail="Identifiants invalides"
         )
     
-    # 2. Construction de la réponse avec l'objet User et son rôle
     return ConnectResponseSchema(
-        role="user",
+        role=role,
         user=map_user_to_schema(user_entity)
     )
