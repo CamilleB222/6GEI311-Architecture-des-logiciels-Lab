@@ -1,10 +1,11 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, status, Depends
 from schemas.userSchema import AdminResponseSchema
 
 from program_list import list_admin
 from services.mappers import map_user_to_schema
+from dependencies import verify_custom_token
 
-router = APIRouter(tags=["Admins"])
+router = APIRouter(tags=["Admins"], dependencies=[Depends(verify_custom_token)])
 
 @router.get("/admins", response_model=list[AdminResponseSchema])
 def get_users():

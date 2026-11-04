@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from controllers.auth_controller import router as auth_router
 from controllers.user_controller import router as user_controller
 from controllers.admin_controller import router as admin_controller
+from controllers.ticket_controller import router as ticket_controller
 
 #Classe métier
 from dossier_modeles import Admin, Ticket, User
@@ -68,6 +69,7 @@ app.add_middleware(
 app.include_router(auth_router)
 app.include_router(user_controller)
 app.include_router(admin_controller)
+app.include_router(ticket_controller)
 
 # Route racine optionnelle pour tester l'état du serveur
 @app.get("/", tags=["Health Check"])

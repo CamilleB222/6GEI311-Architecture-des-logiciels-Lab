@@ -5,4 +5,6 @@ list_user : list[User] = list[User]()
 list_admin : list[Admin] = list[Admin]()
 list_tickets : list[Ticket] = list[Ticket]()
 
+dict_user_connect : dict[str, User] = dict[str, User]()
+
 ticket_manager : TicketManager = TicketManager(list_tickets, list_user)

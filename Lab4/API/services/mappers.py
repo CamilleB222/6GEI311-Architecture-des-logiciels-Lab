@@ -29,19 +29,17 @@ def map_ticket_to_schema(ticket: Ticket) -> TicketResponseSchema:
     )
 
 def map_user_to_schema(user: User | Admin):
-    assigned_ids = [t.ticket_id for t in user.asign_tickets]
     if isinstance(user, Admin):
         return AdminResponseSchema(
             id=user.id,
             name=user.name,
             email=user.email,
             role=user.role,
-            assigned_ticket_ids=assigned_ids
         )
+    
     return UserResponseSchema(
         id=user.id,
         name=user.name,
         email=user.email,
         role=user.role,
-        assigned_ticket_ids=assigned_ids
     )

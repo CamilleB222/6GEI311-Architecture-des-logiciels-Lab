@@ -26,14 +26,16 @@ class TicketCreateSchema(BaseModel):
     description_initiale: str
     priority: str
 
+class TicketCreateResponseSchema(BaseModel):
+    ticket_id: int
+
 
 # --- SCHÉMA DE MISE À JOUR (PUT/ticket/{id}) ---
 class TicketUpdateSchema(BaseModel):
-    title: Optional[str] = None
-    priority: Optional[str] = None
-    status: Optional[StatutTicket] = None
-    user_assign: Optional[str] = None
-
+    title: str
+    description_ini : str
+    priority: str 
+    status: StatutTicket
 
 # --- SCHÉMA POUR ASSIGNER UN UTILISATEUR ---
 class TicketAssignSchema(BaseModel):

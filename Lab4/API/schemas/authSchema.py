@@ -8,4 +8,8 @@ class ConnectRequestSchema(BaseModel):
 
 class ConnectResponseSchema(BaseModel):
     role : str
+    token : str
     user: UserResponseSchema
+
+class DisconnectRequestSchema(BaseModel):
+    token : str

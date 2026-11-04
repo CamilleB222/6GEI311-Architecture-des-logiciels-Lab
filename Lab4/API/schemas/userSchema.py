@@ -6,7 +6,6 @@ class UserResponseSchema(BaseModel):
     name: str
     email: EmailStr
     role: str
-    assigned_ticket_ids: list[int] = []
 
     model_config = ConfigDict(from_attributes=True)
 

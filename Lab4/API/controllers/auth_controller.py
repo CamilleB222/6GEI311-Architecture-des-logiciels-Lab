@@ -1,8 +1,10 @@
-# API/controllers/auth_controller.py
 from fastapi import APIRouter, HTTPException, status
-from schemas.authSchema import ConnectRequestSchema, ConnectResponseSchema
+import secrets
+
+from schemas.authSchema import ConnectRequestSchema, ConnectResponseSchema, DisconnectRequestSchema
 from services.mappers import map_user_to_schema
 from dossier_modeles import User
+from program_list import dict_user_connect
 
 from program_list import list_user, list_admin
 
@@ -29,8 +31,21 @@ def login(payload: ConnectRequestSchema):
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Identifiants invalides"
         )
+
+    token = secrets.token_urlsafe(16)
+    dict_user_connect[token] = user_entity
     
     return ConnectResponseSchema(
         role=role,
+        token=token,
         user=map_user_to_schema(user_entity)
     )
+
+@router.post("/disconnect")
+def logout(payload: DisconnectRequestSchema):
+
+    if dict_user_connect.pop(payload.token, None) is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Utilisateur non connecter"
+        )
