@@ -2,6 +2,7 @@ from datetime import datetime
 from pathlib import Path
 from tkinter import filedialog
 
+from Lab4.APP.clientAPI import ClientAPI
 from windowAssignation import WindowAssignation
 from windowVoirEditTicket import WindowVoirEditTicket
 from windowAcceuil import WindowAcceuil
@@ -11,7 +12,7 @@ from windowAjoutTexte import WindowAjoutTexte
 from windowAjoutImage import WindowAjoutImage
 from windowConnect import WindowConnect
 from dossier_modeles import Admin, User, Ticket, DescriptionTicket, DescriptionTicketImage, DescriptionTicketTexte, StatutTicket
-from ticketManager import TicketManager
+#from ticketManager import TicketManager
 from PyQt6.QtWidgets import QMessageBox, QWidget
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
@@ -20,7 +21,8 @@ from breadcrumbPage import BreadcrumbPage
 
 
 class ControleurGestionTicket:
-    ticket_manager : TicketManager
+    #ticket_manager : TicketManager
+    clientAPI : ClientAPI
     window_connect : WindowConnect
     window_acceuil : WindowAcceuil | None
     window_cree_ticket : WindowCreeTicket | None
@@ -50,12 +52,11 @@ class ControleurGestionTicket:
     _ticket_edit_status_attente : StatutTicket | None
 
 
-    def __init__(self, list_user : list[User], list_admin : list[Admin], list_ticket : list[Ticket]):
-        self._list_user = list_user
-        self._list_admin = list_admin
-        self._list_ticket = list_ticket
-
-        self.ticket_manager = TicketManager(list_ticket, [*list_user, *list_admin])
+    def __init__(self):
+        #self.ticket_manager = TicketManager(list_ticket, [*list_user, *list_admin])
+        self.clientAPI = ClientAPI()
+        self._list_user = self.clientAPI.get_users()
+        self._list_admin = self.clientAPI.get_admins()
 
         self.window_connect = WindowConnect()
 

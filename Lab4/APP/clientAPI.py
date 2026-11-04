@@ -17,7 +17,7 @@ class ClientAPI:
 
     def get_admins(self):
         try:
-            reponse = requests.get(f"{self.base_url}/users/f?role=admin", timeout=10)
+            reponse = requests.get(f"{self.base_url}/admins", timeout=10)
             reponse.raise_for_status()
             return reponse.json()
         except requests.RequestExeption as erreur:
@@ -26,7 +26,7 @@ class ClientAPI:
 
     def get_user(self, user_id : int):
         try:
-            reponse = requests.get(f"{self.base_url}/users/{user_id}", timeout = 10)
+            reponse = requests.get(f"{self.base_url}/user/{user_id}", timeout = 10)
             reponse.raise_for_status()
             return reponse.json()
         except requests.RequestException as erreur:
@@ -69,3 +69,5 @@ class ClientAPI:
         except requests.RequestException as erreur:
             print(f"Erreur API : {erreur}")
             return None
+
+    
