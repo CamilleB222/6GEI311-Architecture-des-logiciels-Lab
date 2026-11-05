@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Literal
 
 class BaseDescriptionSchema(BaseModel):
@@ -15,6 +15,10 @@ class DescriptionImageSchema(BaseDescriptionSchema):
 DescriptionUnion = DescriptionTexteSchema | DescriptionImageSchema
 
 class DescriptionCreateSchema(BaseModel):
-    titre: str
     type_description: Literal["texte", "image"]
+    titre: str
     contenu: str
+    binary_content: bytes | None = Field(default=None, description="Contenu binaire optionnel encodé en Base64 en JSON")
+
+class DescriptionUpdateSchema(DescriptionCreateSchema):
+    pass

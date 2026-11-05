@@ -18,6 +18,8 @@ def get_users():
 
 @router.get("/admin/{admin_id}", response_model=AdminResponseSchema, status_code=status.HTTP_200_OK)
 def get_user(admin_id: int):
+    admin_return : AdminResponseSchema | None = None
+    
     for admin in list_admin:
         if admin.id == admin_id:
             admin_return = admin

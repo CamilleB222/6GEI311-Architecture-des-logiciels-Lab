@@ -12,6 +12,7 @@ router = APIRouter(tags=["Authentication"])
 
 @router.post("/connect", response_model=ConnectResponseSchema)
 def login(payload: ConnectRequestSchema):
+    role = ""
     user_entity = None
     for user in list_user:
         if user.name == payload.name and not payload.password == "":
