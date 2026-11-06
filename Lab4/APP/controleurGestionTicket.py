@@ -1,8 +1,8 @@
 from datetime import datetime
 from pathlib import Path
 from tkinter import filedialog
-
-from Lab4.APP.clientAPI import ClientAPI
+from config import BASE_URL
+from clientAPI import ClientAPI
 from windowAssignation import WindowAssignation
 from windowVoirEditTicket import WindowVoirEditTicket
 from windowAcceuil import WindowAcceuil
@@ -12,7 +12,6 @@ from windowAjoutTexte import WindowAjoutTexte
 from windowAjoutImage import WindowAjoutImage
 from windowConnect import WindowConnect
 from dossier_modeles import Admin, User, Ticket, DescriptionTicket, DescriptionTicketImage, DescriptionTicketTexte, StatutTicket
-#from ticketManager import TicketManager
 from PyQt6.QtWidgets import QMessageBox, QWidget
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtCore import Qt
@@ -21,7 +20,6 @@ from breadcrumbPage import BreadcrumbPage
 
 
 class ControleurGestionTicket:
-    #ticket_manager : TicketManager
     clientAPI : ClientAPI
     window_connect : WindowConnect
     window_acceuil : WindowAcceuil | None
@@ -50,13 +48,13 @@ class ControleurGestionTicket:
     _ticket_edit : Ticket | None
     _ticket_edit_fermer_attente : bool
     _ticket_edit_status_attente : StatutTicket | None
+    _token : str | None
+    _row_description_supp : list[int]
+    _status_modif : bool
 
 
     def __init__(self):
-        #self.ticket_manager = TicketManager(list_ticket, [*list_user, *list_admin])
-        self.clientAPI = ClientAPI()
-        self._list_user = self.clientAPI.get_users()
-        self._list_admin = self.clientAPI.get_admins()
+        self.clientAPI = ClientAPI(BASE_URL)
 
         self.window_connect = WindowConnect()
 
@@ -85,6 +83,8 @@ class ControleurGestionTicket:
         self._ticket_edit = None
         self._ticket_edit_fermer_attente = False
         self._ticket_edit_status_attente = None
+        self._token = None
+        self._row_description_supp = []
 
     def gerer_changement_texte_nom(self):
         self._user_name = self.window_connect.textbox_nom.text()
@@ -98,16 +98,7 @@ class ControleurGestionTicket:
 
     def gerer_clic_bouton_connexion(self):
         user_connected = None
-        for user in self._list_user:
-            if user.name == self._user_name and not self._user_password == "":
-                user_connected = user
-                break
-
-        if not user_connected:
-            for admin in self._list_admin:
-                if admin.name == self._user_name and not self._user_password == "":
-                    user_connected = admin
-                    break
+        user_connected, self._token = self.clientAPI.connect_user(self._user_name, self._user_password)
 
         if not user_connected:
             QMessageBox.warning(self.window_connect, "Erreur de connexion", "Nom d'utilisateur ou mot de passe incorrect.")
@@ -121,6 +112,13 @@ class ControleurGestionTicket:
     def gerer_main_window(self, prochaine_fenetre : QWidget):
         if self._main_window is None:
             self._main_window = MainWindow()
+
+            old_closeEvent = self._main_window.closeEvent
+            def new_close_event(event):
+                if self._user_connected:
+                    self.clientAPI.disconnect_user(self._token)
+                old_closeEvent(event)
+
             self._main_window.show()
 
         self._main_window.setCentralWidget(prochaine_fenetre)
@@ -151,22 +149,25 @@ class ControleurGestionTicket:
 
     def gerer_clic_bouton_liste_ticket(self):
         if self._user_connected.role == "admin":
-            self.gerer_window_list_ticket(self._user_connected.name, self._user_connected.role, [(BreadcrumbPage.Accueil,"Accueil"), (BreadcrumbPage.CreeTicket,"Liste ticket")], self._list_ticket)
+            self.gerer_window_list_ticket(self._user_connected.name, self._user_connected.role, [(BreadcrumbPage.Accueil,"Accueil"), (BreadcrumbPage.CreeTicket,"Liste ticket")], self.clientAPI.get_tickets(self._token))
         else:
-            self.gerer_window_list_ticket(self._user_connected.name, self._user_connected.role, [(BreadcrumbPage.Accueil,"Accueil"), (BreadcrumbPage.CreeTicket,"Liste ticket")], self._user_connected.asign_tickets)
+            self.gerer_window_list_ticket(self._user_connected.name, self._user_connected.role, [(BreadcrumbPage.Accueil,"Accueil"), (BreadcrumbPage.CreeTicket,"Liste ticket")], self.clientAPI.get_user_assign_tickets(self._user_connected.id, self._token))
 
     def gerer_clic_bouton_deconnexion(self):
-        self._main_window.close()
-        self._user_connected = None
-        self.window_acceuil = None
-        self.window_cree_ticket = None
-        self.window_list_ticket = None
-        self._main_window = None
+        if self.clientAPI.disconnect_user(self._token):
+            self._main_window.close()
+            self._user_connected = None
+            self.window_acceuil = None
+            self.window_cree_ticket = None
+            self.window_list_ticket = None
+            self._main_window = None
 
-        self.window_connect.textbox_nom.clear()
-        self.window_connect.textbox_mdp.clear()
-        self.window_connect.button_connect.setEnabled(False)
-        self.window_connect.show()
+            self.window_connect.textbox_nom.clear()
+            self.window_connect.textbox_mdp.clear()
+            self.window_connect.button_connect.setEnabled(False)
+            self.window_connect.show()
+        else:
+            QMessageBox.warning(self._main_window, "Erreur de déconnexion", "Une erreur est survenue lors de la déconnexion.")
 
     def gerer_window_cree_ticket(self, nom : str, role : str, breadcrumbs : list[tuple[BreadcrumbPage, str]]):
         self.window_cree_ticket = WindowCreeTicket(nom, role, breadcrumbs)
@@ -193,7 +194,10 @@ class ControleurGestionTicket:
         if page == BreadcrumbPage.Accueil:
             self.gerer_window_acceuil()
         elif page == BreadcrumbPage.ListTicket:
-            self.gerer_window_list_ticket(self._user_connected.name, self._user_connected.role, [(BreadcrumbPage.Accueil,"Accueil"), (BreadcrumbPage.CreeTicket,"Liste ticket")], self._list_ticket)
+            if self._user_connected.role == "admin":
+                self.gerer_window_list_ticket(self._user_connected.name, self._user_connected.role, [(BreadcrumbPage.Accueil,"Accueil"), (BreadcrumbPage.CreeTicket,"Liste ticket")], self.clientAPI.get_tickets(self._token))
+            else:
+                self.gerer_window_list_ticket(self._user_connected.name, self._user_connected.role, [(BreadcrumbPage.Accueil,"Accueil"), (BreadcrumbPage.CreeTicket,"Liste ticket")], self.clientAPI.get_user_assign_tickets(self._user_connected.id, self._token))
 
     def gerer_changement_texte_creer(self):
         self._titre_ticket = self.window_cree_ticket.textbox_titre_ticket.text()
@@ -222,31 +226,23 @@ class ControleurGestionTicket:
         if ancienne_page == "Accueil":
             self.gerer_window_acceuil()
         elif ancienne_page == "Liste ticket":
-            self.gerer_window_list_ticket(self._user_connected.name, self._user_connected.role, [(BreadcrumbPage.Accueil,"Accueil"), (BreadcrumbPage.CreeTicket,"Liste ticket")], self._list_ticket)
+            if self._user_connected.role == "admin":
+                self.gerer_window_list_ticket(self._user_connected.name, self._user_connected.role, [(BreadcrumbPage.Accueil,"Accueil"), (BreadcrumbPage.CreeTicket,"Liste ticket")], self.clientAPI.get_tickets(self._token))
+            else:
+                self.gerer_window_list_ticket(self._user_connected.name, self._user_connected.role, [(BreadcrumbPage.Accueil,"Accueil"), (BreadcrumbPage.CreeTicket,"Liste ticket")], self.clientAPI.get_user_assign_tickets(self._user_connected.id, self._token))
 
     def gerer_clic_bouton_creer(self):
-        if not len(self._list_ticket) == 0:
-            ticket_id = max(ticket.ticket_id for ticket in self._list_ticket) + 1
+        if self.clientAPI.create_tickets(self._titre_ticket, self._description_ini_ticket, self._priorité_ticket, self._list_Description,self._token):
+            self.window_cree_ticket.textbox_titre_ticket.clear()
+            self._titre_ticket = ""
+            self.window_cree_ticket.textbox_description_ticket.clear()
+            self._description_ini_ticket = ""
+            self.window_cree_ticket.textbox_priorite_ticket.clear()
+            self._priorité_ticket = ""
+            self._list_Description.clear()
+            self.window_cree_ticket.remove_all_description()
         else:
-            ticket_id = 1
-
-        ticket = Ticket(ticket_id, self._titre_ticket, self._description_ini_ticket, self._priorité_ticket, datetime.now(), datetime.now())
-        for description in self._list_Description:
-            if isinstance(description, DescriptionTicketTexte):
-                ticket.add_description(DescriptionTicketTexte, description.get_titre(), description.get_description())
-            else:
-                ticket.add_description(DescriptionTicketImage, description.get_titre(), description.get_description())
-
-        self.ticket_manager.creat_ticket(self._user_connected,ticket)
-
-        self.window_cree_ticket.textbox_titre_ticket.clear()
-        self._titre_ticket = ""
-        self.window_cree_ticket.textbox_description_ticket.clear()
-        self._description_ini_ticket = ""
-        self.window_cree_ticket.textbox_priorite_ticket.clear()
-        self._priorité_ticket = ""
-        self._list_Description.clear()
-        self.window_cree_ticket.remove_all_description()
+            QMessageBox.warning(self.window_cree_ticket, "Erreur de création", "Une erreur est survenue lors de la création du ticket.")
 
 
     def gerer_ajout_texte(self):
@@ -411,11 +407,20 @@ class ControleurGestionTicket:
             self._description_ticket = ""
 
     def gerer_clic_bouton_supprimer_description(self, row : int):
-        if self.window_cree_ticket is not None:
-            self.window_cree_ticket.remove_description(row)
+        reponse = QMessageBox.warning(
+            self,
+            "Confirmation de supression",
+            "Voulez-vous vraiment supprimer cette description?",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandarsButton.No,
+            QMessageBox.Standars.No,
+        )
+        if reponse == QMessageBox.StandardButton.Yes:
+            if self.window_cree_ticket is not None:
+                self.window_cree_ticket.remove_description(row)
+                self._row_description_supp.append(row)
 
-        del self._list_Description[row]
-        pass
+            del self._list_Description[row]
+            pass
     
     def gerer_window_list_ticket(self, nom : str, role : str, breadcrumbs : list[tuple[BreadcrumbPage, str]], list_ticket : list [Ticket]):
         self.window_list_ticket = WindowListTicket(nom,role,isinstance(self._user_connected, Admin),breadcrumbs,list_ticket, self.gerer_clic_bouton_modifier, self.gerer_clic_bouton_supprimer)
@@ -432,7 +437,7 @@ class ControleurGestionTicket:
         list_ticket : list[Ticket] = self.window_list_ticket.get_selected_tickets()
 
         if len(list_ticket) != 0:
-            self.window_assignation = WindowAssignation(self.ticket_manager.list_user_assignable, list_ticket)
+            self.window_assignation = WindowAssignation(self.clientAPI.get_users(self._token), list_ticket)
             self.window_assignation.show()
             self.window_assignation.btn_annuler.clicked.connect(self.gerer_clic_bouton_assign_annuler)
             self.window_assignation.btn_assigner.clicked.connect(self.gerer_clic_bouton_assign_assigner)
@@ -447,29 +452,48 @@ class ControleurGestionTicket:
         if utilisateur_selectionner != None:
             list_ticket = self.window_list_ticket.get_selected_tickets()
             for ticket in list_ticket:
-                self.ticket_manager.assign_Ticket(self._user_connected, utilisateur_selectionner, ticket)
+                self.clientAPI.assign_ticket(self._token,ticket.ticket_id, utilisateur_selectionner.id)
                 self.window_list_ticket.change_user_assignement(utilisateur_selectionner.name)
             self.window_assignation.close()
             self.window_assignation = None
 
     def gerer_clic_bouton_supprimer_lot(self):
-        ticket_a_supprimer : list[Ticket] = self.window_list_ticket.get_selected_tickets()
-        self.window_list_ticket.remove_tickets(ticket_a_supprimer)
-        for ticket in ticket_a_supprimer:
-            self._list_ticket.remove(ticket)
+        reponse = QMessageBox.warning(
+            self,
+            "Confirmation de supression",
+            "Voulez-vous vraiment supprimer ces tickets?",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandarsButton.No,
+            QMessageBox.Standars.No,
+        )
+        if reponse == QMessageBox.StandardButton.Yes:
+            ticket_a_supprimer : list[Ticket] = self.window_list_ticket.get_selected_tickets()
+            self.window_list_ticket.remove_tickets(ticket_a_supprimer)
+            for ticket in ticket_a_supprimer:
+                self.clientAPI.delete_ticket(ticket.ticket_id,self._token)
+                if isinstance(self._user_connected, Admin):
+                    self._list_ticket = self.clientAPI.get_tickets(self._token)
+                else:
+                    self._list_ticket = self.clientAPI.get_user_assign_tickets(self._user_connected.id,self._token)
 
     def gerer_clic_bouton_supprimer(self, row):
-        if self.window_list_ticket is not None:
-            self.window_list_ticket.remove_ticket(row)
-
-        del self._list_ticket[row]
+        reponse = QMessageBox.warning(
+            self,
+            "Confirmation de supression",
+            "Voulez-vous vraiment supprimer ce ticket?",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandarsButton.No,
+            QMessageBox.Standars.No,
+        )
+        if reponse == QMessageBox.StandardButton.Yes:
+            if self.window_list_ticket is not None:
+                self.clientAPI.delete_ticket(self.window_list_ticket.table.item(row,1),self._token)
+                if isinstance(self._user_connected, Admin):
+                    self._list_ticket = self.clientAPI.get_tickets(self._token)
+                else:
+                    self._list_ticket = self.clientAPI.get_user_assign_tickets(self._user_connected.id,self._token)
 
     def gerer_clic_bouton_modifier(self, row):
         ticket : Ticket
-        if isinstance(self._user_connected,Admin):
-            ticket = self._list_ticket[row]
-        else:
-            ticket = self._user_connected.asign_tickets[row]
+        ticket = self.clientAPI.get_ticket(self.window_list_ticket.table.item(row,1), self._token)
 
         is_edit : bool = ticket.status != StatutTicket.FERMER
         is_admin : bool = isinstance(self._user_connected, Admin)
@@ -501,6 +525,7 @@ class ControleurGestionTicket:
         self.window_voir_edit_ticket.textbox_priorite_ticket.textChanged.connect(self.gerer_changement_texte_modifier)
 
     def gerer_clic_bouton_modifier_statut(self):
+
         if self._ticket_edit_status_attente == StatutTicket.ASSIGNÉ:
             self._ticket_edit_status_attente = StatutTicket.VALIDATION
         elif self._ticket_edit_status_attente == StatutTicket.VALIDATION:
@@ -520,6 +545,7 @@ class ControleurGestionTicket:
     # Ajouter ou supprimer des description dans ajout modificaiton
 
     def gerer_clic_bouton_enregistrer(self):
+        
         ticket = Ticket(self._ticket_edit.ticket_id, self._titre_ticket, self._description_ini_ticket, self._priorité_ticket, self._ticket_edit.creation_date, datetime.now(),self._ticket_edit_status_attente)
         for description in self._list_Description:
             if isinstance(description, DescriptionTicketTexte):
@@ -527,20 +553,15 @@ class ControleurGestionTicket:
             else:
                 ticket.add_description(DescriptionTicketImage, description.get_titre(), description.get_description())
         
-        
-        self.ticket_manager.update_ticket_complet(self._user_connected,self._ticket_edit, ticket)
+        self.clientAPI.update_ticket(self._token,ticket, self._row_description_supp)
     
-        
-        if self._ticket_edit_fermer_attente:
-            self.ticket_manager.close_ticket(self._user_connected,ticket)
-
         self._titre_ticket = ""
         self._description_ini_ticket = ""
         self._priorité_ticket = ""
         self.window_voir_edit_ticket.close()
         self.window_voir_edit_ticket = None
 
-        self.window_list_ticket.update_ticket(ticket)
+        self.window_list_ticket.update_ticket(self.clientAPI.get_ticket(ticket.ticket_id,self._token))
 
     def gerer_changement_texte_modifier(self):
             self._titre_ticket = self.window_voir_edit_ticket.textbox_titre_ticket.text()
@@ -594,6 +615,7 @@ class ControleurGestionTicket:
 
     def gerer_clic_bouton_ajout_text_edit(self):
         description_texte = DescriptionTicketTexte(self._titre_description, self._description_ticket)
+        
         self._list_Description.append(description_texte)
         self.window_ajout_texte.close()
         self.window_ajout_texte = None
@@ -702,11 +724,19 @@ class ControleurGestionTicket:
             self._description_ticket = ""
 
     def gerer_clic_bouton_supprimer_description_edit(self, row : int):
-        if self.window_voir_edit_ticket is not None:
-            self.window_voir_edit_ticket.remove_description(row)
+        reponse = QMessageBox.warning(
+            self,
+            "Confirmation de supression",
+            "Voulez-vous vraiment supprimer cette description?",
+            QMessageBox.StandardButton.Yes | QMessageBox.StandarsButton.No,
+            QMessageBox.Standars.No,
+        )
+        if reponse == QMessageBox.StandardButton.Yes:
+            if self.window_voir_edit_ticket is not None:
+                self.window_voir_edit_ticket.remove_description(row)
 
-        del self._list_Description[row]
-        pass
+            del self._list_Description[row]
+            pass
 
     def gerer_clic_bouton_modifier_ticket(self):
         pass
