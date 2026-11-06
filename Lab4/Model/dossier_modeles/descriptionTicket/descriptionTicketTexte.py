@@ -4,7 +4,8 @@ class DescriptionTicketTexte(DescriptionTicket):
     _titre : str
     _description : str
     
-    def __init__(self, titre : str, description : str):
+    def __init__(self, id : int ,titre : str, description : str):
+        super().__init__(id)
         self._titre = titre
         self._description = description
 

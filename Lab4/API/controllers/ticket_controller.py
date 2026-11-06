@@ -7,9 +7,9 @@ from schemas.ticketSchema import TicketAssignSchema, TicketCreateSchema, TicketR
 from schemas.descriptionSchema import DescriptionCreateSchema, DescriptionImageSchema, DescriptionTexteSchema, DescriptionUnion, DescriptionUpdateSchema
 
 
-from dossier_modeles import Ticket, StatutTicket, Admin, User, DescriptionTicketTexte, DescriptionTicketImage
+from dossier_modeles import Ticket, StatutTicket, Admin, User, DescriptionTicketTexte, DescriptionTicketImage, DescriptionTicket
 from dependencies import verify_custom_token, verify_custom_token_admin
-from program_list import ticket_manager, list_user, dict_user_connect
+from program_list import ticket_manager, list_user, dict_user_connect, generer_nouvel_id
 from services.mappers import map_ticket_to_schema, map_description_to_schema
 
 def get_ticket_by_id(ticket_id : Ticket):
@@ -25,7 +25,22 @@ def get_ticket_by_id(ticket_id : Ticket):
             detail="Ticket introuvable"
         )
 
-    return ticket_id
+    return ticket_trouver
+
+def get_description_by_id(list_description : list[DescriptionTicket],description_id : DescriptionTicket):
+    # Trouver la description
+    description_trouver : DescriptionTicket | None = None
+    for description in list_description:
+            if description.id == description_id:
+                description_trouver = description
+    
+    if description_trouver is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Description introuvable"
+        )
+
+    return description_trouver
 
 router = APIRouter(tags=["tickets"], dependencies=[Depends(verify_custom_token)])
 
@@ -130,7 +145,8 @@ def create_descripsion(ticket_id : int, payload : DescriptionCreateSchema):
     ticket_trouver : Ticket = get_ticket_by_id(ticket_id)
 
     if payload.type_description == "texte":
-        ticket_trouver.list_description.append(DescriptionTicketTexte(payload.titre, payload.contenu))
+        id = generer_nouvel_id()
+        ticket_trouver.list_description.append(DescriptionTicketTexte(id ,payload.titre, payload.contenu))
     elif payload.type_description == "image":
         # Enregistrer l'image sur le disc
         if payload.binary_content is None:
@@ -151,38 +167,31 @@ def create_descripsion(ticket_id : int, payload : DescriptionCreateSchema):
         with open(output_path, "wb") as file:
             file.write(payload.binary_content)
 
-        ticket_trouver.list_description.append(DescriptionTicketImage(payload.titre, output_path))
+        id = generer_nouvel_id()
+
+        ticket_trouver.list_description.append(DescriptionTicketImage(id ,payload.titre, output_path))
     else:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="type de description non prise en charge"
         )
 
-@router.get("/ticket/{ticket_id}/description/{description_index}", response_model=DescriptionUnion)
-def get_description(ticket_id : int, description_index : int):
+@router.get("/ticket/{ticket_id}/description/{description_id}", response_model=DescriptionUnion)
+def get_description(ticket_id : int, description_id : int):
     ticket_trouver : Ticket = get_ticket_by_id(ticket_id)
-
-    if description_index < 0 or description_index >= len(ticket_trouver.list_description):
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Description index out of bound"
-        )
+    description_trouver :DescriptionTicket = get_description_by_id(ticket_trouver.list_description, description_id)
     
 
-    return map_description_to_schema(ticket_trouver.list_description[description_index])
+    return map_description_to_schema(description_trouver)
 
-@router.put("/ticket/{ticket_id}/description/{description_index}", status_code=status.HTTP_204_NO_CONTENT)
-def update_description(ticket_id : int, description_index : int, payload : DescriptionUpdateSchema):
+@router.put("/ticket/{ticket_id}/description/{description_id}", status_code=status.HTTP_204_NO_CONTENT)
+def update_description(ticket_id : int, description_id : int, payload : DescriptionUpdateSchema):
     ticket_trouver : Ticket = get_ticket_by_id(ticket_id)
-    
-    if description_index < 0 or description_index >= len(ticket_trouver.list_description):
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Description index out of bound"
-        )
+    description_trouver : DescriptionTicket = get_description_by_id(ticket_trouver.list_description, description_id)
 
     if payload.type_description == "texte":
-        ticket_trouver.list_description[description_index] = DescriptionTicketTexte(payload.titre, payload.contenu)
+        ticket_trouver.list_description.remove(description_trouver)
+        ticket_trouver.list_description.append(DescriptionTicketTexte(description_id ,payload.titre, payload.contenu))
     elif payload.type_description == "image":
         # Enregistrer l'image sur le disc
         if payload.binary_content is None:
@@ -203,21 +212,17 @@ def update_description(ticket_id : int, description_index : int, payload : Descr
         with open(output_path, "wb") as file:
             file.write(payload.binary_content)
 
-        ticket_trouver.list_description[description_index] = DescriptionTicketImage(payload.titre, output_path)
+        ticket_trouver.list_description.remove(description_trouver)
+        ticket_trouver.list_description.append(DescriptionTicketImage(description_id, payload.titre, output_path))
     else:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="type de description non prise en charge"
         )
 
-@router.delete("/ticket/{ticket_id}/description/{description_index}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_description(ticket_id : int, description_index : int):
+@router.delete("/ticket/{ticket_id}/description/{description_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_description(ticket_id : int, description_id : int):
     ticket_trouver : Ticket = get_ticket_by_id(ticket_id)
-        
-    if description_index < 0 or description_index >= len(ticket_trouver.list_description):
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Description index out of bound"
-        )
+    description_trouver : DescriptionTicket = get_description_by_id(ticket_trouver.list_description, description_id)
 
-    del ticket_trouver.list_description[description_index]
+    ticket_trouver.list_description.remove(description_trouver)

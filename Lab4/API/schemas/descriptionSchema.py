@@ -6,10 +6,12 @@ class BaseDescriptionSchema(BaseModel):
 
 class DescriptionTexteSchema(BaseDescriptionSchema):
     type: Literal["texte"] = "texte"
+    id : int
     description: str
 
 class DescriptionImageSchema(BaseDescriptionSchema):
     type: Literal["image"] = "image"
+    id : int
     filepath: str
     binary_content: bytes
 
