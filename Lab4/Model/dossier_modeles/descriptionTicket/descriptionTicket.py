@@ -1,6 +1,15 @@
 from abc import ABC, abstractmethod
 
 class DescriptionTicket(ABC):
+    _id : int
+
+    def __init__(self, id : int) -> None:
+        super().__init__()
+        self._id = id
+
+    @property
+    def id(self):
+        return self._id
 
     @abstractmethod
     def get_titre(self) -> str:

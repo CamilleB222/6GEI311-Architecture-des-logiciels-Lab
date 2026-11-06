@@ -5,7 +5,8 @@ class DescriptionTicketImage(DescriptionTicket):
     _filepath : str
     _binary_content : str
 
-    def __init__(self, titre : str, filepath : str, binary_content : str):
+    def __init__(self, id : int ,titre : str, filepath : str, binary_content : str):
+        super().__init__(id)
         self._titre = titre
         self._filepath = filepath
         self._binary_content = binary_content

@@ -17,9 +17,9 @@ def get_file_bytes(filepath: str | Path) -> bytes:
 
 def map_description_to_schema(desc):
     if isinstance(desc, DescriptionTicketTexte):
-        return DescriptionTexteSchema(titre=desc.get_titre(), description=desc.get_description())
+        return DescriptionTexteSchema(id=desc.id,titre=desc.get_titre(), description=desc.get_description())
     elif isinstance(desc, DescriptionTicketImage):
-        return DescriptionImageSchema(titre=desc.get_titre(), filepath=desc.get_description(), binary_content=get_file_bytes(desc.get_description()))
+        return DescriptionImageSchema(id=desc.id, titre=desc.get_titre(), filepath=desc.get_description(), binary_content=get_file_bytes(desc.get_description()))
 
 def map_ticket_to_schema(ticket: Ticket) -> TicketResponseSchema:
     return TicketResponseSchema(
