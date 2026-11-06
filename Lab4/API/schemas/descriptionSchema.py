@@ -11,6 +11,7 @@ class DescriptionTexteSchema(BaseDescriptionSchema):
 class DescriptionImageSchema(BaseDescriptionSchema):
     type: Literal["image"] = "image"
     filepath: str
+    binary_content: bytes
 
 DescriptionUnion = DescriptionTexteSchema | DescriptionImageSchema
 

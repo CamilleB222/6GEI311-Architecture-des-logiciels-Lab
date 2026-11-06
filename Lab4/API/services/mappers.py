@@ -1,4 +1,5 @@
-# API/services/mappers.py
+from pathlib import Path
+
 from dossier_modeles import Ticket
 from dossier_modeles import DescriptionTicketTexte
 from dossier_modeles import DescriptionTicketImage
@@ -9,11 +10,16 @@ from schemas.ticketSchema import TicketResponseSchema
 from schemas.descriptionSchema import DescriptionTexteSchema, DescriptionImageSchema
 from schemas.userSchema import UserResponseSchema, AdminResponseSchema
 
+
+def get_file_bytes(filepath: str | Path) -> bytes:
+    path = Path(filepath)
+    return path.read_bytes()
+
 def map_description_to_schema(desc):
     if isinstance(desc, DescriptionTicketTexte):
         return DescriptionTexteSchema(titre=desc.get_titre(), description=desc.get_description())
     elif isinstance(desc, DescriptionTicketImage):
-        return DescriptionImageSchema(titre=desc.get_titre(), filepath=desc.get_description())
+        return DescriptionImageSchema(titre=desc.get_titre(), filepath=desc.get_description(), binary_content=get_file_bytes(desc.get_description()))
 
 def map_ticket_to_schema(ticket: Ticket) -> TicketResponseSchema:
     return TicketResponseSchema(
