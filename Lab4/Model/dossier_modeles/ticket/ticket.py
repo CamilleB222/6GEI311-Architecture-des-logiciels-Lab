@@ -77,11 +77,11 @@ class Ticket(BaseModel):
         if (self.status == status-1):# Si le Statut actuelle est avant le statut qu'on veut aller
             self._status = status
 
-    def add_description(self, type_description : type, titre : str, description : str):
+    def add_description(self, type_description : type, titre : str, description : str, description_id : int | None, binary_content : str):
         if (type_description == DescriptionTicketTexte):
-            description_texte = DescriptionTicketTexte(titre, description)
+            description_texte = DescriptionTicketTexte(description_id, titre, description)
             self._list_description.append(description_texte)
 
         elif (type_description == DescriptionTicketImage):
-            description_image = DescriptionTicketImage(titre, description)
+            description_image = DescriptionTicketImage(description_id, titre, description, binary_content)
             self._list_description.append(description_image)

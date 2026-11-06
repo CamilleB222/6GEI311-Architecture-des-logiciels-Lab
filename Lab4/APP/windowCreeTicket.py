@@ -1,3 +1,4 @@
+from dossier_modeles.ticket.ticket import Ticket
 from headerWidget import HeaderWidget
 from breadcrumbPage import BreadcrumbPage
 from PyQt6.QtWidgets import QHBoxLayout, QHeaderView, QLabel, QMenu, QTableWidgetItem, QPlainTextEdit, QPushButton, QTableWidget, QVBoxLayout, QWidget, QLineEdit, QGridLayout, QAbstractItemView
@@ -98,7 +99,7 @@ class WindowCreeTicket(QWidget):
         self.table.setItem(row,1,type_description)
 
         #col 2 : Actions
-        actions_widget = self._create_actions_widget(edit, delete)
+        actions_widget = self._create_actions_widget(edit, delete, description)
         self.table.setCellWidget(row, 2, actions_widget)
 
     def edit_description(self, row: int, description: DescriptionTicket):
@@ -119,12 +120,16 @@ class WindowCreeTicket(QWidget):
 
     def _get_current_row(self, widget: QWidget) -> int:
         """Retrouve la ligne courante d'un widget imbriqué dans la table."""
-        # Convertit la position relative du widget en coordonnées globales de la table
-        pos = widget.parentWidget().mapTo(self.table.viewport(), widget.pos())
-        index = self.table.indexAt(pos)
-        return index.row() if index.isValid() else -1
+        for row in range(self.table.rowCount()):
+            # Récupère le conteneur d'actions dans la dernière colonne de la ligne
+            cell_widget = self.table.cellWidget(row, 2)  # ou 4 selon votre nombre de colonnes
+            if cell_widget:
+                # Vérifie si le bouton fait partie de ce conteneur
+                if cell_widget == widget or cell_widget.isAncestorOf(widget):
+                    return row
+        return -1
 
-    def _create_actions_widget(self, edit: Callable[[int], None], delete: Callable[[int], None]):
+    def _create_actions_widget(self, edit: Callable[[int|None, int], None], delete: Callable[[int|None, int], None], description : DescriptionTicket):
         """Crée un conteneur horizontal avec des boutons d'actions pour la ligne."""
         container = QWidget()
         layout = QHBoxLayout(container)
@@ -135,6 +140,7 @@ class WindowCreeTicket(QWidget):
         btn_edit = QPushButton("✏️")
         btn_edit.setObjectName("actionBtnEdit")
         btn_edit.setToolTip("Modifier")
+        btn_edit.setProperty("description_id", description.id)
         btn_edit.clicked.connect(
             lambda _, b=btn_edit: self._handle_action(b, edit)
         )
@@ -143,6 +149,7 @@ class WindowCreeTicket(QWidget):
         btn_delete = QPushButton("🗑️")
         btn_delete.setObjectName("actionBtnDelete")
         btn_delete.setToolTip("Supprimer")
+        btn_delete.setProperty("description_id", description.id)
         btn_delete.clicked.connect(
             lambda _, b=btn_delete: self._handle_action(b, delete)
         )
@@ -151,9 +158,12 @@ class WindowCreeTicket(QWidget):
         layout.addWidget(btn_delete)
         return container
 
-    def _handle_action(self, button: QPushButton, callback: Callable[[int], None]):
-        """Exécute le callback avec l'index de ligne calculé à la volée."""
-        current_row = self._get_current_row(button)
-        if current_row != -1:
-            callback(current_row)
+    def _handle_action(self, button: QPushButton, callback: Callable[[int|None, int], None]):
+        """Exécute le callback avec le description_id stocké dans le bouton."""
+        description_id = button.property("description_id")
+        row = self._get_current_row(button)
+        if row != -1:
+            callback(description_id, row)
+
+    
 

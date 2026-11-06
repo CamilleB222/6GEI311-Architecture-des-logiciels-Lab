@@ -203,7 +203,7 @@ class ClientAPI:
             print(f"Erreur réseau : {erreur}")
             return None
 
-    def update_ticket(self, token : str, ticket : Ticket, list_row_supp : list[int]):
+    def update_ticket(self, token : str, ticket : Ticket, list_description_id_supp : list[int]):
         try:
             reponse = requests.put(f"{self.base_url}/ticket/{ticket.ticket_id}",
                 json = {
@@ -216,14 +216,19 @@ class ClientAPI:
                 timeout = 10
             )
             reponse.raise_for_status()
-            for row in list_row_supp:
-                if not self.create_description_ticket(token,ticket.ticket_id,row):
+            for description_id in list_description_id_supp:
+                if not self.delete_description(token,ticket.ticket_id,description_id):
                     print(f"Erreur lors de la suppression de la description pour le ticket {ticket.ticket_id}")
                     return False
             for description in ticket.list_description:
-                if not self.update_description_ticket(token, ticket.ticket_id, ticket.list_description.index(description), description):
-                    print(f"Erreur lors de la mise à jour de la description pour le ticket {ticket.ticket_id}")
-                    return False
+                if description.id is None:
+                    if not self.create_description_ticket(token,ticket.ticket_id, description):
+                        print(f"Erreur lors de la création de la description pour le ticket {ticket.ticket_id}")
+                        return False
+                else:
+                    if not self.update_description_ticket(token, ticket.ticket_id, description.id, description):
+                        print(f"Erreur lors de la mise à jour de la description pour le ticket {ticket.ticket_id}")
+                        return False
             return True
         except requests.HTTPError as erreur:
             print(f"Erreur HTTP : {erreur}")
@@ -320,9 +325,9 @@ class ClientAPI:
             print(f"Erreur réseau : {erreur}")
             return False
 
-    def get_description_ticket(self, token : str, ticket_id : int, description_index : int):
+    def get_description_ticket(self, token : str, ticket_id : int, description_id : int):
         try : 
-            reponse = requests.get(f"{self.base_url}/ticket/{ticket_id}/description/{description_index}", headers = {"X-Token": token}, timeout = 10)
+            reponse = requests.get(f"{self.base_url}/ticket/{ticket_id}/description/{description_id}", headers = {"X-Token": token}, timeout = 10)
             reponse.raise_for_status()
             description : DescriptionTicket = self.json_to_description(reponse.json())
             return description
@@ -338,7 +343,7 @@ class ClientAPI:
             print(f"Erreur réseau : {erreur}")
             return None
 
-    def update_description_ticket(self, token : str, ticket_id : int, description_index : int, description : DescriptionTicket):
+    def update_description_ticket(self, token : str, ticket_id : int, description_id : int, description : DescriptionTicket):
         try:
             if isinstance(description, DescriptionTicketTexte):
                 description_json = self.descriptionTexte_to_json(description)
@@ -347,7 +352,7 @@ class ClientAPI:
             else:
                 raise ValueError("Type de description non supporté")
             
-            reponse = requests.put(f"{self.base_url}/ticket/{ticket_id}/description/{description_index}",
+            reponse = requests.put(f"{self.base_url}/ticket/{ticket_id}/description/{description_id}",
                 json = description_json,
                 headers = {"X-Token": token},
                 timeout = 10
@@ -366,9 +371,9 @@ class ClientAPI:
             print(f"Erreur réseau : {erreur}")
             return False
 
-    def delete_description(self, token : str, ticket_id : int, description_index : int):
+    def delete_description(self, token : str, ticket_id : int, description_id : int):
         try:
-            reponse = requests.delete(f"{self.base_url}/ticket/{ticket_id}/description/{description_index}", headers = {"X-Token": token}, timeout = 10)
+            reponse = requests.delete(f"{self.base_url}/ticket/{ticket_id}/description/{description_id}", headers = {"X-Token": token}, timeout = 10)
             reponse.raise_for_status()
             return True
         except requests.HTTPError as erreur:
@@ -431,9 +436,9 @@ class ClientAPI:
         ticket = Ticket(ticket_id, title, description_ini, priority, creation_date, update_date, status, user_assign)
         for description in list_description:
             if isinstance(description, DescriptionTicketTexte):
-                ticket.add_description(DescriptionTicketTexte,description.get_titre(), description.get_description())
+                ticket.add_description(DescriptionTicketTexte,description.get_titre(), description.get_description(), description.id, "")
             else:
-                ticket.add_description(DescriptionTicketImage,description.get_titre(), description.get_description())
+                ticket.add_description(DescriptionTicketImage,description.get_titre(), description.get_description(), description.id, description.get_binary_content())
         return ticket
 
 
@@ -454,9 +459,9 @@ class ClientAPI:
     def json_to_description(self, json_data : dict) -> 'DescriptionTicket':
         description = None
         if json_data.get("type") == "texte":
-            description : DescriptionTicketTexte = DescriptionTicketTexte(json_data.get("titre"), json_data.get("description"))
+            description : DescriptionTicketTexte = DescriptionTicketTexte(json_data.get("id"), json_data.get("titre"), json_data.get("description"))
         elif json_data.get("type") == "image":
-            description : DescriptionTicketImage = DescriptionTicketImage(json_data.get("titre"), json_data.get("filepath"), json_data.get("binary_content"))
+            description : DescriptionTicketImage = DescriptionTicketImage(json_data.get("id"), json_data.get("titre"), json_data.get("filepath"), json_data.get("binary_content"))
         return description
 
     def json_to_descriptions(self, json_data : list[dict]) -> 'list[DescriptionTicket]':
@@ -466,12 +471,12 @@ class ClientAPI:
         return list_description
 
     def descriptionImage_to_json(self, description : DescriptionTicketImage) -> dict:
-        with open(description.get_filepath(), "rb") as image_file:
-            binary_content = base64.b64encode(image_file.read()).decode("utf-8")
+        #with open(description.get_filepath(), "rb") as image_file:
+        #    binary_content = base64.b64encode(image_file.read()).decode("utf-8")
         return {
             "type_description" : "image",
             "titre" : description.get_titre(),
             "contenu" : "",
-            "binary_content" : binary_content
+            "binary_content" : description.get_binary_content()
         }
         

@@ -27,8 +27,6 @@ def get_ticket_by_id(ticket_id : int):
         )
 
     return ticket_trouver
-<<<<<<< HEAD
-=======
 
 def get_description_by_id(list_description : list[DescriptionTicket],description_id : DescriptionTicket):
     # Trouver la description
@@ -44,7 +42,6 @@ def get_description_by_id(list_description : list[DescriptionTicket],description
         )
 
     return description_trouver
->>>>>>> aa24697a3e547ce1c4e0477345c263c27d1151bc
 
 router = APIRouter(tags=["tickets"], dependencies=[Depends(verify_custom_token)])
 
@@ -173,7 +170,7 @@ def create_descripsion(ticket_id : int, payload : DescriptionCreateSchema):
 
         id = generer_nouvel_id()
 
-        ticket_trouver.list_description.append(DescriptionTicketImage(id ,payload.titre, output_path))
+        ticket_trouver.list_description.append(DescriptionTicketImage(id ,payload.titre, output_path, payload.binary_content))
     else:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

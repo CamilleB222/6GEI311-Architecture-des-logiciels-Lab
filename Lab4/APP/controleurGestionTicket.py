@@ -39,7 +39,7 @@ class ControleurGestionTicket:
     _main_window : MainWindow | None
     _titre_ticket : str | None
     _titre_description : str
-    _row_description : int
+    _description_id : int | None
     _description_ini_ticket : str | None
     _description_ticket : str | None
     _priorité_ticket : str | None
@@ -50,10 +50,11 @@ class ControleurGestionTicket:
     _ticket_edit_fermer_attente : bool
     _ticket_edit_status_attente : StatutTicket | None
     _token : str | None
-    _row_description_supp : list[int]
     _status_modif : bool
-    _old_list_description : list[DescriptionTicket] 
     _binary_content : str
+    _ticket_id_modif : int | None
+    _list_description_supp : list[int]
+    _description_row : int | None
 
 
     def __init__(self):
@@ -78,18 +79,19 @@ class ControleurGestionTicket:
         self.window_voir_edit_ticket = None
         self._titre_ticket = None
         self._titre_description = None
-        self._row_description = -1
+        self._description_id = None
         self._description_ini_ticket = None
         self._description_ticket = None
         self._priorité_ticket = None
         self._list_Description = []
-        self._old_list_description = []
         self._ticket_edit = None
         self._ticket_edit_fermer_attente = False
         self._ticket_edit_status_attente = None
         self._token = None
-        self._row_description_supp = []
         self._binary_content = ""
+        self._ticket_id_modif = None
+        self._list_description_supp = []
+        self._description_row = None
 
     def gerer_changement_texte_nom(self):
         self._user_name = self.window_connect.textbox_nom.text()
@@ -280,7 +282,7 @@ class ControleurGestionTicket:
 
 
     def gerer_clic_bouton_ajout_text(self):
-        description_texte = DescriptionTicketTexte(self._titre_description, self._description_ticket)
+        description_texte = DescriptionTicketTexte(None, self._titre_description, self._description_ticket)
         self._list_Description.append(description_texte)
         self.window_ajout_texte.close()
         self.window_ajout_texte = None
@@ -319,25 +321,28 @@ class ControleurGestionTicket:
             title = "Choisir une image",
             initialdir=Path.home
         )
-        self.window_ajout_image.textbox_selection.setText(self._description_ticket)
+        if not self._description_ticket:
+            return
+        else :
+            self.window_ajout_image.textbox_selection.setText(self._description_ticket)
 
-        with open(self._description_ticket, "rb") as image_file:
-            binary_data = image_file.read()
-            self._binary_content = base64.b64encode(binary_data).decode("utf-8")
+            with open(self._description_ticket, "rb") as image_file:
+                binary_data = image_file.read()
+                self._binary_content = base64.b64encode(binary_data).decode("utf-8")
 
-        image_bytes = base64.b64decode(self._binary_content)
+            image_bytes = base64.b64decode(self._binary_content)
 
-        pixmap = QPixmap()
-        pixmap.loadFromData(image_bytes)
-        pixmap_redim = pixmap.scaled(
-            250,150,
-            Qt.AspectRatioMode.KeepAspectRatio,
-            Qt.TransformationMode.SmoothTransformation
-        )
-        self.window_ajout_image.label_image_preview.setPixmap(pixmap_redim)
+            pixmap = QPixmap()
+            pixmap.loadFromData(image_bytes)
+            pixmap_redim = pixmap.scaled(
+                250,150,
+                Qt.AspectRatioMode.KeepAspectRatio,
+                Qt.TransformationMode.SmoothTransformation
+            )
+            self.window_ajout_image.label_image_preview.setPixmap(pixmap_redim)
     
     def gerer_clic_bouton_ajout_image(self):
-        description_image = DescriptionTicketImage(self._titre_description, self._description_ticket, self._binary_content)
+        description_image = DescriptionTicketImage(None, self._titre_description, self._description_ticket, self._binary_content)
         self._list_Description.append(description_image)
         self.window_ajout_image.close()
         self.window_ajout_image = None
@@ -348,9 +353,12 @@ class ControleurGestionTicket:
         self._titre_description = ""
         self._description_ticket = ""
 
-    def gerer_clic_bouton_modifie_description(self, row : int):
+    def gerer_clic_bouton_modifie_description(self, description_id : int | None, row : int):
         # Ouvrir la page de création de description en mode modification
-        description : DescriptionTicket = self._list_Description[row]
+        description = self._list_Description[row]
+        self._description_id = description_id
+        self._description_row = row
+
         if type(description) == DescriptionTicketTexte:
             #Ouvrir la fenêtre
             self.window_ajout_texte = WindowAjoutTexte()
@@ -359,7 +367,6 @@ class ControleurGestionTicket:
             #Modifier les bouton pour la modificaiton
             self.window_ajout_texte.textbox_titre.textChanged.connect(self.gerer_changement_champ_texte)
             self.window_ajout_texte.description.textChanged.connect(self.gerer_changement_champ_texte)
-            self._row_description = row
 
             self.window_ajout_texte.textbox_titre.setText(description.get_titre())
             self.window_ajout_texte.description.setPlainText(description.get_description())
@@ -370,6 +377,7 @@ class ControleurGestionTicket:
             self.window_ajout_texte.btn_annuler.clicked.connect(self.gerer_bouton_annuler_ajout)
             self.window_ajout_texte.btn_ajouter.clicked.connect(self.gerer_clic_bouton_modifier_text)
         else:
+            self._binary_content = description.get_binary_content()
             self.window_ajout_image = WindowAjoutImage()
             self.window_ajout_image.show()
 
@@ -379,7 +387,7 @@ class ControleurGestionTicket:
             self.window_ajout_image.textbox_titre.setText(description.get_titre())
             self.window_ajout_image.textbox_selection.setText(description.get_description())
 
-            image_bytes = base64.b64decode(description.get_binary_content)
+            image_bytes = base64.b64decode(description.get_binary_content())
             
             pixmap = QPixmap()
             pixmap.loadFromData(image_bytes)
@@ -398,32 +406,46 @@ class ControleurGestionTicket:
             self.window_ajout_image.btn_ajouter.clicked.connect(self.gerer_clic_bouton_modifier_image)
 
     def gerer_clic_bouton_modifier_text(self):
-        description_texte = DescriptionTicketTexte(self._titre_description, self._description_ticket)
-        self._list_Description[self._row_description] = description_texte
+        description_texte = DescriptionTicketTexte(self._description_id, self._titre_description, self._description_ticket)
+        row = self._description_row
+
+        if row is None or not 0 <= row < len(self._list_Description):
+            return  
+
+        self._list_Description[row] = description_texte
 
         self.window_ajout_texte.close()
         self.window_ajout_texte = None
 
         if self.window_cree_ticket is not None:
-            self.window_cree_ticket.edit_description(self._row_description,description_texte)
+            self.window_cree_ticket.edit_description(row,description_texte)
         
         self._titre_description = ""
         self._description_ticket = ""
+        self._description_id = None
+        self._description_row = None
 
     def gerer_clic_bouton_modifier_image(self):
-            description_texte = DescriptionTicketImage(self._titre_description, self._description_ticket)
-            self._list_Description[self._row_description] = description_texte
+            description_image = DescriptionTicketImage(self._description_id, self._titre_description, self._description_ticket, self._binary_content)
+            row = self._description_row
+
+            if row is None or not 0 <= row < len(self._list_Description):
+                return
+
+            self._list_Description[row] = description_image
     
             self.window_ajout_image.close()
             self.window_ajout_image = None
     
             if self.window_cree_ticket is not None:
-                self.window_cree_ticket.edit_description(self._row_description,description_texte)
+                self.window_cree_ticket.edit_description(row,description_image)
             
             self._titre_description = ""
             self._description_ticket = ""
+            self._description_id = None
+            self._description_row = None
 
-    def gerer_clic_bouton_supprimer_description(self, row : int):
+    def gerer_clic_bouton_supprimer_description(self, description_id : int | None, row : int):
         reponse = QMessageBox.warning(
             None,
             "Confirmation de supression",
@@ -434,7 +456,6 @@ class ControleurGestionTicket:
         if reponse == QMessageBox.StandardButton.Yes:
             if self.window_cree_ticket is not None:
                 self.window_cree_ticket.remove_description(row)
-                self._row_description_supp.append(row)
 
             del self._list_Description[row]
             pass
@@ -484,15 +505,21 @@ class ControleurGestionTicket:
         )
         if reponse == QMessageBox.StandardButton.Yes:
             ticket_a_supprimer : list[Ticket] = self.window_list_ticket.get_selected_tickets()
-            self.window_list_ticket.remove_tickets(ticket_a_supprimer)
             for ticket in ticket_a_supprimer:
-                self.clientAPI.delete_ticket(ticket.ticket_id,self._token)
-                if isinstance(self._user_connected, Admin):
-                    self._list_ticket = self.clientAPI.get_tickets(self._token)
-                else:
-                    self._list_ticket = self.clientAPI.get_user_assign_tickets(self._user_connected.id,self._token)
+                if self.clientAPI.delete_ticket(ticket.ticket_id,self._token):
+                    if isinstance(self._user_connected, Admin):
+                        self._list_ticket = self.clientAPI.get_tickets(self._token)
+                    else:
+                        self._list_ticket = self.clientAPI.get_user_assign_tickets(self._user_connected.id,self._token)
+                    self.window_list_ticket.remove_tickets(ticket_a_supprimer)
+                else : 
+                    QMessageBox.warning(
+                        self.window_list_ticket,
+                        "Erreur de suppression",
+                        "Une erreur est survenue lors de la suppression du ticket."
+                    )
 
-    def gerer_clic_bouton_supprimer(self, row):
+    def gerer_clic_bouton_supprimer(self, ticket_id, row : int):
         reponse = QMessageBox.warning(
             None,
             "Confirmation de supression",
@@ -502,26 +529,36 @@ class ControleurGestionTicket:
         )
         if reponse == QMessageBox.StandardButton.Yes:
             if self.window_list_ticket is not None:
-                item_id = self.window_list_ticket.table.item(row,1)
-                ticket_id = int(item_id.text())
-                self.clientAPI.delete_ticket(ticket_id,self._token)
-                if isinstance(self._user_connected, Admin):
-                    self._list_ticket = self.clientAPI.get_tickets(self._token)
-                else:
-                    self._list_ticket = self.clientAPI.get_user_assign_tickets(self._user_connected.id,self._token)
+                if self.clientAPI.delete_ticket(ticket_id,self._token):
+                    self.window_list_ticket.remove_ticket(row)
 
-    def gerer_clic_bouton_modifier(self, row):
+                    if isinstance(self._user_connected, Admin):
+                        self._list_ticket = self.clientAPI.get_tickets(self._token)
+                        
+                    else:
+                        self._list_ticket = self.clientAPI.get_user_assign_tickets(self._user_connected.id,self._token)
+                else:
+                    QMessageBox.warning(
+                        self.window_list_ticket,
+                        "Erreur de suppression",
+                        "Une erreur est survenue lors de la suppression du ticket."
+                    )
+
+    def gerer_clic_bouton_modifier(self, ticket_id, row : int):
         ticket : Ticket
-        item_id = self.window_list_ticket.table.item(row,1)
-        ticket_id = int(item_id.text())
         ticket = self.clientAPI.get_ticket(ticket_id, self._token)
+        self._ticket_id_modif = ticket_id
+        self._list_description_supp = []
+
+        if ticket is None:
+            print(f"Erreur : Impossible de récupérer le ticket {ticket_id} depuis l'API.")
+            return
 
         is_edit : bool = ticket.status != StatutTicket.FERMER
         is_admin : bool = isinstance(self._user_connected, Admin)
 
         self._ticket_edit = ticket
         self._list_Description = list(ticket.list_description)
-        self._old_list_description = self._list_Description
         self._ticket_edit_fermer_attente = False
         self._ticket_edit_status_attente = ticket.status
 
@@ -572,16 +609,16 @@ class ControleurGestionTicket:
         ticket = Ticket(self._ticket_edit.ticket_id, self._titre_ticket, self._description_ini_ticket, self._priorité_ticket, self._ticket_edit.creation_date, datetime.now(),self._ticket_edit_status_attente)
         for description in self._list_Description:
             if isinstance(description, DescriptionTicketTexte):
-                ticket.add_description(DescriptionTicketTexte, description.get_titre(), description.get_description())
+                ticket.add_description(DescriptionTicketTexte, description.get_titre(), description.get_description(), description.id, "")
             else:
-                ticket.add_description(DescriptionTicketImage, description.get_titre(), description.get_description())
+                ticket.add_description(DescriptionTicketImage, description.get_titre(), description.get_description(), description.id, description.get_binary_content())
         
-        self.clientAPI.update_ticket(self._token,ticket, self._row_description_supp)
+        self.clientAPI.update_ticket(self._token,ticket, self._list_description_supp)
     
         self._titre_ticket = ""
         self._description_ini_ticket = ""
         self._priorité_ticket = ""
-        self._row_description_supp = []
+        self._list_description_supp = []
         self.window_voir_edit_ticket.close()
         self.window_voir_edit_ticket = None
 
@@ -638,7 +675,7 @@ class ControleurGestionTicket:
 
 
     def gerer_clic_bouton_ajout_text_edit(self):
-        description_texte = DescriptionTicketTexte(self._titre_description, self._description_ticket)
+        description_texte = DescriptionTicketTexte(None, self._titre_description, self._description_ticket)
         
         self._list_Description.append(description_texte)
         self.window_ajout_texte.close()
@@ -664,7 +701,7 @@ class ControleurGestionTicket:
         self.window_ajout_image.btn_ajouter.clicked.connect(self.gerer_clic_bouton_ajout_image_edit)    
     
     def gerer_clic_bouton_ajout_image_edit(self):
-        description_image = DescriptionTicketImage(self._titre_description, self._description_ticket, self._binary_content)
+        description_image = DescriptionTicketImage(None, self._titre_description, self._description_ticket, self._binary_content)
         self._list_Description.append(description_image)
         self.window_ajout_image.close()
         self.window_ajout_image = None
@@ -675,9 +712,12 @@ class ControleurGestionTicket:
         self._titre_description = ""
         self._description_ticket = ""
 
-    def gerer_clic_bouton_modifie_description_edit(self, row : int):
+    def gerer_clic_bouton_modifie_description_edit(self, description_id : int | None, row : int):
         # Ouvrir la page de création de description en mode modification
         description : DescriptionTicket = self._list_Description[row]
+        self._description_id = description_id
+        self._description_row = row
+
         if type(description) == DescriptionTicketTexte:
             #Ouvrir la fenêtre
             self.window_ajout_texte = WindowAjoutTexte()
@@ -686,7 +726,7 @@ class ControleurGestionTicket:
             #Modifier les bouton pour la modificaiton
             self.window_ajout_texte.textbox_titre.textChanged.connect(self.gerer_changement_champ_texte)
             self.window_ajout_texte.description.textChanged.connect(self.gerer_changement_champ_texte)
-            self._row_description = row
+            self._description_id = description_id
 
             self.window_ajout_texte.textbox_titre.setText(description.get_titre())
             self.window_ajout_texte.description.setPlainText(description.get_description())
@@ -700,13 +740,15 @@ class ControleurGestionTicket:
             self.window_ajout_image = WindowAjoutImage()
             self.window_ajout_image.show()
 
+            self._binary_content = description.get_binary_content()
+
             self.window_ajout_image.textbox_titre.textChanged.connect(self.gerer_changement_champ_image)
             self.window_ajout_image.textbox_selection.textChanged.connect(self.gerer_changement_champ_image)
 
             self.window_ajout_image.textbox_titre.setText(description.get_titre())
             self.window_ajout_image.textbox_selection.setText(description.get_description())
 
-            image_bytes = base64.b64decode(description.get_binary_content)
+            image_bytes = base64.b64decode(description.get_binary_content())
             
             pixmap = QPixmap()
             pixmap.loadFromData(image_bytes)
@@ -725,32 +767,37 @@ class ControleurGestionTicket:
             self.window_ajout_image.btn_ajouter.clicked.connect(self.gerer_clic_bouton_modifier_image_edit)
 
     def gerer_clic_bouton_modifier_text_edit(self):
-        description_texte = DescriptionTicketTexte(self._titre_description, self._description_ticket)
-        self._list_Description[self._row_description] = description_texte
-
+        description_texte = DescriptionTicketTexte(self._description_id, self._titre_description, self._description_ticket)
+        
+        self._list_Description[self._description_row] = description_texte
+                
         self.window_ajout_texte.close()
         self.window_ajout_texte = None
 
         if self.window_voir_edit_ticket is not None:
-            self.window_voir_edit_ticket.edit_description(self._row_description,description_texte)
+            self.window_voir_edit_ticket.edit_description(self._description_row,description_texte)
         
         self._titre_description = ""
         self._description_ticket = ""
+        self._description_id = None
+        self._description_row = None
 
     def gerer_clic_bouton_modifier_image_edit(self):
-            description_texte = DescriptionTicketImage(self._titre_description, self._description_ticket)
-            self._list_Description[self._row_description] = description_texte
+            description_image = DescriptionTicketImage(self._description_id, self._titre_description, self._description_ticket, self._binary_content)
+            self._list_Description[self._description_row] = description_image
     
             self.window_ajout_image.close()
             self.window_ajout_image = None
     
             if self.window_voir_edit_ticket is not None:
-                self.window_voir_edit_ticket.edit_description(self._row_description,description_texte)
+                self.window_voir_edit_ticket.edit_description(self._description_row,description_image)
             
             self._titre_description = ""
             self._description_ticket = ""
+            self._description_id = None
+            self._description_row = None
 
-    def gerer_clic_bouton_supprimer_description_edit(self, row : int):
+    def gerer_clic_bouton_supprimer_description_edit(self, description_id : int | None, row :int):
         reponse = QMessageBox.warning(
             None,
             "Confirmation de supression",
@@ -763,10 +810,9 @@ class ControleurGestionTicket:
                 self.window_voir_edit_ticket.remove_description(row)
 
             del self._list_Description[row]
+            if description_id is not None: 
+                self._list_description_supp.append(description_id)
             pass
-
-    def gerer_clic_bouton_modifier_ticket(self):
-        pass
 
     def gerer_clic_bouton_modifier_annuler(self):
         self._ticket_edit_fermer_attente = False

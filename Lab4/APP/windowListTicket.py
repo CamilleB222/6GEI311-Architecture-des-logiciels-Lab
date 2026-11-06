@@ -2,11 +2,11 @@ from headerWidget import HeaderWidget
 from PyQt6.QtWidgets import QCheckBox, QHBoxLayout, QLabel, QPushButton, QTableWidgetItem, QWidget, QHeaderView, QGridLayout,QTableWidget,QAbstractItemView
 from PyQt6.QtCore import Qt
 from breadcrumbPage import BreadcrumbPage
-from dossier_modeles import Ticket
+from dossier_modeles.ticket.ticket import Ticket
 from typing import Callable
 
 class WindowListTicket(QWidget):
-    def __init__(self, nom : str, role : str, is_admin : bool ,breadcrumbs : list[tuple[BreadcrumbPage, str]], list_ticket : list[Ticket], edit: Callable[[int], None], delete: Callable[[int], None]):
+    def __init__(self, nom : str, role : str, is_admin : bool ,breadcrumbs : list[tuple[BreadcrumbPage, str]], list_ticket : list[Ticket], edit: Callable[[int, int], None], delete: Callable[[int, int], None]):
             super().__init__()
             self.setWindowTitle("Gestionnaire de tickets")
             self.setFixedSize(700,400)
@@ -116,7 +116,7 @@ class WindowListTicket(QWidget):
                 self.table.setItem(row, 3, item_assign)
 
                 # Col 4 : Actions avec pictogrammes/boutons
-                actions_widget = self._create_actions_widget(is_admin, edit, delete)
+                actions_widget = self._create_actions_widget(is_admin, edit, delete, ticket)
                 self.table.setCellWidget(row, 4, actions_widget)
 
 
@@ -210,12 +210,16 @@ class WindowListTicket(QWidget):
 
     def _get_current_row(self, widget: QWidget) -> int:
         """Retrouve la ligne courante d'un widget imbriqué dans la table."""
-        # Convertit la position relative du widget en coordonnées globales de la table
-        pos = widget.parentWidget().mapTo(self.table.viewport(), widget.pos())
-        index = self.table.indexAt(pos)
-        return index.row() if index.isValid() else -1
+        for row in range(self.table.rowCount()):
+            # Récupère le conteneur d'actions dans la dernière colonne de la ligne
+            cell_widget = self.table.cellWidget(row, 4)
+            if cell_widget:
+                # Vérifie si le bouton fait partie de ce conteneur
+                if cell_widget == widget or cell_widget.isAncestorOf(widget):
+                    return row
+        return -1
 
-    def _create_actions_widget(self, is_admin : bool, edit: Callable[[int], None], delete: Callable[[int], None]):
+    def _create_actions_widget(self, is_admin : bool, edit: Callable[[int, int], None], delete: Callable[[int, int], None], ticket : Ticket):
         """Crée un conteneur horizontal avec des boutons d'actions pour la ligne."""
         container = QWidget()
         layout = QHBoxLayout(container)
@@ -226,6 +230,7 @@ class WindowListTicket(QWidget):
         btn_edit = QPushButton("👁️/✏️")  # Ou QIcon("path/to/edit.png")
         btn_edit.setObjectName("actionBtnEdit")
         btn_edit.setToolTip("Modifier")
+        btn_edit.setProperty("ticket_id", ticket.ticket_id)
         btn_edit.clicked.connect(
             lambda _, b=btn_edit: self._handle_action(b, edit)
         )
@@ -237,6 +242,7 @@ class WindowListTicket(QWidget):
             btn_delete = QPushButton("🗑️")  # Ou QIcon("path/to/delete.png")
             btn_delete.setObjectName("actionBtnDelete")
             btn_delete.setToolTip("Supprimer")
+            btn_delete.setProperty("ticket_id", ticket.ticket_id)
             btn_delete.clicked.connect(
                 lambda _, b=btn_delete: self._handle_action(b, delete)
             )
@@ -245,8 +251,9 @@ class WindowListTicket(QWidget):
 
         return container
     
-    def _handle_action(self, button: QPushButton, callback: Callable[[int], None]):
-        """Exécute le callback avec l'index de ligne calculé à la volée."""
-        current_row = self._get_current_row(button)
-        if current_row != -1:
-            callback(current_row)
+    def _handle_action(self, button: QPushButton, callback: Callable[[int, int], None]):
+        """Exécute le callback avec le ticket_id stocké dans le bouton."""
+        ticket_id = button.property("ticket_id")
+        row = self._get_current_row(button)
+        if row != -1:
+            callback(ticket_id, row)
