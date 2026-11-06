@@ -36,6 +36,7 @@ class TicketUpdateSchema(BaseModel):
     description_ini : str
     priority: str 
     status: StatutTicket
+    user_assign : str
 
 # --- SCHÉMA POUR ASSIGNER UN UTILISATEUR ---
 class TicketAssignSchema(BaseModel):

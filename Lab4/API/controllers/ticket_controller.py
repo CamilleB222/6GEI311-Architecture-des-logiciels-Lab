@@ -102,7 +102,7 @@ def update_ticket(ticket_id : int, payload : TicketUpdateSchema, token = Depends
             detail="Il faut être admin pour fermer un ticket"
         )
     
-    new_ticket = Ticket(ticket_id, payload.title, payload.description_ini, payload.priority, old_ticket.creation_date, datetime.now(), payload.status)
+    new_ticket = Ticket(ticket_id, payload.title, payload.description_ini, payload.priority, old_ticket.creation_date, datetime.now(), payload.status, payload.user_assign)
     ticket_manager.update_ticket_complet(user, old_ticket, new_ticket)
 
     if payload.status == StatutTicket.FERMER:

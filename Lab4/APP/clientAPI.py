@@ -210,7 +210,8 @@ class ClientAPI:
                     "title" : ticket.title,
                     "description_ini" : ticket.description_ini,
                     "status" : ticket.status.value,
-                    "priority" : ticket.priority
+                    "priority" : ticket.priority,
+                    "user_assign" : ticket.user_assign
                 },
                 headers={"X-Token": token},
                 timeout = 10
