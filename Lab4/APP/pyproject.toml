@@ -3,18 +3,10 @@ name = "app"
 version = "0.1.0"
 requires-python = ">=3.10"
 dependencies = [
-<<<<<<< HEAD
-    "dossier_modeles",
-=======
     "dossier-modeles",
->>>>>>> 3260567dac48e1443a47ec9882aac60af1fcd676
     "pyqt6>=6.11.0",
     "requests>=2.34.2",
 ]
 
 [tool.uv.sources]
-<<<<<<< HEAD
-dossier_modeles = { path = "../Model", editable = true }
-=======
 dossier-modeles = { path = "../Model", editable = true }
->>>>>>> 3260567dac48e1443a47ec9882aac60af1fcd676

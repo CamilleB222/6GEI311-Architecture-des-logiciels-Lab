@@ -20,8 +20,6 @@ requires-dist = [
 ]
 
 [[package]]
-<<<<<<< HEAD
-=======
 name = "certifi"
 version = "2026.10.23"
 source = { registry = "https://pypi.org/simple" }
@@ -194,7 +192,6 @@ wheels = [
 ]
 
 [[package]]
->>>>>>> 3260567dac48e1443a47ec9882aac60af1fcd676
 name = "dossier-modeles"
 version = "0.1.0"
 source = { editable = "../Model" }
