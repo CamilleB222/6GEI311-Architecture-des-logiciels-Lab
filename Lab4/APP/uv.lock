@@ -7,18 +7,18 @@ name = "app"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
-    { name = "modeles" },
+    { name = "dossier-modeles" },
     { name = "pyqt6" },
 ]
 
 [package.metadata]
 requires-dist = [
-    { name = "modeles", editable = "../Model" },
+    { name = "dossier-modeles", editable = "../Model" },
     { name = "pyqt6", specifier = ">=6.11.0" },
 ]
 
 [[package]]
-name = "modeles"
+name = "dossier-modeles"
 version = "0.1.0"
 source = { editable = "../Model" }
 

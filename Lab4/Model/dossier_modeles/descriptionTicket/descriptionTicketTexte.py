@@ -14,10 +14,4 @@ class DescriptionTicketTexte(DescriptionTicket):
     def get_description(self) -> str:
         return self._description
 
-    def to_json(self):
-        return {
-            "type" : "texte",
-            "titre" : self._titre,
-            "description" : self._description
-        }
 
