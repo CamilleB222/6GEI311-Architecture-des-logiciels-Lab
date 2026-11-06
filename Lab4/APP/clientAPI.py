@@ -1,29 +1,42 @@
 import base64
+from datetime import datetime
 
 import requests
 
-from Lab4.Model.dossier_modeles.descriptionTicket import DescriptionTicket, DescriptionTicketImage, DescriptionTicketTexte
-from Lab4.Model.dossier_modeles.ticket import Ticket
-from Lab4.Model.dossier_modeles.user.admin import Admin
-from Lab4.Model.dossier_modeles.user.user import User
+from dossier_modeles.descriptionTicket.descriptionTicket import DescriptionTicket
+from dossier_modeles.descriptionTicket.descriptionTicketImage import DescriptionTicketImage
+from dossier_modeles.descriptionTicket.descriptionTicketTexte import DescriptionTicketTexte
+from dossier_modeles.ticket.ticket import Ticket
+from dossier_modeles.user.admin import Admin
+from dossier_modeles.user.user import User
+from dossier_modeles.statutTicket import StatutTicket
 
 class ClientAPI:
     def __init__(self, base_url):
         self.base_url = base_url
     def connect_user(self, name : str, mdp : str):
         try:
-            reponse = requests.post(f"{self.base_url}/connect/", json={"name": name, "passeword": mdp}, timeout=10)
+            reponse = requests.post(f"{self.base_url}/connect/", json={"name": name, "password": mdp}, timeout=10)
             reponse.raise_for_status()
             data = reponse.json()
             token : str = data.get("token")
             user_data = data.get("user")
             if user_data.get("role") == "admin":
-                user_connected : Admin
-                user_connected.json_to_user(user_data)
+                user_connected = Admin(
+                    user_data.get("id"),
+                    user_data.get("name"),
+                    user_data.get("email")
+                )
+                #user_connected.json_to_user(user_data)
                 return user_connected, token
-            elif user_data.get("role") == "user":
-                user_connected : User
-                user_connected.json_to_user(user_data)
+            else:
+                user_connected = User(
+                    user_data.get("id"),
+                    user_data.get("name"),
+                    user_data.get("email"),
+                    user_data.get("role")
+                )
+                #user_connected.json_to_user(user_data)
                 return user_connected, token    
         except requests.HTTPError as erreur:
             print(f"Erreur HTTP : {erreur}")
@@ -196,7 +209,7 @@ class ClientAPI:
                 json = {
                     "title" : ticket.title,
                     "description_ini" : ticket.description_ini,
-                    "status" : ticket.status,
+                    "status" : ticket.status.value,
                     "priority" : ticket.priority
                 },
                 headers={"X-Token": token},
@@ -377,8 +390,10 @@ class ClientAPI:
         name : str = json_data.get("name")
         email : str = json_data.get("email")
         role : str = json_data.get("role")
-
-        return User(user_id, name, email, role)
+        if role == "admin":
+            return Admin(user_id, name, email, role)
+        else:
+            return User(user_id, name, email, role)
         
     def json_to_users(self,json_data : list[dict]) -> list['User']:
         users : list[User] = []
@@ -405,15 +420,20 @@ class ClientAPI:
         title : str = json_data.get("title")
         description_ini : str = json_data.get("description_ini")
         list_description : list[DescriptionTicket] = self.json_to_descriptions(json_data.get("list_description"))
-        status : int = json_data.get("status")
+        status : str = StatutTicket(json_data.get("status"))
         priority : str = json_data.get("priority")
-        creation_date : str = json_data.get("creation_date")
-        update_date : str = json_data.get("update_date")
+        creation_date_str : str = json_data.get("creation_date")
+        creation_date: datetime = datetime.fromisoformat(creation_date_str) if creation_date_str else datetime.now()
+        update_date_str : str = json_data.get("update_date")
+        update_date: datetime = datetime.fromisoformat(update_date_str) if update_date_str else datetime.now()
         user_assign : str = json_data.get("user_assign")
 
         ticket = Ticket(ticket_id, title, description_ini, priority, creation_date, update_date, status, user_assign)
         for description in list_description:
-            ticket.add_description(description)
+            if isinstance(description, DescriptionTicketTexte):
+                ticket.add_description(DescriptionTicketTexte,description.get_titre(), description.get_description())
+            else:
+                ticket.add_description(DescriptionTicketImage,description.get_titre(), description.get_description())
         return ticket
 
 
@@ -436,7 +456,7 @@ class ClientAPI:
         if json_data.get("type") == "texte":
             description : DescriptionTicketTexte = DescriptionTicketTexte(json_data.get("titre"), json_data.get("description"))
         elif json_data.get("type") == "image":
-            description : DescriptionTicketImage = DescriptionTicketImage(json_data.get("titre"), json_data.get("filepath"))
+            description : DescriptionTicketImage = DescriptionTicketImage(json_data.get("titre"), json_data.get("filepath"), json_data.get("binary_content"))
         return description
 
     def json_to_descriptions(self, json_data : list[dict]) -> 'list[DescriptionTicket]':

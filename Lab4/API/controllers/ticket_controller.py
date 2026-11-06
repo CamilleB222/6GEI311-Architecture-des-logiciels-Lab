@@ -12,12 +12,13 @@ from dependencies import verify_custom_token, verify_custom_token_admin
 from program_list import ticket_manager, list_user, dict_user_connect
 from services.mappers import map_ticket_to_schema, map_description_to_schema
 
-def get_ticket_by_id(ticket_id : Ticket):
+def get_ticket_by_id(ticket_id : int):
     # Trouver le ticket
     ticket_trouver : Ticket | None = None
     for ticket in ticket_manager.view_all_ticket():
             if ticket.ticket_id == ticket_id:
                 ticket_trouver = ticket
+                break
     
     if ticket_trouver is None:
         raise HTTPException(
@@ -25,7 +26,7 @@ def get_ticket_by_id(ticket_id : Ticket):
             detail="Ticket introuvable"
         )
 
-    return ticket_id
+    return ticket_trouver
 
 router = APIRouter(tags=["tickets"], dependencies=[Depends(verify_custom_token)])
 
@@ -63,7 +64,7 @@ def update_ticket(ticket_id : int, payload : TicketUpdateSchema, token = Depends
     old_ticket : Ticket = get_ticket_by_id(ticket_id)
 
     # Vérification du statut du ticket
-    if old_ticket.status == StatutTicket.OUVERT and not payload.status == StatutTicket.OUVERT:
+    if old_ticket.status == StatutTicket.OUVERT and not payload.status == StatutTicket.OUVERT and not (isinstance(user, Admin) and payload.status == StatutTicket.FERMER) :
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Le statut du ticket est a ouvert donc il est imposible de modifier le statut avant de l'assigner"

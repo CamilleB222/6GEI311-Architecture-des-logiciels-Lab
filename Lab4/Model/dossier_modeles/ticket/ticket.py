@@ -17,17 +17,17 @@ class Ticket(BaseModel):
     _list_commentaires : list[str]
     _user_assign : str
 
-    def __init__(self, ticket_id : int, title : str, description_initiale : str, priority : str, creation_date : datetime, update_date : datetime, status:StatutTicket = StatutTicket.OUVERT):
+    def __init__(self, ticket_id : int, title : str, description_initiale : str, priority : str, creation_date : datetime, update_date : datetime, status:StatutTicket = StatutTicket.OUVERT, user_assign : str = ""):
         self._ticket_id = ticket_id
         self._title = title
-        self._description_ini = description_initiale   
+        self._description_ini = description_initiale  
+        self._priority = priority 
         self._list_description = list[DescriptionTicket]()
-        self._status = status
-        self._priority = priority
         self._creation_date = creation_date
         self._update_date = update_date
+        self._status = status
         self._list_commentaires = list[str]()
-        self._user_assign = ""
+        self._user_assign = user_assign
 
     @property
     def ticket_id(self):
