@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, status, Depends
 from datetime import datetime
 from pathlib import Path
+import uuid
 
 
 from schemas.ticketSchema import TicketAssignSchema, TicketCreateSchema, TicketResponseSchema, TicketUpdateSchema, TicketCreateResponseSchema
@@ -102,7 +103,7 @@ def update_ticket(ticket_id : int, payload : TicketUpdateSchema, token = Depends
             detail="Il faut être admin pour fermer un ticket"
         )
     
-    new_ticket = Ticket(ticket_id, payload.title, payload.description_ini, payload.priority, old_ticket.creation_date, datetime.now(), payload.status, payload.user_assign)
+    new_ticket = Ticket(ticket_id, payload.title, payload.description_ini, payload.priority, old_ticket.creation_date, datetime.now(), payload.status, payload.user_assign, list_description=old_ticket.list_description)
     ticket_manager.update_ticket_complet(user, old_ticket, new_ticket)
 
     if payload.status == StatutTicket.FERMER:
@@ -156,11 +157,11 @@ def create_descripsion(ticket_id : int, payload : DescriptionCreateSchema):
                 detail="Il faut un flux binaire pour ajouter une image"
             )
         
-        BASE_DIR = Path(__file__).resolve().parent
+        BASE_DIR = Path(__file__).parent.resolve().parent
         image_dir = BASE_DIR / "image"
         image_dir.mkdir(parents=True, exist_ok=True)
 
-        nom_variable = payload.contenu
+        nom_variable = str(uuid.uuid4())
         extension = "png"
 
         output_path = image_dir / f"{nom_variable}.{extension}"
@@ -200,21 +201,25 @@ def update_description(ticket_id : int, description_id : int, payload : Descript
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Il faut un flux binaire pour ajouter une image"
             )
-        
-        BASE_DIR = Path(__file__).resolve().parent
-        image_dir = BASE_DIR / "image"
-        image_dir.mkdir(parents=True, exist_ok=True)
 
-        nom_variable = payload.contenu
-        extension = "png"
+        if len(payload.binary_content) != 0:
+            BASE_DIR = Path(__file__).resolve().parent
+            image_dir = BASE_DIR / "image"
+            image_dir.mkdir(parents=True, exist_ok=True)
 
-        output_path = image_dir / f"{nom_variable}.{extension}"
+            nom_variable = payload.contenu
+            extension = "png"
 
-        with open(output_path, "wb") as file:
-            file.write(payload.binary_content)
+            output_path = image_dir / f"{nom_variable}.{extension}"
+
+            with open(output_path, "wb") as file:
+                file.write(payload.binary_content)
+        else:
+            output_path = description_trouver.get_description()
+            payload.binary_content = bytes(description_trouver.get_binary_content())
 
         ticket_trouver.list_description.remove(description_trouver)
-        ticket_trouver.list_description.append(DescriptionTicketImage(description_id, payload.titre, output_path))
+        ticket_trouver.list_description.append(DescriptionTicketImage(description_id ,payload.titre, output_path, payload.binary_content))
     else:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

@@ -606,12 +606,12 @@ class ControleurGestionTicket:
 
     def gerer_clic_bouton_enregistrer(self):
         
-        ticket = Ticket(self._ticket_edit.ticket_id, self._titre_ticket, self._description_ini_ticket, self._priorité_ticket, self._ticket_edit.creation_date, datetime.now(),self._ticket_edit_status_attente, self._ticket_edit.user_assign)
-        for description in self._list_Description:
-            if isinstance(description, DescriptionTicketTexte):
-                ticket.add_description(DescriptionTicketTexte, description.get_titre(), description.get_description(), description.id, "")
-            else:
-                ticket.add_description(DescriptionTicketImage, description.get_titre(), description.get_description(), description.id, description.get_binary_content())
+        ticket = Ticket(self._ticket_edit.ticket_id, self._titre_ticket, self._description_ini_ticket, self._priorité_ticket, self._ticket_edit.creation_date, datetime.now(),self._ticket_edit_status_attente, self._ticket_edit.user_assign, self._list_Description)
+        #for description in self._list_Description:
+        #    if isinstance(description, DescriptionTicketTexte):
+        #        ticket.add_description(DescriptionTicketTexte, description.get_titre(), description.get_description(), description.id, "")
+        #    else:
+        #        ticket.add_description(DescriptionTicketImage, description.get_titre(), description.get_description(), description.id, description.get_binary_content())
         
         self.clientAPI.update_ticket(self._token,ticket, self._list_description_supp)
     

@@ -434,12 +434,7 @@ class ClientAPI:
         update_date: datetime = datetime.fromisoformat(update_date_str) if update_date_str else datetime.now()
         user_assign : str = json_data.get("user_assign")
 
-        ticket = Ticket(ticket_id, title, description_ini, priority, creation_date, update_date, status, user_assign)
-        for description in list_description:
-            if isinstance(description, DescriptionTicketTexte):
-                ticket.add_description(DescriptionTicketTexte,description.get_titre(), description.get_description(), description.id, "")
-            else:
-                ticket.add_description(DescriptionTicketImage,description.get_titre(), description.get_description(), description.id, description.get_binary_content())
+        ticket = Ticket(ticket_id, title, description_ini, priority, creation_date, update_date, status, user_assign, list_description)
         return ticket
 
 

@@ -14,6 +14,7 @@ class WindowAjoutImage(QWidget):
 
         self.btn_selection = QPushButton("Sélectionner", self)
         self.textbox_selection = QLineEdit(self)
+        self.textbox_selection.setEnabled(False)
 
         self.label_image_preview = QLabel("Aperçu de l'image", self)
 
