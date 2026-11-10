@@ -56,8 +56,8 @@ def get_tickets():
     return list_ticket_response_schema
 
 
-@router.post("/tickets", response_model=TicketCreateResponseSchema ,status_code=status.HTTP_201_CREATED, dependencies=[Depends(verify_custom_token_admin)])
-def create_ticket(payload : TicketCreateSchema, token = Depends(verify_custom_token_admin)):
+@router.post("/tickets", response_model=TicketCreateResponseSchema ,status_code=status.HTTP_201_CREATED)
+def create_ticket(payload : TicketCreateSchema, token = Depends(verify_custom_token)):
     if not len(ticket_manager.view_all_ticket()) == 0:
         ticket_id = max(ticket.ticket_id for ticket in ticket_manager.view_all_ticket()) + 1
     else:
