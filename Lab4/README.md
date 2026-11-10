@@ -8,45 +8,45 @@
 ### Utilisation du projet
 Pour utiliser l'outil actuel de gestion de tickets, il faut lancer l'API avec la commande 'uv run uvicorn main:app --reload --port 8080' lorsqu'on se trouve au niveau du dossier API.
 
-le fichier de config pour changer le base url se trouve dans le dossier APP (config.py)
+Le fichier de configuration pour changer le 'BASE_URL' se trouve dans le dossier APP (config.py)
 
-Pour lancer les client, il faut être au niveau du dossier APP et exécuter le fichier 'app.py'.
+Pour lancer les clients, il faut être au niveau du dossier APP et exécuter le fichier 'app.py'.
 
 Pour aller voir la documentation de l'API : http://localhost:8080/docs.
 
-les utilisateur disponible sont :
+les utilisateurs disponibles sont :
 - Camille Barrette (admin)
 - Xavier Tremblay (user)
 - Zachary Harvey (user)
-n'importe quel mot de passe fonctionne
+N'importe quel mot de passe fonctionne
 
 ### Résumer des modifications
-Nous avons commencer par regrouper les fichiers exstants dans 3 dossiers : 
-- APP : Pour toutes les pages de l'application, le controleur des pages et app.py
+Nous avons commencé par regrouper les fichiers existants dans trois dossiers : 
+- APP : Pour toutes les pages de l'application, le controleur des pages et 'app.py'
 - API : Nous y avons mis le ticketManager
-- Model : Pour les fichiers qui devrons être utilisé par l'API et l'APP (user, admin, ticket, statutTicket, descriptionTicket, etc.)
+- Model : Pour les fichiers qui devront être utilisés par l'API et l'APP (user, admin, ticket, statutTicket, descriptionTicket, etc.)
 
 grande modification apporté :
 - APP : 
-    - Nous avons ajouter un clientAPI qui s'occupe d'envoyé les requetes à l'API et de faire les conversions json. 
-    - Dans le controleur, nous avons remplacer toutes les appels qui était fait au ticketManager pour qu'il soit fait au clientAPI.
-    - Nous avons rajouter une variable token dans le controleur pour identifier l'utilisateur a l'API.
+    - Nous avons ajouté un clientAPI qui s'occupe d'envoyer les requêtes à l'API et de faire les conversions JSON. 
+    - Dans le controleur, nous avons remplacé tous les appels qui étaient faits au ticketManager pour qu'il soient faits au clientAPI.
+    - Nous avons ajouté une variable token dans le controleur pour identifier l'utilisateur auprès de l'API.
 - API :
     - Nous avons fait des controleur pour admin, authentification, ticket et user pour définir et spécifier les routes.
     - Un dossier pour garder les images.
-    - Des schémas (user, description, ticket, auth) pour le spécifier les réponses de l'API (ce qu'il va renvoyer)
-    - Un ficher maopers pour convertir en objet en json.
+    - Des schémas (user, description, ticket, auth) pour spécifier les réponses de l'API (ce qu'elle va renvoyer)
+    - Un ficher mappers pour convertir les objet en JSON.
     - Un fichier dependencies pour faire la vérifications du token.
 - Model : 
-    - Nous avons ajouter des id au descriptions pour facilité le suivis.
-    - Nous avons ajouter une variable au description en image (binary_content) pour pouvoir passer les image sous forme binaire entre l'APP et l'API.
+    - Nous avons ajouté des id au descriptions pour faciliter le suivi.
+    - Nous avons ajouté une variable au description en image (binary_content) pour pouvoir passer les images sous forme binaire entre l'APP et l'API.
 
 ### Leçons apprise
-Durant ce laboratoire, nous avons appris à bien construre un API en :
-- Spécifiants les réssources (user, admin, ticket)
-- Spécifiants les actions qui peuvent être fait sur chaque ressource
+Durant ce laboratoire, nous avons appris à bien construire un API en :
+- Spécifiant les ressources (user, admin, ticket)
+- Spécifiant les actions qui peuvent être faites sur chaque ressource
     - user : get
     - admin : get
     - ticket : create, get, update, delete
-- Spécifier les routes, les arguments demandé et retourner (voir la documentation de l'API sur http://localhost:8080/docs)
+- Spécifiant les routes, les arguments demandés et retournés (voir la documentation de l'API sur http://localhost:8080/docs)
 
