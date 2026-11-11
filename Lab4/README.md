@@ -6,7 +6,7 @@
 - Xavier Tremblay
 
 ### Utilisation du projet
-Pour utiliser l'outil actuel de gestion de tickets, il faut lancer l'API avec la commande 'uv run uvicorn main:app --reload --port 8080' lorsqu'on se trouve au niveau du dossier API.
+Pour utiliser l'outil actuel de gestion de tickets, il faut lancer l'API avec la commande 'uv run uvicorn main:app --host 0.0.0.0 --reload --port 8080' lorsqu'on se trouve au niveau du dossier API.
 
 Le fichier de configuration pour changer le 'BASE_URL' se trouve dans le dossier APP (config.py)
 
